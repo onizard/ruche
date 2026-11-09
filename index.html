@@ -1,0 +1,2822 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>La Ruche des enfants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Mise en page : une colonne étroite posée sur une feuille Seyès (marge rouge, lignes bleues),
+   les cartes sont des fiches bristol blanches, l'accent est le jaune miel du « Spelling Bee ». */
+:root{
+  --paper:#F7F9FD;
+  --line:rgba(70,110,190,.10);
+  --line-strong:rgba(70,110,190,.22);
+  --margin:rgba(214,84,96,.45);
+  --card:#FFFFFF;
+  --ink:#1D2333;
+  --ink-soft:#586079;
+  --border:#D5DBE7;
+  --honey:#F2B415;
+  --honey-ink:#7A5400;
+  --honey-pale:#FFF3CF;
+  --on-honey:#1D2333;
+  --fr:#2F5DB8;
+  --fr-pale:#E5ECFA;
+  --en:#B83A45;
+  --en-pale:#FBE6E8;
+  --ok:#23804F;
+  --ok-pale:#DDF2E5;
+  --bad:#C23B30;
+  --bad-pale:#FBE3E0;
+  --shadow:0 1px 0 rgba(29,35,51,.06), 0 6px 18px -8px rgba(29,35,51,.25);
+  --f-display:"Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131722; --line:rgba(120,150,220,.07); --line-strong:rgba(120,150,220,.14);
+    --margin:rgba(230,110,120,.35); --card:#1D2230; --ink:#ECEFF6; --ink-soft:#A2AAC0;
+    --border:#30384A; --honey:#F5C33B; --honey-ink:#F5C33B; --honey-pale:#3A3115; --on-honey:#1D2333;
+    --fr:#8DB0F5; --fr-pale:#22304D; --en:#F2939B; --en-pale:#43242A;
+    --ok:#62CB8F; --ok-pale:#173B28; --bad:#F2857A; --bad-pale:#45201D;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 22px -10px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131722; --line:rgba(120,150,220,.07); --line-strong:rgba(120,150,220,.14);
+  --margin:rgba(230,110,120,.35); --card:#1D2230; --ink:#ECEFF6; --ink-soft:#A2AAC0;
+  --border:#30384A; --honey:#F5C33B; --honey-ink:#F5C33B; --honey-pale:#3A3115; --on-honey:#1D2333;
+  --fr:#8DB0F5; --fr-pale:#22304D; --en:#F2939B; --en-pale:#43242A;
+  --ok:#62CB8F; --ok-pale:#173B28; --bad:#F2857A; --bad-pale:#45201D;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 22px -10px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(90deg, transparent 38px, var(--margin) 38px, var(--margin) 40px, transparent 40px),
+    repeating-linear-gradient(180deg, transparent 0 31px, var(--line-strong) 31px 32px),
+    repeating-linear-gradient(180deg, transparent 0 7px, var(--line) 7px 8px);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.5;
+  min-height:100vh;
+}
+.wrap{max-width:640px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:20px}
+@media (min-width:700px){ .wrap{padding-inline:24px} }
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0;text-wrap:balance;line-height:1.15}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible,.chip:focus-visible{outline:3px solid var(--fr);outline-offset:2px}
+
+/* En-tête */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand svg{flex:none}
+.brand h1{font-size:1.6rem;font-weight:700;letter-spacing:-.01em}
+.brand p{margin:0;color:var(--ink-soft);font-size:.9rem}
+.iconbtn{border:1px solid var(--border);background:var(--card);border-radius:999px;padding:8px 14px;font-size:.9rem;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.iconbtn:hover{border-color:var(--ink-soft)}
+
+/* Blocs de réglages */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.label{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.seg{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
+.seg button{border:2px solid var(--border);background:transparent;border-radius:12px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;gap:2px;align-items:center;min-width:0}
+.seg button b{font-family:var(--f-display);font-weight:600;font-size:1.05rem}
+.seg button .sub{font-size:.8rem;color:var(--ink-soft);line-height:1.25}
+.seg button[aria-pressed="true"]{border-color:var(--honey);background:var(--honey-pale)}
+.seg.small button{padding:8px 6px}
+.dir{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+.tag{font-size:.7rem;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:6px}
+.tag.fr{background:var(--fr-pale);color:var(--fr)}
+.tag.en{background:var(--en-pale);color:var(--en)}
+
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.chip{border:2px solid var(--border);background:transparent;border-radius:12px;padding:10px 12px;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+.chip[aria-pressed="true"]{border-color:var(--honey);background:var(--honey-pale)}
+.chip .n{font-weight:700;line-height:1.2}
+.chip .meta{font-size:.78rem;color:var(--ink-soft);display:flex;justify-content:space-between;gap:6px;font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:99px;background:var(--border);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--honey);border-radius:99px;transition:width .4s}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.link{background:none;border:0;padding:0;color:var(--fr);font-weight:700;text-decoration:underline;text-underline-offset:3px;font-size:.9rem}
+
+.go{background:var(--honey);color:var(--on-honey);border:0;border-radius:14px;padding:16px 20px;font-family:var(--f-display);font-weight:600;font-size:1.25rem;box-shadow:0 3px 0 var(--honey-ink);width:100%}
+.go:active{transform:translateY(2px);box-shadow:0 1px 0 var(--honey-ink)}
+.go:disabled{opacity:.5;cursor:not-allowed}
+.ghost{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:12px 16px;font-weight:700}
+.ghost:hover{border-color:var(--ink-soft)}
+.hint{font-size:.85rem;color:var(--ink-soft);margin:0}
+
+/* Séance */
+.prog{display:flex;align-items:center;gap:12px}
+.prog .bar{flex:1;height:10px}
+.prog span{font-variant-numeric:tabular-nums;font-weight:700;font-size:.9rem;color:var(--ink-soft)}
+.stage{perspective:1400px}
+.flash{position:relative;min-height:260px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,.7,.3,1);cursor:pointer}
+.flash.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;overflow:hidden}
+.face::before{content:"";position:absolute;left:0;right:0;top:0;height:8px}
+.face.fr::before{background:var(--fr)}
+.face.en::before{background:var(--en)}
+.face.back{transform:rotateY(180deg)}
+.word{font-family:var(--f-display);font-weight:600;font-size:clamp(1.6rem,6vw,2.4rem);line-height:1.2;overflow-wrap:anywhere;text-wrap:balance}
+.note{color:var(--ink-soft);font-size:.9rem;margin:0}
+.tap{position:absolute;bottom:12px;font-size:.8rem;color:var(--ink-soft)}
+.speak{border:1px solid var(--border);background:var(--card);border-radius:999px;width:44px;height:44px;display:inline-grid;place-items:center;color:var(--en)}
+.speak:hover{border-color:var(--en)}
+.prompt{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:22px 20px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;position:relative;overflow:hidden}
+.prompt::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--fr)}
+.prompt.en::before{background:var(--en)}
+.prompt.dict::before{background:var(--honey)}
+.answer{display:flex;flex-direction:column;gap:10px}
+.answer input{width:100%;font-family:var(--f-body);font-size:1.4rem;padding:14px 16px;border-radius:14px;border:2px solid var(--border);background:var(--card);color:var(--ink);text-align:center;letter-spacing:.02em}
+.answer input:focus{border-color:var(--fr);outline:none}
+.answer input.ok{border-color:var(--ok);background:var(--ok-pale)}
+.answer input.bad{border-color:var(--bad);background:var(--bad-pale)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btns.one{grid-template-columns:1fr}
+.b-ok{background:var(--ok);color:var(--card);border:0;border-radius:14px;padding:14px;font-weight:700;font-size:1.05rem}
+.b-bad{background:var(--bad);color:var(--card);border:0;border-radius:14px;padding:14px;font-weight:700;font-size:1.05rem}
+.feedback{border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.feedback.ok{background:var(--ok-pale);color:var(--ink)}
+.feedback.bad{background:var(--bad-pale);color:var(--ink)}
+.feedback h3{font-size:1.15rem}
+.feedback.ok h3{color:var(--ok)}
+.feedback.bad h3{color:var(--bad)}
+.spell{font-family:var(--f-body);font-size:1.35rem;letter-spacing:.06em;font-weight:700;overflow-wrap:anywhere}
+.spell .x{background:var(--bad);color:var(--card);border-radius:4px;padding:0 2px}
+.spell .g{background:var(--ok);color:var(--card);border-radius:4px;padding:0 2px}
+.spell .gap{display:inline-block;min-width:.6em;border-bottom:3px solid var(--ok)}
+.spell s{text-decoration-thickness:2px}
+.small{font-size:.85rem;color:var(--ink-soft)}
+.dictbtn{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.big-listen{background:var(--honey);color:var(--on-honey);border:0;border-radius:999px;padding:14px 26px;font-family:var(--f-display);font-weight:600;font-size:1.2rem;display:inline-flex;gap:10px;align-items:center;box-shadow:0 3px 0 var(--honey-ink)}
+
+/* Cartes question / réponse (maths, SVT…) */
+.qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:26px 20px 22px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.qcard::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--fr)}
+.qcard.svt::before{background:var(--ok)}
+.qcard.histoire::before{background:var(--honey)}
+.qcard.pc::before{background:var(--en)}
+.qcard.mytho::before{background:linear-gradient(90deg,var(--fr) 0 50%,var(--card) 50% 100%);background-size:24px 8px}
+.qcard.mytho{border-color:var(--fr)}
+.pic{align-self:center;width:min(240px,70%);height:auto;aspect-ratio:1;border-radius:18px;border:3px solid var(--fr);object-fit:cover;background:var(--fr-pale)}
+.statue{margin:6px 0 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.statue img{width:min(200px,60%);height:auto;aspect-ratio:1;border-radius:14px;object-fit:cover}
+.statue figcaption{font-size:.8rem;color:var(--ink-soft)}
+.heword{font-family:"Arial Hebrew","Noto Sans Hebrew","Segoe UI",system-ui,sans-serif;font-size:clamp(1.9rem,8vw,2.6rem);font-weight:700;line-height:1.25;color:var(--ink);text-align:center;direction:rtl;overflow-wrap:anywhere}
+.translit{text-align:center;font-style:italic;color:var(--ink-soft);font-size:1.05rem}
+.herow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.qcard.hebreu::before{background:linear-gradient(180deg,var(--fr) 0 3px,var(--card) 3px 5px,var(--fr) 5px 8px)}
+.tbl td.he{direction:rtl;text-align:right;font-weight:700;font-size:1.05rem}
+.tbl td.he small{display:block;direction:ltr;text-align:right;font-weight:400;font-style:italic;color:var(--ink-soft);font-size:.8rem}
+.medal{align-self:center;width:112px;height:112px;border-radius:50%;display:grid;place-items:center;font-size:58px;line-height:1;background:var(--fr-pale);border:3px solid var(--fr);box-shadow:inset 0 0 0 6px var(--card)}
+.qcard.bonus::before{background:linear-gradient(90deg,var(--en),var(--honey),var(--ok),var(--fr))}
+#subjects button.is-locked{opacity:.45;filter:grayscale(1);border-style:dashed}
+#subjects button.is-locked[aria-pressed="true"]{opacity:.7}
+#subjects button.is-ready{border-color:var(--honey);background:var(--honey-pale);animation:glow 1.8s ease-in-out infinite}
+#subjects button.is-ready b{color:var(--honey-ink)}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(242,180,21,.0)}50%{box-shadow:0 0 0 5px rgba(242,180,21,.35)}}
+@media (prefers-reduced-motion: reduce){#subjects button.is-ready{animation:none}}
+.tally{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.tally span{border:1px solid var(--border);border-radius:99px;padding:4px 10px;font-size:.85rem;color:var(--ink-soft)}
+.tally span b{color:var(--ink);font-variant-numeric:tabular-nums}
+.tally span.has{border-color:var(--honey)}
+.tally span.full{border-color:var(--ok);background:var(--ok-pale)}
+.tally span.full b{color:var(--ok)}
+.lock{display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+.lock h2{font-size:1.3rem}
+.lock .bar{width:100%;height:12px}
+.lock b.n{font-family:var(--f-display);font-size:2.2rem;font-variant-numeric:tabular-nums;line-height:1}
+#subjects{grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+#subjects button{padding-inline:4px}
+
+.qtext{font-family:var(--f-display);font-weight:600;font-size:clamp(1.2rem,4.6vw,1.5rem);line-height:1.3;text-wrap:balance;overflow-wrap:anywhere}
+.qans{border-top:2px dashed var(--border);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+.atext{font-size:1.1rem;line-height:1.55;overflow-wrap:anywhere}
+.atext b{color:var(--en)}
+.tag.q{background:var(--fr-pale);color:var(--fr);align-self:flex-start}
+.tag.a{background:var(--ok-pale);color:var(--ok);align-self:flex-start}
+.tbl td.ans{font-size:.92rem}
+.tbl td.ans b{color:var(--en)}
+
+/* Résultats */
+.score{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.score b{font-family:var(--f-display);font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.mist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.mist li{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--border);align-items:center}
+.mist li span{min-width:0;overflow-wrap:anywhere}
+.mist .e{font-weight:700;color:var(--en)}
+.mist .f{color:var(--fr)}
+
+/* Liste */
+.list h2{font-size:1.25rem;margin-bottom:6px}
+.tbl{width:100%;border-collapse:collapse;font-size:.95rem}
+.tbl td{padding:8px 6px;border-top:1px solid var(--border);vertical-align:middle}
+.tbl td.f{color:var(--ink-soft);width:45%}
+.tbl td.e{font-weight:700}
+.tbl td.s{width:36px;text-align:right}
+.tbl .speak{width:32px;height:32px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;background:var(--border);vertical-align:middle}
+.dot.l1,.dot.l2{background:var(--honey)}
+.dot.l3,.dot.l4,.dot.l5{background:var(--ok)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-soft)}
+.danger{color:var(--bad);border-color:var(--bad-pale)}
+footer{font-size:.8rem;color:var(--ink-soft);text-align:center}
+
+@media (max-width:420px){
+  .seg button .sub{display:none}
+  .brand h1{font-size:1.35rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .flash{transition:none}
+  .bar i{transition:none}
+}
+</style>
+<div class="wrap" id="app">
+  <header class="top">
+    <div class="brand">
+      <svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
+        <ellipse cx="22" cy="20" rx="11" ry="8" fill="var(--fr-pale)" stroke="var(--fr)" stroke-width="2" transform="rotate(-25 22 20)"/>
+        <ellipse cx="40" cy="18" rx="11" ry="8" fill="var(--fr-pale)" stroke="var(--fr)" stroke-width="2" transform="rotate(25 40 18)"/>
+        <ellipse cx="32" cy="38" rx="18" ry="15" fill="var(--honey)"/>
+        <path d="M24 25.5v25M32 23v30M40 25.5v25" stroke="var(--ink)" stroke-width="4.5"/>
+        <circle cx="47" cy="34" r="2.3" fill="var(--ink)"/>
+      </svg>
+      <div>
+        <h1>La Ruche des enfants</h1>
+        <p>Flashcards de 6e · toutes les matières</p>
+      </div>
+    </div>
+    <button class="iconbtn" id="homeBtn" hidden>Accueil</button>
+  </header>
+  <main id="view"></main>
+  <footer>Les progrès sont gardés sur cet appareil.</footer>
+</div>
+
+<script>
+/* ===== Vocabulaire =====
+   Une ligne = français | anglais | variantes acceptées (séparées par ;) | remarque
+   Les articles (a, an, the, to) sont facultatifs quand on écrit, mais s'ils sont écrits ils doivent être justes. */
+const THEMES = [
+{id:'classe', nom:'En classe', sous:'Consignes et phrases du cours', data:`
+faire l'appel | to take the register | to take a register
+souligner | to underline
+entourer | to circle
+surligner | to highlight
+distribuer | to hand out
+poser (quelque chose) | to put down
+jeter | to throw
+saluer | to greet
+suivre | to follow
+épeler | to spell
+Qui est absent aujourd'hui ? | Who is absent today?
+absent (qui manque) | missing
+Personne n'est absent aujourd'hui. | Nobody is missing today.
+il y a (+ pluriel) | there are
+beaucoup de, plusieurs | many
+des élèves | pupils | students
+Qui peut m'aider, s'il vous plaît ? | Who can help me, please?
+Comment dit-on … en anglais ? | How do you say ... in English? | | « English » prend toujours une majuscule.
+Que veut dire … ? | What does ... mean?
+Peux-tu épeler … ? | Can you spell ...?
+le contraire | the opposite
+le pluriel | the plural
+les devoirs | homework | | Pas de « s » : homework est invariable.
+Quelle est la date aujourd'hui ? | What is the date today?
+la dernière leçon | the last lesson
+une virgule | a comma
+une majuscule | a capital letter
+facile | easy
+comme (facile comme ABC) | as
+un mot transparent | a transparent word
+un concours d'orthographe | a spelling bee
+`},
+{id:'saluer', nom:'Se saluer', sous:'Greetings', data:`
+bonjour (le matin) | good morning
+bonjour (l'après-midi) | good afternoon
+bonsoir | good evening
+bonjour, salut | hello | hi
+Comment vas-tu aujourd'hui ? | How are you today?
+Nous sommes contents de te voir ! | We are happy to see you!
+Dis bonjour à la classe ! | Say hello to the class!
+fier, fière | proud
+`},
+{id:'meteo', nom:'La météo', sous:'What is the weather like?', data:`
+la météo, le temps | the weather
+Quel temps fait-il aujourd'hui ? | What is the weather like today?
+ensoleillé | sunny
+nuageux | cloudy
+venteux (il y a du vent) | windy
+pluvieux | rainy
+neigeux (il neige) | snowy
+orageux | stormy
+froid | cold
+doux, tiède | warm
+chaud | hot
+le soleil | the sun
+la lune | the moon
+une goutte de pluie | a raindrop
+des gouttes de pluie | raindrops
+un arc-en-ciel | a rainbow
+le tonnerre | thunder
+`},
+{id:'emotions', nom:'Les émotions', sous:'How are you today? I feel…', data:`
+nerveux, stressé | nervous
+perdu, qui ne comprend pas | confused
+fatigué | tired
+qui a sommeil | sleepy
+amoureux | in love
+malade | sick | ill
+bête, idiot | silly
+heureux, content | happy
+en colère | angry
+triste | sad
+fier, fière | proud
+surexcité, très impatient | excited
+Je me sens… | I feel ...
+`},
+{id:'jours', nom:'Jours & saisons', sous:'Days of the week', data:`
+lundi | Monday | | Le jour de la lune (the moon).
+mardi | Tuesday | | Le jour de Tiw, un dieu germanique.
+mercredi | Wednesday | | Le jour de Woden. Attention au « d » muet : Wed-nes-day.
+jeudi | Thursday | | Le jour de Thor, dieu du tonnerre.
+vendredi | Friday | | Le jour de Frigg, déesse de l'amour.
+samedi | Saturday | | Le jour de Saturne.
+dimanche | Sunday | | Le jour du soleil (the sun).
+un jour | a day
+une semaine | a week
+aujourd'hui | today
+l'hiver | winter | | Les saisons ne prennent pas de majuscule.
+le printemps | spring
+l'été | summer
+l'automne | autumn | fall
+un dieu | a god
+une déesse | a goddess
+la sagesse | wisdom
+`},
+{id:'mois', nom:'Mois & anniversaire', sous:'Months of the year', data:`
+janvier | January
+février | February | | N'oublie pas le premier « r » : Feb-ru-ary.
+mars | March
+avril | April
+mai | May
+juin | June
+juillet | July
+août | August
+septembre | September
+octobre | October
+novembre | November
+décembre | December
+un mois | a month
+une année | a year
+un anniversaire | a birthday
+Quand est ton anniversaire ? | When is your birthday?
+Mon anniversaire est en mai. | My birthday is in May. | | « in » + le mois seul.
+Mon anniversaire est le 28 mai. | My birthday is on the 28th of May. | My birthday is on the twenty-eighth of May | « on the » + nombre ordinal + « of » + mois.
+`},
+{id:'nombres', nom:'Nombres 1 à 31', sous:'Cardinal numbers', data:`
+1 | one
+2 | two
+3 | three
+4 | four
+5 | five
+6 | six
+7 | seven
+8 | eight
+9 | nine
+10 | ten
+11 | eleven
+12 | twelve
+13 | thirteen
+14 | fourteen
+15 | fifteen
+16 | sixteen
+17 | seventeen
+18 | eighteen
+19 | nineteen
+20 | twenty
+21 | twenty-one
+22 | twenty-two
+23 | twenty-three
+24 | twenty-four
+25 | twenty-five
+26 | twenty-six
+27 | twenty-seven
+28 | twenty-eight
+29 | twenty-nine
+30 | thirty
+31 | thirty-one
+`},
+{id:'ordinaux', nom:'1er, 2e, 3e…', sous:'Ordinal numbers', data:`
+1er (premier) | first | | 1st
+2e (deuxième) | second | | 2nd
+3e (troisième) | third | | 3rd
+4e (quatrième) | fourth | | 4th
+5e (cinquième) | fifth | | 5th — five devient fif-th.
+6e (sixième) | sixth | | 6th
+7e (septième) | seventh | | 7th
+8e (huitième) | eighth | | 8th — un seul « t ».
+9e (neuvième) | ninth | | 9th — pas de « e ».
+10e (dixième) | tenth | | 10th
+11e (onzième) | eleventh | | 11th
+12e (douzième) | twelfth | | 12th — twelve devient twelf-th.
+13e (treizième) | thirteenth | | 13th
+14e (quatorzième) | fourteenth | | 14th
+15e (quinzième) | fifteenth | | 15th
+16e (seizième) | sixteenth | | 16th
+17e (dix-septième) | seventeenth | | 17th
+18e (dix-huitième) | eighteenth | | 18th
+19e (dix-neuvième) | nineteenth | | 19th
+20e (vingtième) | twentieth | | 20th — le « y » devient « ie ».
+21e (vingt et unième) | twenty-first | | 21st
+22e (vingt-deuxième) | twenty-second | | 22nd
+23e (vingt-troisième) | twenty-third | | 23rd
+24e (vingt-quatrième) | twenty-fourth | | 24th
+25e (vingt-cinquième) | twenty-fifth | | 25th
+26e (vingt-sixième) | twenty-sixth | | 26th
+27e (vingt-septième) | twenty-seventh | | 27th
+28e (vingt-huitième) | twenty-eighth | | 28th
+29e (vingt-neuvième) | twenty-ninth | | 29th
+30e (trentième) | thirtieth | | 30th
+31e (trente et unième) | thirty-first | | 31st
+`},
+{id:'couleurs', nom:'Les couleurs', sous:'Colours', data:`
+rouge | red
+violet | purple
+jaune | yellow
+noir | black | | Avec « ck » à la fin.
+gris | grey | gray
+blanc | white | | Avec un « h » muet : w-h-ite.
+vert | green
+orange | orange
+bleu | blue
+rose | pink
+marron | brown
+doré | golden | gold
+argenté | silver
+turquoise | turquoise
+bordeaux | burgundy
+une couleur | a colour | a color
+Ma couleur préférée est le rouge. | My favourite colour is red. | My favorite color is red
+`},
+{id:'fournitures', nom:'Fournitures', sous:'School supplies', data:`
+une trousse | a pencil case
+un bâton de colle | a glue stick
+des ciseaux | scissors | a pair of scissors
+un stylo | a pen
+des stylos | pens
+un taille-crayon | a pencil sharpener | a sharpener
+une gourde | a water bottle | a bottle
+un crayon à papier | a pencil
+une gomme | an eraser | a rubber | « an » devant une voyelle : an eraser.
+un surligneur | a highlighter
+des surligneurs | highlighters
+une règle | a ruler
+un cartable | a school bag | a schoolbag
+un livre | a book
+des livres | books
+une craie grasse, un crayon de cire | a crayon
+`},
+{id:'poemes', nom:'Animaux & poèmes', sous:'Crayon poem, colours', data:`
+un dinosaure | a dinosaur
+une souris | a mouse
+le fromage | cheese
+un chien | a dog
+une puce (l'insecte) | a flea
+une maison | a house
+une porte | a door
+une fenêtre | a window
+des fenêtres | windows
+un renard | a fox
+une grenouille | a frog
+un requin | a shark
+une chauve-souris | a bat
+un fantôme | a ghost
+une figue | a fig
+la barbe à papa | cotton candy | candy floss
+le chocolat | chocolate
+la gelée | jelly
+dessiner | to draw
+fou | crazy
+grand, gros | big
+grand (de taille) | tall
+petit | small
+amusant, le plaisir | fun
+quelque chose | something
+puis, ensuite | then
+`},
+{id:'mots', nom:'Petits mots utiles', sous:'New words', data:`
+jamais | never
+se souvenir | to remember
+oublier | to forget
+si | if
+peut-être | maybe
+combien | how many
+cependant | however
+l'ordre | order | the order
+une position | a position
+une course | a race | the race
+pourquoi | why
+Je ne sais pas pourquoi. | I don't know why. | I do not know why
+absurde | absurd
+un nombre cardinal | a cardinal number
+un nombre ordinal | an ordinal number
+`},
+{id:'transparents', nom:'Mots transparents', sous:'Presque comme en français', data:`
+une table | a table
+un bus | a bus
+un restaurant | a restaurant | | Comme en français : res-tau-rant.
+un lion | a lion
+un fruit | a fruit
+la jungle | the jungle
+un biscuit | a biscuit
+un zoo | a zoo
+l'océan | the ocean | | Pas d'accent en anglais.
+le théâtre | the theatre | the theater
+une banane | a banana
+un oignon | an onion
+un parapluie | an umbrella
+la soupe | soup
+un kangourou | a kangaroo
+un vélo, une bicyclette | a bicycle | a bike
+une salade | a salad
+une tomate | a tomato
+le shampooing | shampoo
+la limonade | lemonade
+le café | coffee
+un lézard | a lizard
+un entraîneur | a coach
+un sandwich | a sandwich
+un T-shirt | a T-shirt
+le pop-corn | popcorn
+une interview | an interview
+`},
+];
+
+THEMES.forEach(t => t.subject = 'anglais');
+/* ===== Maths et SVT : une ligne = question | réponse | | remarque
+   **mot** = en gras · ¶ = retour à la ligne ===== */
+const QA_THEMES = [
+{id:'m-s1-nombres', subject:'maths', nom:'Séq. 1 · Nombres entiers', sous:'Chiffres, millions, milliards', data:`
+À quoi servent les nombres entiers naturels ? | À **compter** des objets, des personnes… à donner une **quantité**.
+Donne trois exemples d'entiers naturels. | Par exemple **2, 90, 307**.
+Quelle différence entre un chiffre et un nombre ? | Il n'y a que **10 chiffres** (de 0 à 9). Ils servent à **écrire tous les nombres**.
+Combien vaut un milliard ? | **Mille millions**, soit **1 000 000 000**.
+Dans 1 023 456 789, quel est le chiffre des dizaines de millions ? | **2**.
+Dans 1 023 456 789, quel est le chiffre des centaines de milliers ? | **4**.
+Comment écrire 1023456789 pour qu'il soit lisible ? | **1 023 456 789** : on laisse un **espace tous les 3 chiffres** en partant de la droite.
+Décompose 4 507 avec des multiplications. | **4 × 1 000 + 5 × 100 + 0 × 10 + 7 × 1**.
+`},
+{id:'m-s1-ortho', subject:'maths', nom:'Séq. 1 · Écrire les nombres', sous:'Million, vingt, cent, mille', data:`
+Million et milliard prennent-ils un S au pluriel ? Pourquoi ? | **Oui**, car ce sont des **noms** : trois million**s**.
+Quand « vingt » et « cent » prennent-ils un S ? | Quand ils sont **multipliés** et **ne sont suivis d'aucun autre nombre** : quatre-vingt**s**, deux-cent**s**. ¶ Mais : quatre-vingt-trois, deux-cent-dix.
+« Mille » prend-il un S ? | **Jamais**, il est **invariable**.
+Écris 3 500 en lettres. | **trois-mille-cinq-cents** (avec un **s** à cents).
+`},
+{id:'m-s1-comparer', subject:'maths', nom:'Séq. 1 · Comparer, encadrer', sous:'Ordre, symboles, ordre de grandeur', data:`
+Que veut dire comparer deux nombres ? | Dire lequel est **le plus grand**, **le plus petit**, ou s'ils sont **égaux**.
+Qu'est-ce que l'ordre croissant ? | Du **plus petit au plus grand**.
+Range 45, 12, 100, 50 dans l'ordre décroissant. | **100 > 50 > 45 > 12**.
+Que signifient les symboles < et > ? | **<** : « est strictement **inférieur** à ». ¶ **>** : « est strictement **supérieur** à ».
+Que signifie le symbole ≈ ? | « **Environ égal** à ».
+Qu'est-ce qu'encadrer un nombre ? | Donner un nombre **plus petit** et un nombre **plus grand** que lui.
+Encadre 5 678 901 au millier près. | **5 678 000 < 5 678 901 < 5 679 000**.
+Qu'est-ce qu'un ordre de grandeur d'un nombre ? | Une **valeur simple et proche** de ce nombre.
+Donne un ordre de grandeur de 22 135 467 891 au million près. | **22 135 000 000**. ¶ On note 22 135 467 891 **≈** 22 135 000 000.
+`},
+{id:'m-s2-droites', subject:'maths', nom:'Séq. 2 · Points et droites', sous:'Géométrie plane', data:`
+Qu'est-ce qu'un point ? Comment le représente-t-on ? | Le **plus petit élément du plan**, **sans longueur ni largeur**. On le représente par une **croix**.
+Combien de droites passent par deux points distincts ? | **Une seule** (une unique droite).
+Combien de droites passent par un seul point ? | **Une infinité**.
+Comment peut-on nommer la droite qui passe par A et B ? | **(AB)** ou **(BA)**, ou **(d)** si on lui donne un nom.
+Dans la droite (xy), x et y sont-ils des points ? | **Non**, ce sont des **directions**.
+Comment appelle-t-on le point où plusieurs droites se croisent ? | Le **point d'intersection**.
+Trois points H, D, F sont alignés. Comment nommer la droite ? | **(HD)**, **(DF)** ou **(HF)** : c'est la même droite.
+`},
+{id:'m-s2-alignes', subject:'maths', nom:'Séq. 2 · Demi-droites, alignement', sous:'[Ax), ∈ et ∉', data:`
+Que fait un point A placé sur une droite (xy) ? | Il partage la droite en **deux demi-droites** : **[Ax)** et **[Ay)**.
+Comment note-t-on la demi-droite d'origine A qui part vers x ? | **[Ax)** : **crochet** du côté de A, **parenthèse** du côté de x.
+Quand dit-on que des points sont alignés ? | Quand ils **appartiennent à une même droite**.
+Deux points sont-ils toujours alignés ? | **Oui, toujours**.
+Que signifient les symboles ∈ et ∉ ? | **∈** : « **appartient à** ». ¶ **∉** : « **n'appartient pas à** ».
+Le point C est sur la droite (DE). Comment l'écrire ? | **C ∈ (DE)**. On a aussi D ∈ (CE) et E ∈ (CD).
+Le point G n'est pas sur la droite (FH). Comment l'écrire ? | **G ∉ (FH)**. On a aussi F ∉ (GH) et H ∉ (FG).
+`},
+{id:'m-s2-segments', subject:'maths', nom:'Séq. 2 · Segments et milieu', sous:'[AB], AB, codage', data:`
+Qu'est-ce que le segment [AB] ? | La **portion de la droite (AB)** **délimitée par les points A et B**. On le note avec des **crochets** : [AB] ou [BA].
+Quelle différence entre (AB), [AB] et AB ? | **(AB)** est la **droite**. ¶ **[AB]** est le **segment**. ¶ **AB** est la **longueur** du segment.
+Qu'est-ce que la longueur d'un segment ? | La **distance entre ses extrémités**, c'est-à-dire le **plus court chemin** entre les 2 points.
+Qu'est-ce que le milieu d'un segment ? | Le point du segment situé **à égale distance de ses extrémités**.
+Si I est le milieu de [AB], donne les 3 égalités. | **AI = IB** ¶ **AB = 2 × AI** ¶ **AI = AB ÷ 2**
+À quoi sert le codage (les petits traits) ? | À montrer que **deux longueurs sont égales**.
+`},
+{id:'m-s2-perimetre', subject:'maths', nom:'Séq. 2 · Périmètre', sous:'Contour, formules', data:`
+Qu'est-ce que le périmètre d'une figure ? | La **longueur de son contour**.
+Comment calcule-t-on le périmètre d'un polygone ? | On **additionne les longueurs de ses côtés**, toutes exprimées dans la **même unité**.
+Formule du périmètre du carré ? | **P = 4 × c**
+Formule du périmètre du rectangle ? | **P = 2 × (L + l)**
+Formule du périmètre du losange ? | **P = 4 × c**
+Formule du périmètre d'un pentagone régulier ? | **P = 5 × c**
+ABCD a pour côtés 1,3 ; 2,3 ; 2,8 et 1,5 cm. Son périmètre ? | P = AB + BC + CD + DA = 1,3 + 2,3 + 2,8 + 1,5 = **7,9 cm**.
+Périmètre d'un losange de côté 3,6 cm ? | P = 4 × 3,6 = **14,4 cm**.
+`},
+{id:'m-s2-paralleles', subject:'maths', nom:'Séq. 2 · Parallèles, perpendiculaires', sous:'Propriétés « cœur »', data:`
+Quand deux droites sont-elles parallèles ? | Quand elles **ne se coupent pas**. On note **(d1) // (d2)**.
+Quand deux droites sont-elles sécantes ? | Quand elles ont **un seul point d'intersection**.
+Quand deux droites sont-elles perpendiculaires ? | Quand elles se coupent en formant un **angle droit**. On note **(d1) ⊥ (d2)**.
+Propriété ❤ des droites perpendiculaires ? | Si deux droites sont **perpendiculaires à une même droite**, alors elles sont **parallèles**.
+Propriété ❤ des droites parallèles ? | Si deux droites sont **parallèles**, toute droite **perpendiculaire à l'une** est **perpendiculaire à l'autre**.
+(d1) ⊥ (Δ) et (d2) ⊥ (Δ). Prouve que (d1) // (d2). | **On sait que** (d1) ⊥ (Δ) et (d2) ⊥ (Δ). ¶ **Propriété :** si deux droites sont perpendiculaires à une même droite, alors elles sont parallèles. ¶ **Donc** (d1) // (d2).
+(d1) // (d2) et (d1) ⊥ (Δ). Prouve que (Δ) ⊥ (d2). | **On sait que** (d1) // (d2) et (d1) ⊥ (Δ). ¶ **Propriété :** si deux droites sont parallèles, toute droite perpendiculaire à l'une est perpendiculaire à l'autre. ¶ **Donc** (Δ) ⊥ (d2).
+Comment se lit le symbole Δ ? | **Delta**.
+`},
+{id:'m-s3-decimaux', subject:'maths', nom:'Séq. 3 · Nombres décimaux', sous:'Début du chapitre', data:`
+Qu'est-ce qu'une fraction décimale ? | Une fraction dont le **dénominateur** est **1, 10, 100, 1 000…**
+Comment lit-on 7/10 ? Et 35/100 ? | **Sept dixièmes**. ¶ **Trente-cinq centièmes**.
+4/7 est-elle une fraction décimale ? | **Non**, car son dénominateur est **7**.
+Qu'est-ce qu'un nombre décimal ? | Un nombre qui **peut s'écrire sous forme de fraction décimale**.
+Donne les écritures de 35/4. | Décimale : **8,75** ¶ Fraction décimale : **875/100** ¶ Écriture mixte : **8 + 75/100**
+Décompose 65 430,1. | **6 × 10 000 + 5 × 1 000 + 4 × 100 + 3 × 10 + 0,1**
+Décompose 2,978 avec des fractions. | **2 + 9/10 + 7/100 + 8/1000**
+Écris 2,978 avec sa partie entière et sa partie décimale. | **2 + 0,978**
+Qu'est-ce qu'une demi-droite graduée d'origine O ? | Une demi-droite sur laquelle on choisit une **unité** que l'on **reporte régulièrement à partir de l'origine**.
+Qu'est-ce que l'abscisse d'un point ? | Le **nombre** qui **repère ce point** sur une demi-droite graduée.
+`},
+{id:'m-s3-comparer', subject:'maths', nom:'Séq. 3 · Comparer et ranger', sous:'Décimaux, <, >, =', data:`
+Que veut dire comparer deux nombres décimaux ? | Dire lequel est **le plus grand**, **le plus petit**, ou s'ils sont **égaux**.
+Compare 9,3 et 5,8. | **9,3 > 5,8** : 9,3 est **supérieur** à 5,8.
+Compare 37,1 et 194,8. | **37,1 < 194,8** : 37,1 est **inférieur** à 194,8.
+0,73900 et 0,739 sont-ils égaux ? | **Oui** : **0,73900 = 0,739**. Les zéros à la fin de la partie décimale ne changent rien.
+Que veut dire ranger dans l'ordre croissant ? | Ranger **du plus petit au plus grand**.
+Que veut dire ranger dans l'ordre décroissant ? | Ranger **du plus grand au plus petit**.
+Range dans l'ordre croissant : 5,8 ; 3,9 ; 94,3 ; 2,1 ; 105,6 ; 3,84. | **2,1 < 3,84 < 3,9 < 5,8 < 94,3 < 105,6**
+Lequel est le plus grand : 3,9 ou 3,84 ? | **3,9**, car 3,9 = 3,90 et **90 centièmes > 84 centièmes**.
+`},
+{id:'m-s3-encadrer', subject:'maths', nom:'Séq. 3 · Encadrer et intercaler', sous:"À l'unité, au dixième, au centième", data:`
+Qu'est-ce qu'encadrer un nombre décimal ? | L'écrire **entre un nombre plus petit que lui** et **un autre plus grand**.
+Que sont deux entiers consécutifs ? | Deux entiers **qui se suivent**, comme 78 et 79.
+Encadre 78,637 à l'unité. | **78 < 78,637 < 79** (écart : 79 − 78 = **1**)
+Encadre 78,637 au dixième. | **78,6 < 78,637 < 78,7** (écart : **0,1**)
+Encadre 78,637 au centième. | **78,63 < 78,637 < 78,64** (écart : **0,01**)
+Comment lit-on 78 < 78,637 < 79 ? | « 78,637 est **compris entre** 78 et 79 ».
+Qu'est-ce qu'intercaler un nombre entre deux nombres ? | **Trouver un nombre compris entre** ces deux nombres.
+Intercale un nombre entre 72,5 et 72,6. | Par exemple **72,54** : 72,5 < 72,54 < 72,6.
+Combien de nombres peut-on intercaler entre 72,5 et 72,6 ? | **Une infinité** ! Par exemple 72,512 ou 72,5899.
+`},
+{id:'m-s3-arrondir', subject:'maths', nom:'Séq. 3 · Arrondir', sous:"À l'unité, au dixième", data:`
+Pour arrondir à l'unité, quel chiffre regarde-t-on ? | Le **chiffre des dixièmes**.
+Pour arrondir à l'unité, quand arrondit-on à l'unité inférieure ? | Quand le chiffre des dixièmes est **0, 1, 2, 3 ou 4**.
+Pour arrondir à l'unité, quand arrondit-on à l'unité supérieure ? | Quand le chiffre des dixièmes est **5, 6, 7, 8 ou 9**.
+Arrondis 94,751 à l'unité. | **95** (le chiffre des dixièmes est 7).
+Arrondis 94,123 à l'unité. | **94** (le chiffre des dixièmes est 1).
+Pour arrondir au dixième, quel chiffre regarde-t-on ? | Le **chiffre des centièmes** : de 0 à 4, on arrondit au dixième **inférieur** ; de 5 à 9, au dixième **supérieur**.
+Arrondis 94,751 au dixième. | **94,8** (le chiffre des centièmes est 5).
+Arrondis 94,123 au dixième. | **94,1** (le chiffre des centièmes est 2).
+`},
+{id:'m-s5-addition', subject:'maths', nom:'Séq. 5 · Addition des décimaux', sous:'Somme, termes, propriétés', data:`
+Qu'est-ce que l'addition ? | L'opération qui fait correspondre à deux nombres a et b **leur somme a + b**.
+Comment s'appellent a et b dans la somme a + b ? | Les **termes** de la somme.
+Comment s'écrit la somme de 5 et de 6 ? | **5 + 6**, qui est égale à **11**.
+Que veut dire « l'addition est commutative » ? | On peut **changer l'ordre des termes** : **a + b = b + a**. ¶ Ex. : 10 + 6 = 6 + 10 = 16.
+Que veut dire « l'addition est associative » ? | On peut **regrouper les termes** comme on veut : **(a + b) + c = a + (b + c) = a + b + c**.
+Vérifie que (10 + 6) + 7 = 6 + (10 + 7). | (10 + 6) + 7 = 16 + 7 = **23** et 6 + (10 + 7) = 6 + 17 = **23**.
+Calcule astucieusement 18,4 + 13 + 1,6 + 47. | On regroupe : **(18,4 + 1,6) + (13 + 47) = 20 + 60 = 80**.
+Que vaut a + 0 ? | **a + 0 = 0 + a = a**. Ex. : 5 + 0 = 0 + 5 = 5.
+Comment appelle-t-on 0 dans l'addition ? | L'**élément neutre** de l'addition.
+`},
+{id:'s-conditions', subject:'svt', nom:'Les conditions de la vie', sous:'La Terre, planète habitée', data:`
+Quelles planètes du système solaire sont gazeuses ? | **Jupiter, Saturne, Uranus et Neptune** : elles n'ont **pas de sol**.
+Qu'est-ce qu'une planète tellurique ? Cite-les. | Une planète **solide**, faite de **roches**, avec un **sol** : **Mercure, Vénus, la Terre et Mars**.
+Quel est le principal constituant des êtres vivants ? | **L'eau** (liquide) : 93 % du champignon, 94 % de la mousse, 74 % de la mésange.
+Par quoi commence toujours une hypothèse ? | **« Je pense que… »** ou **« Je suppose que… »**.
+Comment varie la température quand on s'éloigne du Soleil ? | Elle **diminue** : plus on est **proche du Soleil**, plus il fait **chaud**.
+Quelle est la seule planète où l'on trouve de l'eau liquide ? | **La Terre**.
+Quelles sont les 3 conditions de la Terre qui permettent la vie ? | 1) Une **bonne distance au Soleil**, donc une **bonne température**. ¶ 2) De l'**eau à l'état liquide**, indispensable à la vie. ¶ 3) Une **atmosphère** riche en **dioxygène**, avec la **couche d'ozone**.
+En quoi l'atmosphère favorise-t-elle la vie ? | Elle maintient une **température propice** à la vie et **filtre les rayonnements dangereux** du Soleil.
+`},
+{id:'s-serre', subject:'svt', nom:"L'effet de serre", sous:'GES, 15 °C, −18 °C', data:`
+Qu'est-ce que l'effet de serre ? | Un **phénomène naturel** qui **retient une partie de la chaleur** renvoyée par la Terre. Il maintient la température moyenne à **15 °C**.
+Quelle serait la température sans effet de serre ? | **−18 °C** (moins dix-huit degrés).
+Qu'est-ce qu'un gaz à effet de serre (GES) ? | Un **gaz de l'atmosphère** qui **absorbe et réémet** le **rayonnement infrarouge** (la chaleur) renvoyé par la Terre.
+Cite 3 gaz à effet de serre. | Le **dioxyde de carbone** (CO₂), la **vapeur d'eau**, le **méthane** (CH₄).
+Explique l'effet de serre en 4 étapes. | 1) Le **Soleil chauffe** la surface de la Terre. ¶ 2) La Terre émet des **infrarouges** (chaleur). ¶ 3) Les **GES absorbent** une partie de ces infrarouges. ¶ 4) L'atmosphère réchauffée **renvoie de la chaleur** vers la Terre.
+`},
+{id:'s-rechauffement', subject:'svt', nom:'Le réchauffement climatique', sous:'Preuves, causes, solutions', data:`
+Qu'est-ce qu'un climatosceptique ? | Une personne qui **ne « croit » pas** au réchauffement climatique.
+Que pensent les climatologues ? | **97 %** sont d'accord sur l'**origine humaine** du réchauffement.
+Qu'est-ce que le GIEC ? | Le **groupe d'experts** qui étudie les **variations du climat** et leurs conséquences.
+Comment a évolué la température en France entre 1975 et 2020 ? | Elle est passée de 12 °C à 14 °C : elle a **augmenté de 2 °C**.
+Comment rédige-t-on la lecture d'un document ? | **« Je vois que… »** (ce que je lis), puis **« Je déduis que… »** (ce que j'en conclus).
+Le réchauffement est-il dû uniquement à des causes naturelles ? | **Non**. Les **activités humaines** (transports, énergie, électricité, déchets) rejettent des **GES** comme le CO₂ et le CH₄.
+Cite des conséquences du réchauffement climatique. | Des **incendies**, la **disparition des sapins**, le **blanchissement des coraux** : les **écosystèmes sont détruits**.
+Que peut-on faire pour le limiter ? | **Replanter des arbres** (la forêt **absorbe le CO₂** et protège les sols de l'**érosion**), prendre les **transports en commun**, **recycler**.
+`},
+{id:'s-ecosystemes', subject:'svt', nom:'Les écosystèmes', sous:'Forêt, réseau alimentaire', data:`
+Qu'est-ce qu'un écosystème ? | Un ensemble formé par les **êtres vivants**, leur **milieu de vie**, et les **interactions** des êtres vivants entre eux et avec leur milieu.
+Qu'est-ce qu'un paramètre ? Donne un exemple. | Une **grandeur que l'on peut mesurer**, par exemple la **température** (ou l'humidité, le vent, la luminosité).
+Compare la forêt (milieu fermé) et la prairie (milieu ouvert). | La forêt est beaucoup plus **sombre** (luminosité 0 à 200 contre 1 800), **moins venteuse**, plus **humide** et un peu plus **fraîche**.
+Qu'est-ce qu'un réseau alimentaire ? | Plusieurs **chaînes alimentaires reliées** entre elles.
+Que veut dire la flèche dans un réseau alimentaire ? | **« Est mangé par »**. Elle va de celui qui est mangé vers celui qui mange.
+Donne une chaîne alimentaire de la forêt. | **Hêtre** (feuilles) → **bombyx** (chenilles) → **mésange** → **épervier**.
+Qu'est-ce que les serres ? | Des **doigts prolongés de longues griffes** qui s'enfoncent dans la proie.
+Comment l'épervier est-il adapté à la chasse en forêt ? | Il a des **ailes courtes**, de **longues pattes** et des **serres**.
+Pourquoi le peuplement d'un écosystème n'est-il pas dû au hasard ? | Les êtres vivants vivent là où le **milieu leur convient**. Ex. : le pied-de-mouton ne pousse qu'en milieu **humide et sombre** ; la mésange niche dans un trou creusé par le **pic épeiche**.
+Qui mange la mésange ? | **L'épervier** (et la martre).
+Que mange le chevreuil ? | **Les feuilles du hêtre**.
+Qui mange les larves du capricorne ? | **Le pic épeiche**.
+`},
+{id:'h-c1-intro', subject:'histoire', nom:'Ch. 1 · Connaître la Préhistoire', sous:'Définition, archéologues', data:`
+Qu'est-ce que la Préhistoire ? | La période **la plus ancienne** de l'histoire de l'humanité : de l'**apparition des premiers hommes** à l'**invention de l'écriture**.
+Quand commence la Préhistoire ? | Avec l'apparition des premiers hommes **en Afrique**, il y a environ **2,5 millions d'années**.
+Quand se termine la Préhistoire ? | Avec l'**invention de l'écriture**, vers **3 300 av. J.-C.**
+Grâce à qui connaît-on la Préhistoire ? | Grâce aux **fouilles archéologiques** et aux découvertes des **archéologues**.
+Quels outils utilisent les archéologues ? | Des outils **précis et fragiles** : **petites pelles, pinceaux, truelles, tamis**…
+Pourquoi les archéologues creusent-ils couche par couche ? | Car **chaque niveau du sol** correspond à **une époque différente**.
+Que font les archéologues de chaque objet découvert ? | Il est **noté, photographié et dessiné**. Rien n'est déplacé sans être **enregistré**.
+Qu'est-ce qu'un fossile ? | Une **trace de vie**, animale ou végétale, **préservée dans la roche**.
+Pourquoi date-t-on les fossiles et les vestiges ? | Pour connaître leur **âge**, mais aussi **comment les hommes vivaient**, ce qu'ils **mangeaient**, leurs **croyances**.
+Comment date-t-on les vestiges en laboratoire ? | Par des analyses : **carbone 14**, **ADN**, datation par la pierre ou les sédiments.
+`},
+{id:'h-c1-especes', subject:'histoire', nom:"Ch. 1 · L'évolution humaine", sous:'Toumaï, Lucy, Homo…', data:`
+Quel est l'hominidé connu le plus ancien ? | **Toumaï**, un *Sahelanthropus tchadensis*.
+Qui est Lucy ? | Un **australopithèque** : un ancien primate qui a vécu il y a environ **3,5 à 2,5 millions d'années**.
+Qui marche debout mais ne fabrique pas d'outils ? | **Lucy** (et Toumaï).
+Quelle espèce maîtrise le feu et quitte l'Afrique ? | **Homo erectus**.
+Quelle est notre espèce actuelle ? | **Homo sapiens**.
+Que sait faire Homo sapiens ? | Il utilise des **outils perfectionnés** et se répand sur **tous les continents**.
+Pourquoi surnomme-t-on l'Afrique « le berceau de l'humanité » ? | Parce que les **premiers hominidés** y sont **apparus**.
+Qu'est-ce qu'un hominidé ? | Une espèce de la **famille de l'Homme et de ses ancêtres**.
+Que montre l'évolution humaine ? | Une **progression** de la **posture**, de la **taille** et des **capacités techniques et culturelles**.
+Range dans l'ordre d'apparition : Homo erectus, Toumaï, Homo sapiens, Lucy, Homo habilis. | **Toumaï → Lucy → Homo habilis → Homo erectus → Homo sapiens**. | | Complément (frise) : Toumaï vers 7 millions d'années, Homo habilis vers 2,5 millions, Homo erectus vers 2 millions, Homo sapiens vers 300 000 ans.
+`},
+{id:'h-c1-innovations', subject:'histoire', nom:'Ch. 1 · Le feu et les outils', sous:'Innovations techniques', data:`
+Quand l'homme a-t-il maîtrisé le feu ? Quelle espèce ? | Il y a environ **400 000 ans**, par **Homo erectus**.
+À quoi servait le feu ? | À **cuire** les aliments, se **réchauffer**, se **protéger** des animaux sauvages et **éclairer** les grottes.
+Depuis quand l'homme fabrique-t-il des outils en pierre taillée ? | Depuis environ **2,5 millions d'années**.
+À quoi servaient les outils en pierre taillée ? | À **couper**, **gratter**, **dépecer** des animaux et **fabriquer d'autres outils**.
+Pourquoi ces innovations sont-elles essentielles ? | Elles ont facilité la **survie** et l'**adaptation** des hommes. Grâce au feu, ils ont pu aller dans des **régions plus froides**.
+`},
+{id:'h-c1-mots', subject:'histoire', nom:'Ch. 1 · Mots et dates', sous:'Vocabulaire à connaître', data:`
+Qu'est-ce qu'un archéologue ? | Un **scientifique** qui étudie le passé grâce aux **vestiges** retrouvés lors de **fouilles**.
+Qu'est-ce qu'un vestige ? | **Ce qui reste d'une époque passée** : outil, os, poterie, peinture…
+Que s'est-il passé vers 2,5 millions d'années ? | Les **premiers hommes** en Afrique et les **premiers outils en pierre taillée** : **début de la Préhistoire**.
+Que s'est-il passé vers 400 000 ans ? | La **maîtrise du feu** par Homo erectus.
+Que s'est-il passé vers 3 300 av. J.-C. ? | L'**invention de l'écriture** : **fin de la Préhistoire**.
+`},
+{id:'pc-c1-matiere', subject:'pc', nom:'Ch. 1 · La matière', sous:'Familles, propriétés', data:`
+Où trouve-t-on de la matière ? | **Partout** et sous diverses formes. Elle peut être **vivante ou inerte**, **naturelle ou fabriquée** par l'Homme.
+Cite les 5 familles de matière. | Les **métaux**, les **plastiques**, le **verre**, la **matière minérale** et la **matière organique**.
+Donne des exemples de métaux. | Le **fer**, l'**aluminium**, le **cuivre**…
+Donne des exemples de matière minérale. | La **roche**, le **sable**, le **sel**…
+Donne des exemples de matière organique. | Le **bois**, une **feuille**, le **coton**…
+Cite des propriétés physico-chimiques d'un échantillon de matière. | **Masse, volume, conductivité électrique, conductivité thermique, densité, élasticité, magnétisme, couleur, solubilité, miscibilité**.
+Cite des caractéristiques d'un échantillon de matière. | Sa **forme**, si c'est un matériau **brut ou transformé**, son **origine** (minerai…).
+`},
+{id:'pc-c1-densite', subject:'pc', nom:'Ch. 1 · La densité', sous:'Flotte ou coule ?', data:`
+Comment calcule-t-on la densité d'un solide par rapport à l'eau ? | **d = masse d'un volume de solide ÷ masse du même volume d'eau**
+À volume égal, quel objet est le plus dense ? | **Le plus lourd** : plus un objet est lourd, plus il est dense.
+Quelle est la densité de l'eau ? | **1**.
+Un objet coule dans l'eau. Que dire de sa densité ? | Sa densité est **supérieure à 1**.
+Un objet flotte sur l'eau. Que dire de sa densité ? | Sa densité est **inférieure à 1**.
+Le bois et le polystyrène flottent ou coulent ? | Ils **flottent** : densité **inférieure à 1**.
+Un caillou et un boulon en fer flottent ou coulent ? | Ils **coulent** : densité **supérieure à 1**.
+`},
+{id:'pc-c1-aimant', subject:'pc', nom:'Ch. 1 · Le magnétisme', sous:"L'aimant", data:`
+Comment savoir si un matériau est magnétique ? | On passe un **aimant** au-dessus. S'il est **attiré**, il est **magnétique**.
+Parmi le fer, le bois et le plastique, lequel est magnétique ? | **Le fer** : c'est le seul attiré par l'aimant.
+Le bois et le plastique sont-ils attirés par l'aimant ? | **Non**, ils ne sont **pas magnétiques**.
+`},
+{id:'pc-c1-thermique', subject:'pc', nom:'Ch. 1 · La conductivité thermique', sous:'Le glaçon qui fond', data:`
+Que veut dire « conduire la chaleur » ? | Certains matériaux **transmettent mieux la chaleur** que d'autres.
+Sur quel matériau un glaçon fond-il le plus vite ? | Sur l'**aluminium**, car c'est un **bon conducteur thermique**.
+Pourquoi le glaçon fond-il vite sur l'aluminium ? | L'aluminium **transmet très bien la chaleur de l'air** vers le glaçon, ce qui **accélère sa fonte**.
+Qu'est-ce qu'un isolant thermique ? Donne 2 exemples. | Un matériau qui **conduit mal la chaleur** : le **bois** et le **polystyrène**. Le glaçon y fond **lentement**.
+Range du plus isolant au meilleur conducteur : carrelage, aluminium, polystyrène, bois. | **Polystyrène, bois** (isolants) → **carrelage** (assez conducteur) → **aluminium** (bon conducteur).
+`},
+{id:'b-licornes', subject:'bonus', nom:"L'École des Licornes", sous:'Unicorn Academy', data:`
+Dans L'École des Licornes, comment s'appelle la licorne de Sophia ? | **Wildstar**.
+Comment s'appelle la licorne d'Ava ? | **Leaf**.
+Comment s'appelle la licorne de Layla ? | **Glacier**.
+Comment s'appelle la licorne d'Isabel ? | **River**.
+Comment s'appelle la licorne de Valentina ? | **Cinder**.
+Quel élève de l'école adore faire des farces ? | **Rory**.
+Comment s'appelle la grande méchante de la saison 1 ? | **Ravenzella**.
+Quel animal est l'emblème national de l'Écosse ? | **La licorne** ! | | Vrai : la licorne est l'animal national de l'Écosse.
+Comment dit-on licorne en anglais ? | **Unicorn**.
+Comment s'appelle le cheval ailé de la mythologie grecque ? | **Pégase**.
+`},
+{id:'b-kpop', subject:'bonus', nom:'KPop Demon Hunters', sous:'HUNTR/X contre les Saja Boys', data:`
+Comment s'appelle le groupe de Rumi, Mira et Zoey ? | **HUNTR/X** (Huntrix).
+Qui est la chanteuse principale de HUNTR/X ? | **Rumi**.
+Qui est la rappeuse de HUNTR/X ? | **Zoey**.
+Comment s'appelle le boys band rival ? | **Les Saja Boys**.
+Qui est le chef des Saja Boys ? | **Jinu**.
+Comment s'appelle le roi des démons ? | **Gwi-Ma**.
+Comment s'appelle la barrière magique qui protège le monde des démons ? | **Le Honmoon**.
+Qui a élevé Rumi et l'a formée ? | **Celine**.
+Quel secret cache Rumi ? | Elle est **à moitié démon**.
+Comment s'appellent le tigre et l'oiseau qui suivent Jinu ? | **Derpy** le tigre et **Sussie** l'oiseau.
+Cite trois chansons du film. | Par exemple **Golden**, **How It's Done**, **Soda Pop**, **Takedown**, **Free**, **What It Sounds Like**.
+Quel est le métier secret des filles de HUNTR/X ? | Elles sont **chasseuses de démons**.
+Qu'est-ce qui rend le Honmoon plus fort ? | **Les chansons de HUNTR/X** et les voix de leurs fans.
+Cite deux membres des Saja Boys, à part Jinu. | Par exemple **Romance**, **Mystery**, **Abs** ou **Baby**.
+Que fait Jinu à la fin du film ? | Il **se sacrifie** pour sauver **Rumi**.
+`},
+{id:'b-disney', subject:'bonus', nom:'Les films Disney', sous:'Reine des neiges, Encanto…', data:`
+Dans La Reine des neiges, comment s'appelle le bonhomme de neige ? | **Olaf**.
+Comment s'appelle le renne de Kristoff ? | **Sven**.
+Comment s'appelle le royaume d'Elsa et Anna ? | **Arendelle**.
+Dans Vaiana, comment s'appelle le demi-dieu ? | **Maui**.
+Dans Vaiana, comment s'appelle le coq un peu bête ? | **Heihei**.
+Dans Raiponce, quel animal accompagne Raiponce ? | **Pascal**, un **caméléon**.
+Dans Le Roi lion, comment s'appelle le père de Simba ? | **Mufasa**.
+Qui est le méchant oncle de Simba ? | **Scar**.
+Que veut dire « Hakuna matata » ? | « **Pas de soucis** ».
+Dans Encanto, comment s'appelle la famille de Mirabel ? | **Les Madrigal**.
+Dans Encanto, de qui « on ne parle pas » ? | **De Bruno** !
+Dans Vice-versa, cite les 5 émotions de Riley. | **Joie, Tristesse, Colère, Peur et Dégoût**.
+Dans Lilo & Stitch, quel est le numéro d'expérience de Stitch ? | **626**.
+Dans La Petite Sirène, comment s'appelle le crabe ? | **Sébastien**.
+Dans La Petite Sirène, comment s'appelle le poisson ami d'Ariel ? | **Polochon**.
+À quelle heure la magie de Cendrillon s'arrête-t-elle ? | À **minuit**.
+Dans Coco, de quel instrument Miguel rêve-t-il de jouer ? | De la **guitare**.
+Dans Zootopie, comment s'appelle la lapine policière ? | **Judy Hopps**.
+Dans Aladdin, comment s'appelle le singe d'Aladdin ? | **Abu**.
+Dans La Belle et la Bête, comment s'appelle le chandelier ? | **Lumière**.
+`},
+{id:'b-pixar', subject:'bonus', nom:'Les films Pixar', sous:'Toy Story, Nemo, Vice-versa…', data:`
+Dans Toy Story, comment s'appelle le cowboy ? | **Woody**.
+Dans Toy Story, comment s'appelle l'astronaute ? | **Buzz l'Éclair**.
+Quelle est la phrase célèbre de Buzz l'Éclair ? | « **Vers l'infini et au-delà !** »
+Dans Monstres & Cie, comment s'appelle le grand monstre bleu ? | **Sulli**.
+Dans Monstres & Cie, comment s'appelle le petit monstre vert à un œil ? | **Bob**.
+Dans Monstres & Cie, comment s'appelle la petite fille ? | **Bouh**.
+Dans Le Monde de Nemo, quel poisson est Nemo ? | Un **poisson-clown**.
+Comment s'appelle le papa de Nemo ? | **Marin**.
+Qui est l'amie de Marin qui oublie tout ? | **Dory**.
+Dans Cars, comment s'appelle la voiture de course rouge ? | **Flash McQueen**.
+Dans Cars, comment s'appelle la dépanneuse rigolote ? | **Martin**.
+Dans Là-haut, comment la maison de Carl s'envole-t-elle ? | Grâce à **des milliers de ballons**.
+Dans Là-haut, comment s'appelle le chien qui parle ? | **Doug**.
+Dans Ratatouille, quel animal rêve d'être cuisinier ? | Un **rat** qui s'appelle **Rémy**.
+Dans quelle ville se passe Ratatouille ? | À **Paris**.
+Dans Les Indestructibles, comment s'appelle la petite styliste des super-héros ? | **Edna**.
+Dans Les Indestructibles, quel enfant court super vite ? | **Flèche**.
+Dans Alerte rouge, en quel animal Mei se transforme-t-elle ? | En **panda roux** géant.
+Dans Élémentaire, comment s'appellent la fille de feu et le garçon d'eau ? | **Flam** et **Flack**.
+Dans Coco, comment s'appelle le chien de Miguel ? | **Dante**.
+Dans Luca, que sont Luca et Alberto en réalité ? | Des **monstres marins**.
+Dans Vice-versa 2, quelles nouvelles émotions arrivent ? | **Anxiété, Envie, Ennui et Embarras**.
+Dans Wall-E, quel est le travail de Wall-E sur Terre ? | **Ramasser et compacter les déchets**.
+Comment s'appelle le robot blanc dont Wall-E tombe amoureux ? | **EVE**.
+`},
+{id:'b-disney2', subject:'bonus', nom:'Les classiques Disney', sous:'Princesses, animaux, méchants', data:`
+Combien de nains vivent avec Blanche-Neige ? | **Sept**.
+Dans La Belle au bois dormant, comment s'appelle la méchante fée ? | **Maléfique**.
+Dans Mulan, comment s'appelle le petit dragon ? | **Mushu**.
+Dans Le Roi lion, comment s'appellent le suricate et le phacochère ? | **Timon** et **Pumbaa**.
+Dans Le Roi lion, quel animal est Rafiki ? | Un **mandrill** (un singe).
+Quelle chanson chante Elsa quand elle s'enfuit dans la montagne ? | « **Libérée, délivrée** ».
+Dans Raiponce, comment s'appelle le cheval ? | **Maximus**.
+Dans Vaiana, comment s'appelle le petit cochon ? | **Pua**.
+Dans Wish, comment s'appelle l'héroïne ? | **Asha**.
+Dans Wish, comment s'appelle la petite étoile ? | **Star**.
+Dans Wish, comment s'appelle le méchant roi ? | Le roi **Magnifico**.
+Dans Aladdin, comment s'appelle le tigre de Jasmine ? | **Rajah**.
+Dans Aladdin, qui est le méchant ? | **Jafar**, avec son perroquet **Iago**.
+Que se passe-t-il quand Pinocchio ment ? | Son **nez s'allonge** !
+Comment s'appelle le criquet ami de Pinocchio ? | **Jiminy Cricket**.
+Dans Les 101 Dalmatiens, qui veut un manteau en fourrure de chiots ? | **Cruella**.
+Dans Peter Pan, comment s'appelle la petite fée ? | **La fée Clochette**.
+Dans Peter Pan, qui est le méchant pirate ? | **Le capitaine Crochet**.
+Dans Le Livre de la jungle, comment s'appelle l'ours ? | **Baloo**.
+Dans Le Livre de la jungle, comment s'appelle la panthère ? | **Bagheera**.
+Dans Le Livre de la jungle, comment s'appelle le tigre ? | **Shere Khan**.
+Pourquoi Dumbo est-il spécial ? | Ses **grandes oreilles** lui permettent de **voler**.
+Dans Bambi, comment s'appelle le petit lapin ? | **Panpan**.
+Dans Hercule, qui est le papa d'Hercule ? | **Zeus**.
+Dans Hercule, comment s'appelle le cheval ailé ? | **Pégase**.
+Dans Pocahontas, quel animal est Meeko ? | Un **raton laveur**.
+`},
+{id:'b-miraculous', subject:'bonus', nom:'Miraculous', sous:'Ladybug et Chat Noir', data:`
+Qui se cache derrière Ladybug ? | **Marinette Dupain-Cheng**.
+Qui se cache derrière Chat Noir ? | **Adrien Agreste**.
+Dans quelle ville vivent Ladybug et Chat Noir ? | À **Paris**.
+Comment s'appelle le kwami de Marinette ? | **Tikki**.
+Comment s'appelle le kwami d'Adrien ? | **Plagg**.
+Quel fromage Plagg adore-t-il ? | Le **camembert**.
+Comment s'appelle le pouvoir de Ladybug ? | Le **Lucky Charm**.
+Comment s'appelle le pouvoir de Chat Noir ? | Le **Cataclysme**.
+Qui est la meilleure amie de Marinette ? | **Alya**.
+De qui Marinette est-elle amoureuse ? | D'**Adrien** !
+`},
+{id:'b-pokemon', subject:'bonus', nom:'Pokémon', sous:'Attrapez-les tous !', data:`
+Quel est le Pokémon jaune le plus célèbre ? | **Pikachu**.
+De quel type est Pikachu ? | Type **Électrik**.
+En quoi Pikachu évolue-t-il ? | En **Raichu**.
+Comment s'appelle le dresseur de Pikachu dans le dessin animé ? | **Sacha**.
+Dans quoi attrape-t-on les Pokémon ? | Dans une **Poké Ball**.
+De quel type est Salamèche ? | Type **Feu**.
+De quel type est Carapuce ? | Type **Eau**.
+De quel type est Bulbizarre ? | Type **Plante**.
+Quel petit Pokémon marron peut évoluer de plein de façons différentes ? | **Évoli**.
+`},
+{id:'b-harry', subject:'bonus', nom:'Harry Potter', sous:'Le monde des sorciers', data:`
+Comment s'appelle l'école de sorcellerie de Harry ? | **Poudlard**.
+Cite les 4 maisons de Poudlard. | **Gryffondor, Serpentard, Poufsouffle et Serdaigle**.
+Dans quelle maison est Harry ? | **Gryffondor**.
+Qui sont les deux meilleurs amis de Harry ? | **Ron** et **Hermione**.
+Comment s'appelle la chouette de Harry ? | **Hedwige**.
+Quelle forme a la cicatrice sur le front de Harry ? | Un **éclair**.
+Comment s'appelle le sport des sorciers sur des balais ? | Le **Quidditch**.
+Comment s'appelle la petite balle dorée à attraper au Quidditch ? | Le **Vif d'or**.
+Qui est le grand méchant de Harry Potter ? | **Voldemort**.
+`},
+{id:'my-dieux', subject:'mytho', nom:"Les dieux de l'Olympe", sous:'Zeus, Athéna, Poséidon…', data:`
+Où habitent les grands dieux grecs ? | Sur le **mont Olympe**, la plus haute montagne de Grèce. | ⛰️
+Qui est le roi des dieux ? | **Zeus**. Il lance la **foudre** et son animal est l'**aigle**. | ⚡;zeus
+Qui est la femme de Zeus, la reine des dieux ? | **Héra**, déesse du **mariage**. Son oiseau est le **paon**. | 🦚;hera
+Qui est le dieu de la mer ? Quel est son objet ? | **Poséidon**, avec son **trident**. Il provoque aussi les tremblements de terre. | 🔱;poseidon
+Qui est le dieu du royaume des morts ? | **Hadès**, le maître des **Enfers**. | 💀;hades
+Qui est la déesse de la sagesse ? Quel est son animal ? | **Athéna**, avec sa **chouette**. Elle a donné son nom à la ville d'**Athènes**. | 🦉;athena
+Comment est née Athéna ? | Elle est sortie **tout armée de la tête de Zeus** ! | 🪖;athena
+Qui est le dieu du soleil, de la musique et des arts ? | **Apollon**, qui joue de la **lyre**. | ☀️;apollon
+Qui est la déesse de la chasse et de la lune ? | **Artémis**, la sœur jumelle d'Apollon, avec son **arc**. | 🏹;artemis
+Qui est le dieu de la guerre ? | **Arès**. | ⚔️;ares
+Qui est la déesse de l'amour et de la beauté ? | **Aphrodite**, née de l'**écume de la mer**. | 💖;aphrodite
+Qui est le fils d'Aphrodite qui lance des flèches d'amour ? | **Éros**. | 💘;eros
+Qui est le dieu forgeron, dieu du feu ? | **Héphaïstos**. Il fabrique les armes des dieux. | 🔨;hephaistos
+Qui est le messager des dieux, avec des sandales ailées ? | **Hermès**. Il est aussi le dieu des voyageurs et des voleurs. | 🪽;hermes
+Qui est le dieu du vin et de la fête ? | **Dionysos**. | 🍇;dionysos
+Qui est la déesse des moissons et du blé ? | **Déméter**. | 🌾;demeter
+Qui est la fille de Déméter, enlevée par Hadès ? | **Perséphone**. Quand elle est aux Enfers, c'est l'**hiver** ; quand elle revient, c'est le **printemps**. | 🌸;persephone
+Qui est la déesse du foyer et de la maison ? | **Hestia**. | 🔥;hestia
+Qui est le père de Zeus, qui avalait ses enfants ? | Le titan **Cronos**. | ⏳;cronos
+Qui est la Terre-Mère, la toute première déesse ? | **Gaïa**. Les montagnes et le ciel sont nés d'elle. | 🌍;gaia
+Qui est la déesse de la magie, qui éclaire les carrefours avec ses torches ? | **Hécate**. | 🔮;hecate
+Qui est la déesse de la nuit, avec son grand voile étoilé ? | **Nyx**. | 🌙;nyx
+`},
+{id:'my-monstres', subject:'mytho', nom:'Monstres et créatures', sous:'Méduse, Pégase, centaures…', data:`
+Quelle créature a des serpents à la place des cheveux ? | **Méduse**. Son regard **transforme en pierre** ceux qui la regardent. | 🐍;meduse
+Quel monstre a une tête de taureau et un corps d'homme ? | Le **Minotaure**. | 🐂;minotaure
+Où vit le Minotaure ? | Dans le **labyrinthe** du roi Minos, en **Crète**. | 🌀;minotaure
+Qui est Cerbère ? | Le **chien à trois têtes** qui garde l'entrée des **Enfers**. | 🐕;cerbere
+Quel monstre a des têtes qui repoussent quand on les coupe ? | L'**Hydre de Lerne**. | 🐉;hydre
+Qu'est-ce qu'un cyclope ? | Un géant avec **un seul œil** au milieu du front. | 👁️;cyclope
+Comment s'appelle le cyclope piégé par Ulysse ? | **Polyphème**. | 🪨;cyclope
+Que font les sirènes ? | Elles **chantent** pour attirer les marins et faire couler leurs bateaux. | 🎶;sirenes
+Comment s'appelle le cheval ailé ? | **Pégase**. Il est né du sang de Méduse. | 🐴;pegase
+Quel monstre a une tête de lion, un corps de chèvre et une queue de serpent ? | La **Chimère**. Elle crache du **feu** ! | 🦁;chimere
+Qu'est-ce qu'un centaure ? | Un être **moitié homme, moitié cheval**. | 🏇;centaure
+Quel centaure très sage était le professeur des héros ? | **Chiron**. | 📜;centaure
+Quelle créature pose une énigme aux voyageurs ? | Le **Sphinx**, avec un corps de lion et une tête de femme. | 🧩;sphinx
+Quelle est l'énigme du Sphinx ? | « Qui marche à 4 pattes le matin, à 2 pattes à midi et à 3 pattes le soir ? » ¶ Réponse : **l'homme** (bébé, adulte, puis vieillard avec une canne). | 🤔;sphinx
+Qu'est-ce que les Harpies ? | Des monstres **mi-femmes, mi-oiseaux** qui volent la nourriture. | 🦅;harpies
+Combien de sœurs Gorgones y a-t-il ? | **Trois** : Méduse et ses deux sœurs **Sthéno** et **Euryale**. | 🐍;meduse
+Qu'est-ce qu'une nymphe ? | Une **jeune divinité de la nature** qui vit dans les arbres, les rivières, les sources ou la mer. | 🌿
+Comment s'appellent les nymphes des arbres ? | Les **dryades**. | 🌳
+Comment s'appellent les nymphes de la mer ? | Les **néréides**. | 🌊
+Qu'est-ce qu'un satyre ? | Un être des bois **mi-homme, mi-bouc**, qui adore la musique et la fête. | 🐐
+Quel dieu des bergers a des pattes et des cornes de bouc ? | **Pan**, qui joue de la **flûte de Pan**. | 🪈;pan
+Quel oiseau magique renaît de ses cendres ? | Le **phénix**. | 🔥;phenix
+Qu'est-ce qu'un griffon ? | Une créature avec une **tête et des ailes d'aigle** et un **corps de lion**. | 🦅;griffon
+Qu'est-ce qu'un hippocampe dans la mythologie ? | Un **cheval de mer** à queue de poisson qui tire le char de **Poséidon**. | 🐎;hippocampe
+Qui sont les Muses ? | **Neuf sœurs**, filles de Zeus, qui inspirent les **arts**, la musique et la poésie. | 🎭
+Quels monstres de la mer Ulysse doit-il éviter dans un détroit ? | **Charybde**, un tourbillon géant, et **Scylla**, un monstre à six têtes. | 🌀
+Qui est Talos ? | Un **géant de bronze** qui protégeait la Crète en lançant des rochers. | 🗿
+Quel est le monstre le plus terrible, que Zeus a dû combattre ? | **Typhon**, un géant aux cent têtes de serpent. | 🌪️
+`},
+{id:'my-heros', subject:'mytho', nom:'Les héros', sous:'Héraclès, Ulysse, Persée…', data:`
+Quel héros très fort a accompli 12 travaux ? | **Héraclès** (Hercule chez les Romains), fils de Zeus. | 💪;heracles
+Quel est le premier des 12 travaux d'Héraclès ? | Tuer le **lion de Némée**, dont il porte ensuite la peau. | 🦁;heracles
+Qui a coupé la tête de Méduse ? | **Persée**. | 🗡️;persee
+Comment Persée a-t-il vaincu Méduse sans être changé en pierre ? | Il l'a regardée dans le **reflet de son bouclier**. | 🛡️;persee
+Qui a tué le Minotaure ? | **Thésée**. | 🐂;thesee
+Comment Thésée est-il sorti du labyrinthe ? | Grâce au **fil d'Ariane**, la fille du roi Minos. | 🧶;thesee
+Quel héros a mis 10 ans à rentrer chez lui après la guerre de Troie ? | **Ulysse**. Son voyage s'appelle l'**Odyssée**. | ⛵;ulysse
+Quelle ruse a fait gagner la guerre de Troie ? | Le **cheval de Troie** : un grand cheval en bois rempli de soldats grecs. | 🐴;ulysse
+Comment s'appellent l'île et la femme d'Ulysse ? | L'île d'**Ithaque** et sa femme **Pénélope**. | 🏝️;ulysse
+Quel est le seul point faible d'Achille ? | Son **talon** : c'est le « talon d'Achille ». | 🦶;achille
+Quel héros est parti chercher la Toison d'or ? | **Jason**, avec les **Argonautes** sur le navire **Argo**. | 🐏;jason
+Pourquoi Icare est-il tombé ? | Il a volé **trop près du soleil** : la **cire** de ses ailes a fondu. | ☀️
+Qui a fabriqué les ailes d'Icare ? | Son père **Dédale**, qui avait aussi construit le labyrinthe. | 🪶
+Quel musicien est descendu aux Enfers chercher sa femme Eurydice ? | **Orphée**, avec sa **lyre**. | 🎵;orphee
+Qui a volé le feu aux dieux pour le donner aux hommes ? | Le titan **Prométhée**. | 🔥;promethee
+Qu'est-ce que la boîte de Pandore ? | Une boîte qui contenait **tous les malheurs** du monde. Pandore l'a ouverte ; seule l'**espérance** est restée au fond. | 📦
+Quelle princesse, la plus belle du monde, a déclenché la guerre de Troie ? | **Hélène**. | 👑
+Quel roi changeait tout ce qu'il touchait en or ? | Le roi **Midas**. | 🪙
+Quelle chasseresse courait plus vite que tous les garçons ? | **Atalante**. | 🏃‍♀️;atalante
+Quel héros a volé sur Pégase pour vaincre la Chimère ? | **Bellérophon**. | 🐴;bellerophon
+Quel guerrier géant de la guerre de Troie avait un énorme bouclier ? | **Ajax**. | 🛡️;ajax
+`},
+{id:'my-romains', subject:'mytho', nom:'Les noms romains', sous:'Zeus = Jupiter…', data:`
+Quel est le nom romain de Zeus ? | **Jupiter**. | 🏛️;zeus
+Quel est le nom romain de Héra ? | **Junon**. | 🏛️;hera
+Quel est le nom romain de Poséidon ? | **Neptune**. | 🏛️;poseidon
+Quel est le nom romain de Athéna ? | **Minerve**. | 🏛️;athena
+Quel est le nom romain de Arès ? | **Mars**. | 🏛️;ares
+Quel est le nom romain de Aphrodite ? | **Vénus**. | 🏛️;aphrodite
+Quel est le nom romain de Hermès ? | **Mercure**. | 🏛️;hermes
+Quel est le nom romain de Héphaïstos ? | **Vulcain**. | 🏛️;hephaistos
+Quel est le nom romain de Artémis ? | **Diane**. | 🏛️;artemis
+Quel est le nom romain de Déméter ? | **Cérès**. | 🏛️;demeter
+Quel est le nom romain de Hadès ? | **Pluton**. | 🏛️;hades
+Quel est le nom romain de Dionysos ? | **Bacchus**. | 🏛️;dionysos
+Quel est le nom romain de Éros ? | **Cupidon**. | 🏛️;eros
+Quel est le nom romain de Cronos ? | **Saturne**. | 🏛️;cronos
+Quel est le nom romain de Hestia ? | **Vesta**. | 🏛️;hestia
+Quel est le nom romain de Héraclès ? | **Hercule**. | 🏛️;heracles
+Pourquoi les dieux grecs ont-ils aussi des noms romains ? | Les **Romains** ont repris les dieux des Grecs en leur donnant **d'autres noms**. Plusieurs planètes portent ces noms : **Jupiter, Mars, Vénus, Mercure, Saturne, Neptune**. | 🪐
+`},
+{id:'he-politesse', subject:'hebreu', nom:'Politesse et salutations', sous:'Shalom, toda, bevakasha…', data:`
+bonjour, salut, au revoir | שלום | shalom
+bonjour (le matin) | בוקר טוב | boker tov
+réponse à « bonjour » (le matin) | בוקר אור | boker or
+bonsoir | ערב טוב | erev tov
+bonne nuit | לילה טוב | layla tov
+bonne journée | יום טוב | yom tov
+bonne semaine (le samedi soir) | שבוע טוב | shavoua tov
+chabbat chalom | שבת שלום | shabbat shalom
+bonne fête | חג שמח | khag saméakh
+merci | תודה | toda
+merci beaucoup | תודה רבה | toda raba
+s'il te plaît / je t'en prie | בבקשה | bevakasha
+pardon, excusez-moi | סליחה | slikha
+désolé (homme) | אני מצטער | ani mitsta'er
+désolée (femme) | אני מצטערת | ani mitsta'éret
+de rien | אין בעד מה | eyn be'ad ma
+avec plaisir | בכיף | bekef
+bienvenue | ברוך הבא | baroukh haba
+bienvenue (à plusieurs) | ברוכים הבאים | broukhim habaïm
+comment ça va ? (à un homme) | מה שלומך? | ma shlomkha?
+comment ça va ? (à une femme) | מה שלומך? | ma shlomekh?
+quoi de neuf ? ça va ? | מה נשמע? | ma nishma?
+ça va ? (familier) | מה קורה? | ma koré?
+ça va bien | הכל טוב | hakol tov
+bien, très bien | טוב מאוד | tov méod
+ça va, comme ci comme ça | ככה ככה | kakha kakha
+bien, merci | בסדר, תודה | beseder, toda
+enchanté (homme) | נעים מאוד | naïm méod
+au revoir, à plus | להתראות | lehitraot
+salut, bye (familier) | ביי | bye
+à demain | נתראה מחר | nitraé makhar
+à bientôt | נתראה בקרוב | nitraé bekarov
+bonne chance | בהצלחה | behatslakha
+félicitations, mazal tov | מזל טוב | mazal tov
+bon appétit | בתיאבון | beté'avon
+à la santé ! (en trinquant) | לחיים | lekhaïm
+à tes souhaits / guéris vite | לבריאות | labriout
+prompt rétablissement | רפואה שלמה | refoua shléma
+bon voyage | נסיעה טובה | nesia tova
+bon anniversaire | יום הולדת שמח | yom houledet saméakh
+bonne année | שנה טובה | shana tova
+oui | כן | ken
+non | לא | lo
+d'accord, OK | בסדר | beseder
+peut-être | אולי | oulay
+bien sûr | בטח | betakh
+volontiers, avec joie | בשמחה | besimkha
+je ne sais pas | אני לא יודע | ani lo yodéa
+je ne comprends pas | אני לא מבין | ani lo mévin
+tu peux répéter ? | אפשר לחזור על זה? | efshar lakhzor al zé?
+parle plus lentement, s'il te plaît | תדבר לאט, בבקשה | tedaber lat, bevakasha
+comment tu t'appelles ? (à un homme) | איך קוראים לך? | eykh korim lekha?
+comment tu t'appelles ? (à une femme) | איך קוראים לך? | eykh korim lakh?
+je m'appelle… | קוראים לי… | korim li…
+d'où es-tu ? (à un homme) | מאיפה אתה? | méeyfo ata?
+je suis de France | אני מצרפת | ani mitsarfat
+je suis français / française | אני צרפתי / צרפתייה | ani tsarfati / tsarfatiya
+tu parles hébreu ? | אתה מדבר עברית? | ata medaber ivrit?
+un peu | קצת | ktsat
+je parle un peu hébreu | אני מדבר קצת עברית | ani medaber ktsat ivrit
+`},
+{id:'he-argot', subject:'hebreu', nom:'Expressions israéliennes', sous:'Yalla, sababa, balagan…', data:`
+allez ! on y va ! | יאללה | yalla
+super, cool | סבבה | sababa
+génial, top | אחלה | akhla
+le désordre, le bazar | בלגן | balagan
+concrètement, droit au but | תכלס | takhles
+exprès, justement | דווקא | davka
+pour rien, juste comme ça | סתם | stam
+mon chéri, ma vie (affectueux) | כפרה | kapara
+mon frère, mon pote | אחי | akhi
+ma sœur, ma copine | אחותי | akhoti
+mon chéri / ma chérie (mon âme) | נשמה | neshama
+sans problème | אין בעיה | eyn baaya
+pas grave | לא נורא | lo nora
+c'est pas grave, ça arrive | קורה | koré
+attends une seconde | רגע | réga
+une petite seconde | רק רגע | rak réga
+tant mieux, enfin bref | בקיצור | bekitsour
+en gros, en bref | בגדול | bigdol
+vraiment ? sérieux ? | באמת? | beémet?
+c'est fou ! incroyable ! | מטורף | metoraf
+pas de soucis, détends-toi | יהיה בסדר | yihyé beseder
+tout ira bien | הכל יהיה בסדר | hakol yihyé beseder
+c'est la vie, c'est comme ça | ככה זה | kakha zé
+quoi ? | מה? | ma?
+quoi ?! (étonnement) | מה פתאום? | ma pit'om?
+n'importe quoi ! jamais de la vie ! | מה פתאום! | ma pit'om!
+dommage | חבל | khaval
+dommage pour le temps (ça vaut le coup !) | חבל על הזמן | khaval al hazman
+bravo, bien joué | כל הכבוד | kol hakavod
+avec l'aide de Dieu | בעזרת השם | be'ezrat hashem
+si Dieu le veut | אם ירצה השם | im yirtsé hashem
+Dieu merci | ברוך השם | baroukh hashem
+il n'y a pas le choix | אין ברירה | eyn brera
+pas de chance, tant pis | באסה | basa
+j'ai la flemme | אין לי כוח | eyn li koakh
+j'en ai marre | נמאס לי | nimas li
+ça ne me dérange pas | לא אכפת לי | lo ikhpat li
+c'est pas mon problème | לא הבעיה שלי | lo habaaya sheli
+ça vaut le coup | שווה | shavé
+c'est bon, ça suffit | די | dai
+ça suffit déjà ! | די כבר! | dai kvar!
+en route, partons | זזים | zazim
+viens ! (à un homme) | בוא! | bo!
+viens ! (à une femme) | בואי! | boï!
+on verra | נראה | nir'é
+tranquille, doucement | לאט לאט | lat lat
+la débrouille, le système D | קומבינה | kombina
+ne sois pas un pigeon ! | אל תהיה פראייר! | al tihyé frayer!
+fort, solide (un dur) | חזק | khazak
+sois fort et courageux | חזק ואמץ | khazak ve'emats
+c'est parti | מתחילים | matkhilim
+quel est le problème ? | מה הבעיה? | ma habaaya?
+qu'est-ce qui se passe ? | מה קרה? | ma kara?
+laisse tomber | עזוב | azov
+c'est moche, c'est nul | גרוע | garoua
+trop bien ! | מגניב | magniv
+`},
+{id:'he-questions', subject:'hebreu', nom:'Pronoms et questions', sous:'Ani, ata, ma, éfo…', data:`
+je, moi | אני | ani
+tu (homme) | אתה | ata
+tu (femme) | את | at
+il, lui | הוא | hou
+elle | היא | hi
+nous | אנחנו | anakhnou
+vous (hommes ou groupe mixte) | אתם | atem
+vous (femmes) | אתן | aten
+ils | הם | hem
+elles | הן | hen
+mon, ma, à moi | שלי | sheli
+ton, ta (à un homme) | שלך | shelkha
+ton, ta (à une femme) | שלך | shelakh
+son, sa (à lui) | שלו | shelo
+son, sa (à elle) | שלה | shela
+notre, à nous | שלנו | shelanou
+leur, à eux | שלהם | shelahem
+ce, ceci (masculin) | זה | zé
+ceci (féminin) | זאת | zot
+ceux-ci, celles-ci | אלה | élé
+quoi ? que ? | מה? | ma?
+qui ? | מי? | mi?
+où ? | איפה? | éfo?
+où ? (vers où) | לאן? | lean?
+d'où ? | מאיפה? | méeyfo?
+quand ? | מתי? | matay?
+pourquoi ? | למה? | lama?
+comment ? | איך? | eykh?
+combien ? | כמה? | kama?
+combien ça coûte ? | כמה זה עולה? | kama zé olé?
+lequel ? | איזה? | eyzé?
+laquelle ? | איזו? | eyzo?
+quelle heure est-il ? | מה השעה? | ma hasha'a?
+qu'est-ce que c'est ? | מה זה? | ma zé?
+qui est-ce ? | מי זה? | mi zé?
+il y a | יש | yesh
+il n'y a pas | אין | eyn
+j'ai | יש לי | yesh li
+je n'ai pas | אין לי | eyn li
+tu as ? (à un homme) | יש לך? | yesh lekha?
+est-ce que… ? (question) | האם | haïm
+c'est-à-dire | כלומר | klomar
+`},
+{id:'he-petitsmots', subject:'hebreu', nom:'Petits mots utiles', sous:'Mais, avec, aussi, très…', data:`
+et | ו־ | ve-
+ou | או | o
+mais | אבל | aval
+parce que | כי | ki
+parce que (soutenu) | בגלל ש | biglal she
+si (condition) | אם | im
+alors, donc | אז | az
+que (conjonction) | ש־ | she-
+aussi | גם | gam
+seulement, juste | רק | rak
+très | מאוד | méod
+trop | יותר מדי | yoter miday
+plus | יותר | yoter
+moins | פחות | pakhot
+beaucoup | הרבה | harbé
+un peu | קצת | ktsat
+tout | הכל | hakol
+tous, chaque | כל | kol
+rien | כלום | kloum
+quelque chose | משהו | mashéhou
+quelqu'un | מישהו | mishéhou
+personne | אף אחד | af ékhad
+jamais | אף פעם | af pa'am
+toujours | תמיד | tamid
+parfois | לפעמים | lifamim
+souvent | הרבה פעמים | harbé pe'amim
+déjà | כבר | kvar
+encore | עוד | od
+pas encore | עוד לא | od lo
+maintenant | עכשיו | akhshav
+tout de suite | מיד | miyad
+bientôt | בקרוב | bekarov
+plus tard | אחר כך | akhar kakh
+avant | לפני | lifné
+après | אחרי | akharé
+ici | פה | po
+là-bas | שם | sham
+près | קרוב | karov
+loin | רחוק | rakhok
+avec | עם | im
+sans | בלי | bli
+pour | בשביל | bishvil
+de, depuis | מ־ | mi-
+à, vers | ל־ | le-
+dans, en | ב־ | be-
+sur | על | al
+sous | מתחת | mitakhat
+entre | בין | beyn
+en face de | מול | moul
+derrière | מאחורי | méakhoré
+à côté de | ליד | leyad
+dedans | בפנים | bifnim
+dehors | בחוץ | bakhouts
+en haut | למעלה | lemala
+en bas | למטה | lemata
+à droite | ימינה | yamina
+à gauche | שמאלה | smola
+tout droit | ישר | yashar
+comme | כמו | kmo
+ensemble | ביחד | beyakhad
+seul, tout seul | לבד | levad
+vraiment | באמת | beémet
+en fait | בעצם | be'etsem
+bien sûr (soutenu) | כמובן | kamouvan
+surtout | במיוחד | bimyoukhad
+presque | כמעט | kim'at
+assez | מספיק | maspik
+environ | בערך | be'érekh
+ensuite, puis | ואז | veaz
+par exemple | למשל | lemashal
+grâce à | בזכות | bizkhout
+à cause de | בגלל | biglal
+malgré | למרות | lamrot
+en même temps | בו זמנית | bo zmanit
+de nouveau, encore une fois | שוב | shouv
+d'abord | קודם | kodem
+à la fin | בסוף | basof
+au début | בהתחלה | bahatkhala
+`},
+{id:'he-nombres', subject:'hebreu', nom:'Les nombres', sous:'Ekhad, shtayim, shalosh…', data:`
+zéro | אפס | éfes
+un (féminin, pour compter) | אחת | akhat
+deux (féminin, pour compter) | שתיים | shtayim
+trois | שלוש | shalosh
+quatre | ארבע | arba
+cinq | חמש | khamesh
+six | שש | shesh
+sept | שבע | sheva
+huit | שמונה | shmoné
+neuf | תשע | tesha
+dix | עשר | éser
+onze | אחת עשרה | akhat esré
+douze | שתים עשרה | shtem esré
+treize | שלוש עשרה | shlosh esré
+quinze | חמש עשרה | khamesh esré
+vingt | עשרים | esrim
+trente | שלושים | shloshim
+quarante | ארבעים | arba'im
+cinquante | חמישים | khamishim
+soixante | שישים | shishim
+soixante-dix | שבעים | shiv'im
+quatre-vingts | שמונים | shmonim
+quatre-vingt-dix | תשעים | tish'im
+cent | מאה | méa
+deux cents | מאתיים | matayim
+mille | אלף | élef
+deux mille | אלפיים | alpayim
+un million | מיליון | milyon
+un (masculin, ex. un garçon) | אחד | ékhad
+deux (masculin, ex. deux garçons) | שניים | shnayim
+premier | ראשון | rishon
+deuxième | שני | shéni
+troisième | שלישי | shlishi
+la moitié | חצי | khétsi
+un quart | רבע | réva
+un numéro, un nombre | מספר | mispar
+numéro de téléphone | מספר טלפון | mispar télefon
+une fois | פעם אחת | pa'am akhat
+deux fois | פעמיים | pa'amayim
+le shekel (monnaie) | שקל | shékel
+dix shekels | עשרה שקלים | asara shkalim
+combien d'argent ? | כמה כסף? | kama késef?
+`},
+{id:'he-temps', subject:'hebreu', nom:'Le temps et le calendrier', sous:'Jours, mois, heures…', data:`
+dimanche (yom rishon) | יום ראשון | yom rishon
+lundi | יום שני | yom shéni
+mardi | יום שלישי | yom shlishi
+mercredi | יום רביעי | yom révi'i
+jeudi | יום חמישי | yom khamishi
+vendredi | יום שישי | yom shishi
+samedi, chabbat | שבת | shabbat
+le week-end (vendredi-samedi) | סוף שבוע | sof shavoua
+un jour | יום | yom
+une semaine | שבוע | shavoua
+un mois | חודש | khodesh
+une année | שנה | shana
+aujourd'hui | היום | hayom
+demain | מחר | makhar
+hier | אתמול | etmol
+après-demain | מחרתיים | mokhortayim
+avant-hier | שלשום | shilshom
+le matin | בוקר | boker
+le midi | צהריים | tsohorayim
+l'après-midi | אחר הצהריים | akhar hatsohorayim
+le soir | ערב | érev
+la nuit | לילה | layla
+ce soir | הערב | ha'érev
+cette nuit | הלילה | halayla
+la semaine prochaine | שבוע הבא | shavoua haba
+la semaine dernière | שבוע שעבר | shavoua she'avar
+l'année prochaine | שנה הבאה | shana haba'a
+une heure (durée) | שעה | sha'a
+une minute | דקה | daka
+une seconde | שנייה | shniya
+une demi-heure | חצי שעה | khatsi sha'a
+un quart d'heure | רבע שעה | réva sha'a
+à quelle heure ? | באיזו שעה? | be'eyzo sha'a?
+à huit heures | בשמונה | bishmoné
+tôt | מוקדם | moukdam
+tard | מאוחר | méoukhar
+en retard | באיחור | be'ikhour
+à l'heure | בזמן | bazman
+le temps (qui passe) | זמן | zman
+je n'ai pas le temps | אין לי זמן | eyn li zman
+la date | תאריך | taarikh
+janvier | ינואר | yanouar
+février | פברואר | februar
+mars | מרץ | merts
+avril | אפריל | april
+mai | מאי | may
+juin | יוני | youni
+juillet | יולי | youli
+août | אוגוסט | ogoust
+septembre | ספטמבר | september
+octobre | אוקטובר | oktober
+novembre | נובמבר | november
+décembre | דצמבר | detsember
+l'été | קיץ | kayits
+l'hiver | חורף | khoref
+le printemps | אביב | aviv
+l'automne | סתיו | stav
+une fête | חג | khag
+les vacances | חופש | khofesh
+l'anniversaire | יום הולדת | yom houledet
+`},
+{id:'he-famille', subject:'hebreu', nom:'Famille et personnes', sous:'Aba, ima, yeled…', data:`
+la famille | משפחה | mishpakha
+papa | אבא | aba
+maman | אמא | ima
+les parents | הורים | horim
+le père | אב | av
+la mère | אם | em
+le frère | אח | akh
+la sœur | אחות | akhot
+les frères et sœurs | אחים | akhim
+le fils | בן | ben
+la fille (enfant de) | בת | bat
+les enfants (fils et filles) | ילדים | yeladim
+un garçon, un enfant | ילד | yéled
+une fille, une enfant | ילדה | yalda
+un bébé | תינוק | tinok
+le grand-père | סבא | saba
+la grand-mère | סבתא | savta
+les grands-parents | סבא וסבתא | saba vesavta
+le petit-fils | נכד | nekhed
+la petite-fille | נכדה | nekhda
+l'oncle | דוד | dod
+la tante | דודה | doda
+le cousin | בן דוד | ben dod
+la cousine | בת דודה | bat doda
+le mari | בעל | ba'al
+la femme, l'épouse | אישה | isha
+mon mari | בעלי | ba'ali
+ma femme | אשתי | ishti
+un homme | גבר | guéver
+une femme | אישה | isha
+une personne | אדם | adam
+les gens | אנשים | anashim
+un ami | חבר | khaver
+une amie | חברה | khavera
+les amis | חברים | khaverim
+le voisin | שכן | shakhen
+la voisine | שכנה | shkhena
+un jeune homme, un ado | נער | na'ar
+une jeune fille, une ado | נערה | na'ara
+les jeunes | צעירים | tse'irim
+un vieil homme | זקן | zaken
+une vieille dame | זקנה | zkena
+un invité | אורח | oréakh
+monsieur | אדון | adon
+madame | גברת | guéveret
+le nom | שם | shem
+le nom de famille | שם משפחה | shem mishpakha
+l'âge | גיל | guil
+quel âge as-tu ? (à un homme) | בן כמה אתה? | ben kama ata?
+quel âge as-tu ? (à une femme) | בת כמה את? | bat kama at?
+j'ai dix ans (garçon) | אני בן עשר | ani ben éser
+j'ai neuf ans (fille) | אני בת תשע | ani bat tesha
+marié | נשוי | nassouy
+le mariage | חתונה | khatouna
+la bar-mitsva | בר מצווה | bar mitsva
+`},
+{id:'he-corps', subject:'hebreu', nom:'Le corps et la santé', sous:'Rosh, yad, rofé…', data:`
+le corps | גוף | gouf
+la tête | ראש | rosh
+les cheveux | שיער | sé'ar
+le visage | פנים | panim
+l'œil | עין | ayin
+les yeux | עיניים | eynayim
+l'oreille | אוזן | ozen
+le nez | אף | af
+la bouche | פה | pé
+les dents | שיניים | shinayim
+une dent | שן | shen
+la langue | לשון | lashon
+le cou | צוואר | tsavar
+l'épaule | כתף | katef
+le bras | זרוע | zroa
+la main | יד | yad
+les mains | ידיים | yadayim
+le doigt | אצבע | etsba
+le ventre | בטן | béten
+le dos | גב | gav
+la jambe, le pied | רגל | réguel
+les pieds, les jambes | רגליים | raglayim
+le genou | ברך | bérekh
+le cœur | לב | lev
+le sang | דם | dam
+la peau | עור | or
+la santé | בריאות | briout
+en bonne santé | בריא | bari
+malade (homme) | חולה | kholé
+malade (femme) | חולה | kholah
+je suis malade | אני חולה | ani kholé
+j'ai mal | כואב לי | koev li
+j'ai mal à la tête | כואב לי הראש | koev li harosh
+j'ai mal au ventre | כואבת לי הבטן | koevet li habéten
+la douleur | כאב | ké'ev
+la fièvre | חום | khom
+un rhume | הצטננות | hitstanenout
+la toux | שיעול | shi'oul
+une allergie | אלרגיה | alergya
+le médecin | רופא | rofé
+la doctoresse | רופאה | rof'a
+l'infirmier | אח | akh
+l'infirmière | אחות | akhot
+la pharmacie | בית מרקחת | beit mirkakhat
+le pharmacien | רוקח | rokéakh
+la pharmacienne | רוקחת | rokakhat
+un médicament | תרופה | troufa
+une ordonnance | מרשם | mirsham
+un comprimé | כדור | kadour
+l'hôpital | בית חולים | beit kholim
+les urgences | מיון | miyoun
+une ambulance | אמבולנס | ambulans
+le dentiste | רופא שיניים | rofé shinayim
+un rendez-vous (médical) | תור | tor
+la caisse d'assurance maladie (kupat holim) | קופת חולים | koupat kholim
+fatigué | עייף | ayef
+fatiguée | עייפה | ayéfa
+j'ai faim | אני רעב | ani ra'év
+j'ai soif | אני צמא | ani tsamé
+au secours ! | הצילו! | hatsilou!
+appelez une ambulance ! | תזמינו אמבולנס! | tazminou ambulans!
+`},
+{id:'he-nourriture', subject:'hebreu', nom:'Nourriture et boissons', sous:'Lekhem, mayim, falafel…', data:`
+la nourriture | אוכל | okhel
+manger | לאכול | le'ekhol
+boire | לשתות | lishtot
+le petit-déjeuner | ארוחת בוקר | aroukhat boker
+le déjeuner | ארוחת צהריים | aroukhat tsohorayim
+le dîner | ארוחת ערב | aroukhat érev
+un repas | ארוחה | aroukha
+l'eau | מים | mayim
+de l'eau, s'il vous plaît | מים, בבקשה | mayim, bevakasha
+le pain | לחם | lekhem
+la pita | פיתה | pita
+la hallah (pain du chabbat) | חלה | khala
+le beurre | חמאה | khem'a
+le fromage | גבינה | gvina
+le fromage blanc | גבינה לבנה | gvina levana
+le lait | חלב | khalav
+le yaourt | יוגורט | yogourt
+un œuf | ביצה | beytsa
+les œufs | ביצים | beytsim
+la viande | בשר | bassar
+le poulet | עוף | of
+le poisson | דג | dag
+le riz | אורז | orez
+les pâtes | פסטה | pasta
+la soupe | מרק | marak
+la salade | סלט | salat
+le houmous | חומוס | khoumous
+le falafel | פלאפל | falafel
+le shawarma | שווארמה | shawarma
+la tehina | טחינה | tkhina
+la shakshouka | שקשוקה | shakshouka
+les légumes | ירקות | yerakot
+la tomate | עגבנייה | agvaniya
+le concombre | מלפפון | melafefon
+l'oignon | בצל | batsal
+l'ail | שום | shoum
+la pomme de terre | תפוח אדמה | tapouakh adama
+la carotte | גזר | gézer
+le poivron | פלפל | pilpel
+les fruits | פירות | pérot
+la pomme | תפוח | tapouakh
+la banane | בננה | banana
+l'orange | תפוז | tapouz
+le raisin | ענבים | anavim
+la pastèque | אבטיח | avatiakh
+la fraise | תות | tout
+la grenade | רימון | rimon
+la datte | תמר | tamar
+l'olive | זית | zayit
+le citron | לימון | limon
+le sel | מלח | melakh
+le poivre | פלפל שחור | pilpel shakhor
+le sucre | סוכר | soukar
+l'huile | שמן | shémen
+le miel | דבש | dvash
+le gâteau | עוגה | ouga
+le chocolat | שוקולד | shokolad
+la glace | גלידה | glida
+les bonbons | ממתקים | mamtakim
+le café | קפה | kafé
+un café au lait | קפה הפוך | kafé hafoukh
+le thé | תה | té
+le jus | מיץ | mits
+le jus d'orange | מיץ תפוזים | mits tapouzim
+le vin | יין | yayin
+la bière | בירה | bira
+une boisson | משקה | mashké
+chaud (pour un plat) | חם | kham
+froid | קר | kar
+délicieux, bon | טעים | ta'im
+c'est très bon ! | טעים מאוד! | ta'im méod!
+sucré | מתוק | matok
+salé | מלוח | malouakh
+épicé, piquant | חריף | kharif
+végétarien | צמחוני | tsimkhoni
+casher | כשר | kasher
+le restaurant | מסעדה | mis'ada
+la carte, le menu | תפריט | tafrit
+le serveur | מלצר | meltsar
+la serveuse | מלצרית | meltsarit
+l'addition, s'il vous plaît | חשבון, בבקשה | kheshbon, bevakasha
+une table pour deux | שולחן לשניים | shoulkhan lishnayim
+à emporter | לקחת | lakakhat
+une assiette | צלחת | tsalakhat
+un verre | כוס | kos
+une fourchette | מזלג | mazleg
+un couteau | סכין | sakin
+une cuillère | כף | kaf
+`},
+{id:'he-maison', subject:'hebreu', nom:'La maison', sous:'Bayit, khéder, mita…', data:`
+la maison | בית | bayit
+à la maison | בבית | babayit
+un appartement | דירה | dira
+une chambre, une pièce | חדר | khéder
+la chambre à coucher | חדר שינה | khadar shena
+le salon | סלון | salon
+la cuisine | מטבח | mitbakh
+la salle de bain | חדר אמבטיה | khadar ambatya
+les toilettes | שירותים | sheroutim
+où sont les toilettes ? | איפה השירותים? | éfo hasheroutim?
+le balcon | מרפסת | mirpéset
+le jardin | גינה | guina
+la porte | דלת | délet
+la fenêtre | חלון | khalon
+le mur | קיר | kir
+le toit | גג | gag
+l'escalier | מדרגות | madregot
+l'ascenseur | מעלית | ma'alit
+l'étage | קומה | koma
+la clé | מפתח | mafte'akh
+la table | שולחן | shoulkhan
+la chaise | כיסא | kissé
+le lit | מיטה | mita
+le canapé | ספה | sapa
+l'armoire | ארון | aron
+la lampe | מנורה | menora
+la lumière | אור | or
+la télévision | טלוויזיה | televizya
+l'ordinateur | מחשב | makhshev
+le téléphone | טלפון | télefon
+le portable | פלאפון | pelefon
+le réfrigérateur | מקרר | mekarer
+le four | תנור | tanour
+le lave-linge | מכונת כביסה | mekhonat kvissa
+la douche | מקלחת | miklakhat
+la serviette | מגבת | magévet
+le savon | סבון | sabon
+le miroir | מראה | mar'a
+le livre | ספר | séfer
+le sac | תיק | tik
+le stylo | עט | et
+le papier | נייר | nayar
+la boîte | קופסה | koufsa
+la poubelle | פח | pakh
+le climatiseur | מזגן | mazgan
+la pièce sécurisée (mamad) | ממ"ד | mamad
+l'abri | מקלט | miklat
+le loyer | שכר דירה | skhar dira
+`},
+{id:'he-ville', subject:'hebreu', nom:'Ville et transports', sous:'Ir, rekhov, otobous…', data:`
+la ville | עיר | ir
+le village | כפר | kfar
+le pays | ארץ | érets
+Israël | ישראל | israël
+Jérusalem | ירושלים | yeroushalayim
+Tel-Aviv | תל אביב | tel aviv
+la rue | רחוב | rekhov
+la route | כביש | kvish
+le chemin | דרך | dérekh
+le quartier | שכונה | shkhouna
+la place | כיכר | kikar
+le centre-ville | מרכז העיר | merkaz ha'ir
+le magasin | חנות | khanout
+le supermarché | סופרמרקט | supermarket
+le marché | שוק | shouk
+la banque | בנק | bank
+la poste | דואר | do'ar
+l'école | בית ספר | beit séfer
+la synagogue | בית כנסת | beit knéset
+le parc | פארק | park
+la plage | חוף | khof
+la mer | ים | yam
+la mairie | עירייה | iriya
+l'hôtel | מלון | malon
+le musée | מוזיאון | mouzéon
+le cinéma | קולנוע | kolno'a
+la gare | תחנת רכבת | takhanat rakévet
+l'arrêt de bus | תחנת אוטובוס | takhanat otobous
+le bus | אוטובוס | otobous
+le train | רכבת | rakévet
+le taxi | מונית | monit
+le taxi collectif (sherout) | שירות | sherout
+la voiture | מכונית | mekhonit
+la voiture (familier) | אוטו | oto
+le vélo | אופניים | ofanayim
+l'avion | מטוס | matos
+l'aéroport | שדה תעופה | sdé te'oufa
+le billet | כרטיס | kartis
+la carte de transport (Rav-Kav) | רב קו | rav kav
+le feu rouge | רמזור | ramzor
+le parking | חניה | khanaya
+l'essence | דלק | délek
+l'adresse | כתובת | ktovet
+le plan, la carte | מפה | mapa
+à pied | ברגל | baréguel
+où est… ? | איפה… ? | éfo… ?
+comment aller à… ? | איך מגיעים ל…? | eykh maguiim le…?
+c'est loin ? | זה רחוק? | zé rakhok?
+c'est près d'ici | זה קרוב לפה | zé karov lepo
+arrête-toi ici, s'il te plaît | תעצור פה, בבקשה | ta'atsor po, bevakasha
+le nord | צפון | tsafon
+le sud | דרום | darom
+l'est | מזרח | mizrakh
+l'ouest | מערב | ma'arav
+le désert | מדבר | midbar
+la montagne | הר | har
+`},
+{id:'he-adjectifs', subject:'hebreu', nom:'Couleurs et adjectifs', sous:'Gadol, katan, yafé…', data:`
+une couleur | צבע | tseva
+blanc | לבן | lavan
+noir | שחור | shakhor
+rouge | אדום | adom
+bleu | כחול | kakhol
+vert | ירוק | yarok
+jaune | צהוב | tsahov
+orange (couleur) | כתום | katom
+rose | ורוד | varod
+violet | סגול | sagol
+marron | חום | khoum
+gris | אפור | afor
+bleu ciel | תכלת | tkhelet
+grand, gros | גדול | gadol
+grande | גדולה | gdola
+petit | קטן | katan
+petite | קטנה | ktana
+beau, bien | יפה | yafé
+belle | יפה | yafa
+moche | מכוער | mekho'ar
+bon, bien | טוב | tov
+bonne | טובה | tova
+mauvais | רע | ra
+nouveau | חדש | khadash
+nouvelle | חדשה | khadasha
+vieux (objet) | ישן | yashan
+vieux (personne) | זקן | zaken
+jeune | צעיר | tsa'ir
+long | ארוך | arokh
+court | קצר | katsar
+haut, grand (taille) | גבוה | gavoha
+bas, petit (taille) | נמוך | namoukh
+lourd | כבד | kaved
+léger | קל | kal
+facile | קל | kal
+difficile | קשה | kashé
+chaud | חם | kham
+froid | קר | kar
+rapide | מהיר | mahir
+lent | איטי | iti
+cher | יקר | yakar
+pas cher | זול | zol
+gratuit | חינם | khinam
+plein | מלא | malé
+vide | ריק | reyk
+propre | נקי | naki
+sale | מלוכלך | melukhlakh
+ouvert | פתוח | patouakh
+fermé | סגור | sagour
+riche | עשיר | ashir
+pauvre | עני | ani
+fort | חזק | khazak
+faible | חלש | khalash
+intelligent | חכם | khakham
+gentil | נחמד | nekhmad
+gentille | נחמדה | nekhmada
+drôle | מצחיק | matskhik
+calme | שקט | shaket
+bruyant | רועש | ro'esh
+heureux | שמח | saméakh
+heureuse | שמחה | smékha
+triste | עצוב | atsouv
+important | חשוב | khashouv
+intéressant | מעניין | me'anyen
+ennuyeux | משעמם | mesha'amem
+prêt | מוכן | moukhan
+occupé | עסוק | asouk
+libre | פנוי | panouy
+juste, correct | נכון | nakhon
+faux | לא נכון | lo nakhon
+possible | אפשר | efshar
+impossible | אי אפשר | i efshar
+interdit | אסור | assour
+permis | מותר | moutar
+différent | שונה | shoné
+le même | אותו דבר | oto davar
+dernier | אחרון | akharon
+spécial | מיוחד | meyoukhad
+dangereux | מסוכן | messoukan
+sûr, en sécurité | בטוח | batouakh
+parfait | מושלם | moushlam
+`},
+{id:'he-verbes', subject:'hebreu', nom:'Les verbes', sous:'Infinitifs les plus utilisés', data:`
+être | להיות | lihyot
+faire | לעשות | la'assot
+aller | ללכת | lalekhet
+venir | לבוא | lavo
+arriver | להגיע | lehaguia
+partir, sortir | לצאת | latset
+entrer | להיכנס | lehikanes
+rentrer, revenir | לחזור | lakhzor
+rester | להישאר | lehisha'er
+voyager, rouler | לנסוע | linso'a
+courir | לרוץ | larouts
+marcher, se promener | לטייל | letayel
+s'asseoir | לשבת | lashévet
+se lever | לקום | lakoum
+dormir | לישון | lishon
+se réveiller | להתעורר | lehit'orer
+manger | לאכול | le'ekhol
+boire | לשתות | lishtot
+cuisiner | לבשל | levashel
+dire | להגיד | lehaguid
+parler | לדבר | ledaber
+raconter | לספר | lessaper
+demander | לשאול | lishol
+répondre | לענות | la'anot
+appeler (au téléphone) | להתקשר | lehitkasher
+crier | לצעוק | litsok
+écouter | להקשיב | lehakshiv
+entendre | לשמוע | lishmoa
+voir | לראות | lir'ot
+regarder | להסתכל | lehistakel
+lire | לקרוא | likro
+écrire | לכתוב | likhtov
+apprendre, étudier | ללמוד | lilmod
+enseigner | ללמד | lelamed
+comprendre | להבין | lehavin
+savoir | לדעת | lada'at
+connaître | להכיר | lehakir
+penser | לחשוב | lakhshov
+se souvenir | לזכור | lizkor
+oublier | לשכוח | lishko'akh
+croire | להאמין | leha'amin
+vouloir | לרצות | lirtsot
+pouvoir (je peux) | אני יכול | ani yakhol
+aimer | לאהוב | le'ehov
+détester | לשנוא | lisno
+préférer | להעדיף | leha'adif
+avoir besoin | להצטרך | lehitstarekh
+devoir (il faut) | צריך | tsarikh
+essayer | לנסות | lenassot
+commencer | להתחיל | lehatkhil
+finir | לגמור | ligmor
+terminer (soutenu) | לסיים | lessayem
+continuer | להמשיך | lehamshikh
+attendre | לחכות | lekhakot
+chercher | לחפש | lekhapes
+trouver | למצוא | limtso
+perdre | לאבד | le'abed
+gagner (un jeu) | לנצח | lenatséakh
+jouer | לשחק | lessakhek
+chanter | לשיר | lashir
+danser | לרקוד | lirkod
+rire | לצחוק | litskhok
+pleurer | לבכות | livkot
+sourire | לחייך | lekhayekh
+acheter | לקנות | liknot
+vendre | למכור | limkor
+payer | לשלם | leshalem
+coûter | לעלות | la'alot
+donner | לתת | latet
+prendre | לקחת | lakakhat
+apporter | להביא | lehavi
+envoyer | לשלוח | lishlo'akh
+recevoir | לקבל | lekabel
+mettre, poser | לשים | lassim
+ouvrir | לפתוח | liftoakh
+fermer | לסגור | lisgor
+allumer | להדליק | lehadlik
+éteindre | לכבות | lekhabot
+laver | לשטוף | lishtof
+se laver, se doucher | להתקלח | lehitkale'akh
+nettoyer | לנקות | lenakot
+s'habiller | להתלבש | lehitlabesh
+porter (un vêtement) | ללבוש | lilbosh
+travailler | לעבוד | la'avod
+aider | לעזור | la'azor
+utiliser | להשתמש | lehishtamesh
+réparer | לתקן | letaken
+construire | לבנות | livnot
+casser | לשבור | lishbor
+habiter | לגור | lagour
+vivre | לחיות | likhyot
+mourir | למות | lamout
+naître | להיוולד | lehivaled
+grandir | לגדול | ligdol
+changer | לשנות | leshanot
+choisir | לבחור | livkhor
+décider | להחליט | lehakhlit
+montrer | להראות | leharot
+expliquer | להסביר | lehasbir
+traduire | לתרגם | letargem
+compter | לספור | lispor
+dessiner | לצייר | letsayer
+nager | לשחות | liskhot
+conduire | לנהוג | linhog
+voler (en avion) | לטוס | latous
+monter | לעלות | la'alot
+descendre | לרדת | larédet
+tomber | ליפול | lipol
+porter (un objet) | לסחוב | liskhov
+tenir | להחזיק | lehakhzik
+jeter | לזרוק | lizrok
+tirer | למשוך | limshokh
+pousser | לדחוף | lidkhof
+toucher | לגעת | laga'at
+sentir (une odeur) | להריח | lehari'akh
+goûter | לטעום | lit'om
+se sentir | להרגיש | lehargish
+avoir peur | לפחד | lefakhed
+se fâcher | לכעוס | lik'os
+s'inquiéter | לדאוג | lid'og
+se reposer | לנוח | lanoua'h
+rêver | לחלום | lakhlom
+espérer | לקוות | lekavot
+remercier | להודות | lehodot
+pardonner | לסלוח | lisloakh
+s'excuser | להתנצל | lehitnatsel
+inviter, commander | להזמין | lehazmin
+rencontrer | לפגוש | lifgosh
+se marier | להתחתן | lehitkhaten
+fêter | לחגוג | lakhgog
+prier | להתפלל | lehitpalel
+fermer à clé | לנעול | lin'ol
+garder, surveiller | לשמור | lishmor
+promettre | להבטיח | lehavtiakh
+permettre | להרשות | leharshot
+interdire | לאסור | le'essor
+ressembler | להיראות כמו | lehera'ot kmo
+sembler, avoir l'air | להיראות | lehera'ot
+arrêter (de faire) | להפסיק | lehafsik
+s'arrêter | לעצור | la'atsor
+tourner | לפנות | lifnot
+retourner, rendre | להחזיר | lehakhzir
+emprunter | ללוות | lilvot
+envoyer un message | לשלוח הודעה | lishlo'akh hoda'a
+photographier | לצלם | letsalem
+téléphoner | לטלפן | letalfen
+`},
+{id:'he-ecole', subject:'hebreu', nom:'École et travail', sous:'Beit séfer, moré, avoda…', data:`
+l'élève (garçon) | תלמיד | talmid
+l'élève (fille) | תלמידה | talmida
+le professeur | מורה | moré
+la professeure | מורה | mora
+la classe | כיתה | kita
+le cours, la leçon | שיעור | shi'our
+les devoirs | שיעורי בית | shi'ouré bayit
+le cahier | מחברת | makhbéret
+le crayon | עיפרון | iparon
+la gomme | מחק | mekhak
+la règle | סרגל | sargel
+le cartable | ילקוט | yalkout
+l'examen, le contrôle | מבחן | mivkhan
+la note | ציון | tsiyoun
+la récréation | הפסקה | hafsaka
+le tableau | לוח | lou'akh
+une question | שאלה | she'ela
+une réponse | תשובה | tshouva
+un mot | מילה | mila
+une phrase | משפט | mishpat
+une langue | שפה | safa
+l'hébreu | עברית | ivrit
+le français | צרפתית | tsarfatit
+l'anglais | אנגלית | anglit
+les mathématiques | מתמטיקה | matematika
+l'histoire | היסטוריה | historya
+l'université | אוניברסיטה | ouniversita
+le jardin d'enfants | גן | gan
+le travail | עבודה | avoda
+le bureau | משרד | misrad
+le patron | בוס | bos
+un collègue | עמית | amit
+une réunion | פגישה | pguisha
+l'argent | כסף | késef
+le salaire | משכורת | maskoret
+un métier | מקצוע | miktso'a
+l'avocat | עורך דין | orekh din
+l'ingénieur | מהנדס | mehandes
+le policier | שוטר | shoter
+le soldat | חייל | khayal
+la soldate | חיילת | khayélet
+l'armée (Tsahal) | צבא | tsava
+le vendeur | מוכר | mokher
+le chauffeur | נהג | nahag
+`},
+{id:'he-nature', subject:'hebreu', nom:'Nature, météo et animaux', sous:'Shémesh, gueshem, kélev…', data:`
+le soleil | שמש | shémesh
+la lune | ירח | yaréakh
+les étoiles | כוכבים | kokhavim
+le ciel | שמיים | shamayim
+le nuage | ענן | anan
+la pluie | גשם | guéshem
+il pleut | יורד גשם | yored guéshem
+le vent | רוח | rouakh
+la neige | שלג | shéleg
+la chaleur | חום | khom
+il fait chaud | חם | kham
+il fait froid | קר | kar
+quel temps fait-il ? | מה מזג האוויר? | ma mézeg ha'avir?
+la météo | מזג אוויר | mézeg avir
+l'air | אוויר | avir
+la terre, le sol | אדמה | adama
+la Terre (planète) | כדור הארץ | kadour ha'arets
+le monde | עולם | olam
+l'arbre | עץ | ets
+la fleur | פרח | pérakh
+l'herbe | דשא | désheh
+la pierre | אבן | éven
+le feu | אש | esh
+la rivière | נהר | nahar
+le lac | אגם | agam
+la forêt | יער | ya'ar
+le sable | חול | khol
+l'animal | חיה | khaya
+le chien | כלב | kélev
+le chat | חתול | khatoul
+l'oiseau | ציפור | tsipor
+le poisson | דג | dag
+le cheval | סוס | sous
+la vache | פרה | para
+le mouton | כבש | kéves
+la chèvre | עז | ez
+le chameau | גמל | gamal
+le lion | אריה | arié
+l'ours | דוב | dov
+le singe | קוף | kof
+l'éléphant | פיל | pil
+le serpent | נחש | nakhash
+la souris | עכבר | akhbar
+le lapin | ארנב | arnav
+le papillon | פרפר | parpar
+l'abeille | דבורה | dvora
+la fourmi | נמלה | nemala
+la tortue | צב | tsav
+`},
+{id:'he-vetements', subject:'hebreu', nom:'Vêtements et courses', sous:"Khoultsa, na'alayim, kniyot…", data:`
+les vêtements | בגדים | bgadim
+la chemise, le t-shirt | חולצה | khoultsa
+le pantalon | מכנסיים | mikhnassayim
+la jupe | חצאית | khatsa'it
+la robe | שמלה | simla
+le manteau | מעיל | me'il
+le pull | סוודר | sveder
+les chaussures | נעליים | na'alayim
+les sandales | סנדלים | sandalim
+les chaussettes | גרביים | garbayim
+le chapeau | כובע | kova
+les lunettes | משקפיים | mishkafayim
+les lunettes de soleil | משקפי שמש | mishkéfé shémesh
+la montre | שעון | sha'on
+le maillot de bain | בגד ים | béguéd yam
+la taille (vêtement) | מידה | mida
+les courses | קניות | kniyot
+faire les courses | לעשות קניות | la'assot kniyot
+combien ça coûte ? | כמה זה עולה? | kama zé olé?
+c'est trop cher | זה יקר מדי | zé yakar miday
+il y a une réduction ? | יש הנחה? | yesh hanakha?
+les soldes, une réduction | הנחה | hanakha
+je voudrais acheter… | אני רוצה לקנות… | ani rotsé liknot…
+je cherche… | אני מחפש… | ani mekhapes…
+je peux essayer ? | אפשר למדוד? | efshar limdod?
+la caisse | קופה | koupa
+le reçu | קבלה | kabala
+la carte de crédit | כרטיס אשראי | kartis ashrai
+en espèces | מזומן | mezouman
+un sac (plastique) | שקית | sakit
+ouvert / fermé (magasin) | פתוח / סגור | patouakh / sagour
+`},
+{id:'he-emotions', subject:'hebreu', nom:'Émotions et sentiments', sous:'Saméakh, atsouv, ohev…', data:`
+je t'aime (à un homme) | אני אוהב אותך | ani ohev otkha
+je t'aime (à une femme) | אני אוהב אותך | ani ohev otakh
+l'amour | אהבה | ahava
+la joie | שמחה | simkha
+la tristesse | עצב | étsev
+la peur | פחד | pakhad
+la colère | כעס | ka'as
+j'ai peur | אני מפחד | ani mefakhed
+je suis content | אני שמח | ani saméakh
+je suis triste | אני עצוב | ani atsouv
+je suis en colère | אני כועס | ani ko'es
+je suis fatigué | אני עייף | ani ayef
+je m'ennuie | משעמם לי | mesha'amem li
+je suis stressé | אני בלחץ | ani belakhats
+je suis surpris | אני מופתע | ani mouft'a
+je suis fier de toi | אני גאה בך | ani gué'é bekha
+tu me manques | אני מתגעגע אליך | ani mitga'agué'a élékha
+j'aime ça | אני אוהב את זה | ani ohev et zé
+je n'aime pas ça | אני לא אוהב את זה | ani lo ohev et zé
+c'est amusant | כיף | kef
+quel plaisir ! | איזה כיף! | eyzé kef!
+quelle honte | בושה | bousha
+le calme, la tranquillité | שקט | shéket
+l'espoir | תקווה | tikva
+la chance | מזל | mazal
+le bonheur | אושר | osher
+`},
+{id:'he-phrases', subject:'hebreu', nom:'Phrases utiles', sous:'Pour se débrouiller en Israël', data:`
+je veux… | אני רוצה… | ani rotsé…
+je ne veux pas | אני לא רוצה | ani lo rotsé
+j'ai besoin d'aide | אני צריך עזרה | ani tsarikh ezra
+tu peux m'aider ? (à un homme) | אתה יכול לעזור לי? | ata yakhol la'azor li?
+tu peux m'aider ? (à une femme) | את יכולה לעזור לי? | at yekhola la'azor li?
+est-ce possible ? | אפשר? | efshar?
+c'est possible de… ? | אפשר ל…? | efshar le…?
+je peux avoir… ? | אפשר לקבל…? | efshar lekabel…?
+je me suis perdu | הלכתי לאיבוד | halakhti le'ibbod
+je ne parle pas bien hébreu | אני לא מדבר עברית טוב | ani lo medaber ivrit tov
+tu parles français ? | אתה מדבר צרפתית? | ata medaber tsarfatit?
+tu parles anglais ? | אתה מדבר אנגלית? | ata medaber anglit?
+comment dit-on… en hébreu ? | איך אומרים… בעברית? | eykh omrim… be'ivrit?
+qu'est-ce que ça veut dire ? | מה זה אומר? | ma zé omer?
+écris-le-moi, s'il te plaît | תכתוב לי, בבקשה | tikhtov li, bevakasha
+j'habite à Paris | אני גר בפריז | ani gar beparis
+je suis en vacances | אני בחופש | ani bekhofesh
+je suis touriste | אני תייר | ani tayar
+nous sommes une famille | אנחנו משפחה | anakhnou mishpakha
+j'ai trois enfants | יש לי שלושה ילדים | yesh li shlosha yeladim
+c'est combien pour aller à… ? | כמה זה עולה עד…? | kama zé olé ad…?
+une table pour quatre, s'il vous plaît | שולחן לארבעה, בבקשה | shoulkhan le'arba'a, bevakasha
+je suis allergique | יש לי אלרגיה | yesh li alergya
+sans sucre | בלי סוכר | bli soukar
+avec plaisir, à ton service | בכיף | bekef
+je reviens tout de suite | אני כבר חוזר | ani kvar khozer
+attends-moi ! | חכה לי! | khaké li!
+on se voit quand ? | מתי נפגשים? | matay nifgashim?
+on se retrouve où ? | איפה נפגשים? | éfo nifgashim?
+quelle heure est-il ? | מה השעה? | ma hasha'a?
+il est quelle heure maintenant ? | כמה השעה עכשיו? | kama hasha'a akhshav?
+c'est fermé le chabbat | זה סגור בשבת | zé sagour beshabbat
+quelle belle journée ! | איזה יום יפה! | eyzé yom yafé!
+il fait très chaud aujourd'hui | חם מאוד היום | kham méod hayom
+je suis prêt | אני מוכן | ani moukhan
+je n'ai pas compris | לא הבנתי | lo havanti
+j'ai compris | הבנתי | havanti
+encore une fois, s'il te plaît | עוד פעם, בבקשה | od pa'am, bevakasha
+c'est à moi | זה שלי | zé sheli
+c'est pour toi | זה בשבילך | zé bishvilkha
+fais attention ! | תיזהר! | tizahér!
+attention ! | זהירות! | zehirout!
+silence ! | שקט! | shéket!
+vite ! | מהר! | maher!
+bonne idée | רעיון טוב | ra'ayon tov
+j'arrive ! | אני בא! | ani ba!
+je suis là | אני פה | ani po
+c'est tout | זה הכל | zé hakol
+rien d'autre ? | עוד משהו? | od mashéhou?
+merci, c'est tout | תודה, זה הכל | toda, zé hakol
+`},
+];
+
+THEMES.push(...QA_THEMES);
+const SUBJECTS = [
+  { id: 'anglais', nom: 'Anglais', txt: 'Spelling Bee' },
+  { id: 'maths', nom: 'Maths', txt: 'Séquences 1 à 5' },
+  { id: 'svt', nom: 'SVT', txt: 'Terre, climat, écosystèmes' },
+  { id: 'histoire', nom: 'Histoire', txt: 'La Préhistoire' },
+  { id: 'pc', nom: 'Physique-chimie', txt: 'La matière' },
+  { id: 'hebreu', nom: 'Hébreu', txt: '1000 mots utiles' },
+  { id: 'mytho', nom: 'Mythologie', txt: 'Dieux, monstres, héros' },
+  { id: 'bonus', nom: 'Bonus', txt: 'Séries et films' },
+];
+const isQA = subj => subj !== 'anglais';
+const BONUS_GOAL = 20;
+const BONUS_LEN = 10;
+let secretTaps = 0, secretTimer = null;
+const NO_POINTS = ['bonus', 'mytho', 'hebreu']; // matières qui ne rapportent pas de points bonus
+const PER_SUBJECT = 10;
+const WINDOW_MS = 8 * 3600 * 1000; // une période dure 8 heures
+const MIN_SUBJECTS = 2;
+const newCycle = () => ({ v: 2, pts: 0, total: {}, legacy: 0, win: null });
+const cycle = () => (store.cycle = store.cycle && store.cycle.v === 2 ? store.cycle : newCycle());
+const curWin = () => { const c = cycle(); return c.win && Date.now() - c.win.start < WINDOW_MS ? c.win : null; };
+const validated = () => { const c = cycle(); return Math.min(BONUS_GOAL, c.pts + (c.legacy || 0)); };
+const nbSubjects = () => Object.values(cycle().total).filter(n => n > 0).length;
+const bonusReady = () => validated() >= BONUS_GOAL && (nbSubjects() >= MIN_SUBJECTS || cycle().legacy >= BONUS_GOAL);
+const plain = s => String(s).replace(/\*\*/g, '').replace(/ ¶ /g, ' · ');
+const rich = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/ ¶ /g, '<br>');
+
+const CARDS = [];
+for (const t of THEMES) {
+  t.cards = [];
+  for (const raw of t.data.split('\n')) {
+    if (!raw.trim()) continue;
+    const [fr, en, alt = '', note = ''] = raw.split('|').map(s => s.trim());
+    const c = { id: t.id + '|' + en, theme: t.id, subject: t.subject, fr, en, alt: alt ? alt.split(';').map(s => s.trim()).filter(Boolean) : [], note };
+    t.cards.push(c); CARDS.push(c);
+  }
+}
+const byId = Object.fromEntries(CARDS.map(c => [c.id, c]));
+
+/* ===== Mémoire locale ===== */
+const KEY = 'nora-spelling-bee-v1';
+let store = { prefs: { mode: 'cartes', dir: 'fr-en', len: 20, themes: ['classe', 'meteo', 'jours', 'mois'] }, boxes: {} };
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.prefs) store = { ...store, ...s, prefs: { ...store.prefs, ...s.prefs } }; } catch (e) {}
+store.prefs.themes = store.prefs.themes.filter(id => THEMES.some(t => t.id === id));
+if (!SUBJECTS.some(x => x.id === store.prefs.subject)) store.prefs.subject = 'anglais';
+if (!store.cycle || store.cycle.v !== 2) {
+  // passage à la nouvelle règle : on garde les points déjà gagnés
+  const o = store.cycle, c = newCycle();
+  if (o && o.ids) { c.pts = o.ids.length; c.total = { ...o.by }; c.legacy = o.legacy || 0; c.win = { start: Date.now(), ids: [...o.ids], by: { ...o.by } }; }
+  else c.legacy = Math.min(BONUS_GOAL, typeof store.credit === 'number' ? store.credit : CARDS.filter(x => x.subject !== 'bonus' && store.boxes[x.id] && store.boxes[x.id].ok > 0).length);
+  store.cycle = c; save();
+}
+{ const c = store.cycle; let changed = false;
+  for (const sub of NO_POINTS) {
+    if (c.total && c.total[sub]) { c.pts = Math.max(0, c.pts - c.total[sub]); delete c.total[sub]; changed = true; }
+    if (c.win && c.win.by && c.win.by[sub]) { delete c.win.by[sub]; changed = true; }
+  }
+  if (c.win && c.win.ids) c.win.ids = c.win.ids.filter(id => !(byId[id] && NO_POINTS.includes(byId[id].subject)));
+  if (changed) save(); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+const boxOf = id => (store.boxes[id] && store.boxes[id].b) || 0;
+function record(id, ok) {
+  const s = store.boxes[id] || { b: 0, ok: 0, ko: 0 };
+  if (ok) { s.b = Math.min(5, s.b + 1); s.ok++; } else { s.b = 0; s.ko++; }
+  if (ok && byId[id] && !NO_POINTS.includes(byId[id].subject)) {
+    // une question ne compte qu'une fois par cycle, et 10 points maximum par matière
+    // dans une période de 8 h : une question compte une fois, une matière 10 points maximum
+    const cy = cycle(), sub = byId[id].subject;
+    if (!curWin()) cy.win = { start: Date.now(), ids: [], by: {} };
+    const w = cy.win;
+    if (!w.ids.includes(id) && (w.by[sub] || 0) < PER_SUBJECT) {
+      w.ids.push(id); w.by[sub] = (w.by[sub] || 0) + 1;
+      cy.total[sub] = (cy.total[sub] || 0) + 1; cy.pts++;
+    }
+  }
+  s.t = Date.now();
+  store.boxes[id] = s; save();
+}
+const known = t => t.cards.filter(c => boxOf(c.id) >= 3).length;
+
+/* ===== Voix anglaise ===== */
+// On choisit explicitement une voix anglaise : Ava d'abord (Premium, puis améliorée,
+// puis standard), sinon une autre voix féminine claire. Les voix gadget sont écartées.
+// (Indiquer seulement la langue ne suffit pas : Safari prenait alors une voix française.)
+let voice = null;
+const VOIX_A_EVITER = /\b(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
+const PREFEREES = ['ava', 'samantha', 'allison', 'susan', 'zoe', 'serena', 'kate', 'stephanie', 'google us english', 'google uk english female', 'aria', 'jenny', 'libby', 'sonia'];
+function noteVoix(v) {
+  const n = v.name.toLowerCase();
+  if (VOIX_A_EVITER.test(n)) return -100;
+  let s = 0;
+  const i = PREFEREES.findIndex(x => n === x || n.startsWith(x + ' ') || n.startsWith(x + '(') || n.includes(x + ' ('));
+  if (i > -1) s += 100 - i * 5;
+  if (/premium/i.test(n)) s += 3; else if (/enhanced|amélior|natural|neural/i.test(n)) s += 2;
+  if (/^en[-_]us/i.test(v.lang)) s += 1;
+  return s;
+}
+function pickVoice() {
+  if (!('speechSynthesis' in window)) return;
+  const vs = speechSynthesis.getVoices().filter(v => /^en[-_]/i.test(v.lang));
+  voice = vs.sort((a, b) => noteVoix(b) - noteVoix(a))[0] || null;
+}
+const canSpeak = 'speechSynthesis' in window;
+let heVoice = null;
+function pickHe() {
+  if (!canSpeak) return null;
+  const vs = speechSynthesis.getVoices().filter(v => /^(he|iw)([-_]|$)/i.test(v.lang));
+  heVoice = vs.sort((a, b) => (/google|carmit|natural|premium|enhanced/i.test(b.name) ? 1 : 0) - (/google|carmit|natural|premium|enhanced/i.test(a.name) ? 1 : 0))[0] || null;
+  return heVoice;
+}
+function sayHe(text, slow) {
+  if (!canSpeak) return;
+  if (!heVoice) pickHe();
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/…/g, ' ').replace(/ ?\/ ?/g, ', '));
+  u.lang = heVoice ? heVoice.lang : 'he-IL';
+  if (heVoice) u.voice = heVoice;
+  u.rate = slow ? 0.65 : 0.85;
+  speechSynthesis.speak(u);
+}
+function say(text, slow) {
+  if (!canSpeak) return;
+  if (!voice) pickVoice();
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ', something,'));
+  u.lang = voice ? voice.lang : 'en-US';
+  if (voice) u.voice = voice;
+  u.rate = slow ? 0.7 : 0.92;
+  speechSynthesis.speak(u);
+}
+const SPK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+
+/* ===== Vérification de l'orthographe ===== */
+const ARTS = ['a', 'an', 'the', 'to'];
+function norm(s) {
+  return s.replace(/[’‘`]/g, "'").replace(/…/g, ' ').replace(/[.,!?;:"«»()]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function stripArt(s) {
+  const w = s.split(' ');
+  return (w.length > 1 && ARTS.includes(w[0].toLowerCase())) ? w.slice(1).join(' ') : s;
+}
+// Les mots qui portent une majuscule dans la réponse attendue (Monday, May, English, I…)
+// doivent l'avoir. Le premier mot d'une phrase peut s'écrire avec ou sans.
+function sameWords(typed, exp) {
+  const a = typed.split(' '), b = exp.split(' ');
+  if (a.length !== b.length) return { ok: false, caseOnly: false };
+  let caseIssue = false;
+  for (let i = 0; i < b.length; i++) {
+    if (a[i].toLowerCase() !== b[i].toLowerCase()) return { ok: false, caseOnly: false };
+    const strict = /[A-Z]/.test(b[i]) && !(i === 0 && b.length > 1);
+    if (strict && a[i] !== b[i]) caseIssue = true;
+  }
+  return { ok: !caseIssue, caseOnly: caseIssue };
+}
+function checkEn(input, card) {
+  const t = norm(input);
+  if (!t) return { ok: false, best: card.en };
+  let caseOnly = false;
+  for (const exp of [card.en, ...card.alt]) {
+    const e = norm(exp);
+    const tries = [[t, e], [t, stripArt(e)]];
+    if (stripArt(e) === e) tries.push([stripArt(t), e]);
+    for (const [x, y] of tries) {
+      const r = sameWords(x, y);
+      if (r.ok) return { ok: true, best: exp };
+      if (r.caseOnly) caseOnly = true;
+    }
+  }
+  // réponse la plus proche, pour montrer les lettres fautives
+  let best = card.en, bestD = Infinity;
+  for (const exp of [card.en, ...card.alt]) {
+    for (const y of [norm(exp), stripArt(norm(exp))]) {
+      const d = levDist(t.toLowerCase(), y.toLowerCase());
+      if (d < bestD) { bestD = d; best = y; }
+    }
+  }
+  return { ok: false, caseOnly, best };
+}
+const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+function normFr(s) {
+  let x = deaccent(s.toLowerCase()).replace(/[’']/g, ' ').replace(/[.,!?;:"«»…]/g, ' ').replace(/\s+/g, ' ').trim();
+  x = x.replace(/^(le|la|les|l|un|une|des|du|de|se|s) /, '');
+  return x;
+}
+function checkFr(input, card) {
+  const t = normFr(input);
+  if (!t) return false;
+  const base = card.fr.replace(/\([^)]*\)/g, ' ');
+  const opts = new Set([normFr(card.fr), normFr(base)]);
+  for (const part of base.split(/,| \/ /)) opts.add(normFr(part));
+  return [...opts].some(o => o && o === t);
+}
+function lev(a, b) {
+  const m = a.length, n = b.length, d = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+  for (let j = 1; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d;
+}
+function levDist(a, b) { const d = lev(a, b); return d[a.length][b.length]; }
+function align(a, b, ci) {
+  const A = ci ? a.toLowerCase() : a, B = ci ? b.toLowerCase() : b;
+  const d = lev(A, B), out = [];
+  let i = A.length, j = B.length;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && d[i][j] === d[i - 1][j - 1] + (A[i - 1] === B[j - 1] ? 0 : 1)) { out.unshift([a[i - 1], b[j - 1]]); i--; j--; }
+    else if (j > 0 && d[i][j] === d[i][j - 1] + 1) { out.unshift([null, b[j - 1]]); j--; }
+    else { out.unshift([a[i - 1], null]); i--; }
+  }
+  return out;
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function diffHtml(typed, expected, caseOnly) {
+  const pairs = align(typed, expected, !caseOnly);
+  const same = (x, y) => x !== null && y !== null && (caseOnly ? x === y : x.toLowerCase() === y.toLowerCase());
+  let mine = '', good = '';
+  for (const [x, y] of pairs) {
+    if (x !== null) mine += same(x, y) ? esc(x) : (x === ' ' ? '<span class="x">&nbsp;</span>' : `<span class="x">${esc(x)}</span>`);
+    if (x === null && y !== null) mine += '<span class="gap"></span>';
+    if (y !== null) good += same(x, y) ? esc(y) : (y === ' ' ? '<span class="g">&nbsp;</span>' : `<span class="g">${esc(y)}</span>`);
+  }
+  return { mine, good };
+}
+
+/* ===== Écrans ===== */
+const view = document.getElementById('view');
+const homeBtn = document.getElementById('homeBtn');
+homeBtn.onclick = () => { if (canSpeak) speechSynthesis.cancel(); home(); };
+let session = null;
+
+const MODES = [
+  { id: 'cartes', nom: 'Cartes', txt: 'Retourner et se tester' },
+  { id: 'ecrire', nom: 'Écrire', txt: 'Taper la traduction' },
+  { id: 'dictee', nom: 'Dictée', txt: 'Écouter et épeler' },
+];
+const DIRS = [
+  { id: 'fr-en', html: '<span class="dir"><span class="tag fr">FR</span>→<span class="tag en">EN</span></span>' },
+  { id: 'en-fr', html: '<span class="dir"><span class="tag en">EN</span>→<span class="tag fr">FR</span></span>' },
+  { id: 'mix', html: '<span class="dir">Les deux</span>' },
+];
+
+function home() {
+  session = null;
+  homeBtn.hidden = true;
+  const p = store.prefs;
+  const subj = p.subject, qa = isQA(subj);
+  const sThemes = THEMES.filter(t => t.subject === subj);
+  const isBonus = subj === 'bonus';
+  const total = CARDS.filter(c => c.subject === subj && p.themes.includes(c.theme)).length;
+  const unit = qa ? 'questions' : 'mots';
+  const v = validated(), locked = !bonusReady();
+  const subTxt = x => x.id === 'bonus' ? (locked ? `${v}/${BONUS_GOAL}` : 'Débloqué !') : x.txt;
+  const bindSubjects = () => view.querySelectorAll('#subjects button').forEach(b => b.onclick = () => {
+    const val = b.dataset.v;
+    if (val === 'bonus' && !bonusReady()) {
+      secretTaps++;
+      clearTimeout(secretTimer); secretTimer = setTimeout(() => { secretTaps = 0; }, 6000);
+      if (secretTaps >= 10) { secretTaps = 0; const c = cycle(); c.legacy = BONUS_GOAL; save(); }
+    } else secretTaps = 0;
+    p.subject = val;
+    const ids = THEMES.filter(t => t.subject === val).map(t => t.id);
+    if (!ids.some(id => p.themes.includes(id))) p.themes = [...p.themes, ...ids];
+    save(); home();
+    document.getElementById('subj-' + val)?.focus();
+  });
+  const subjPanel = `<section class="panel">
+      <span class="label">Quelle matière ?</span>
+      <div class="seg" id="subjects">${SUBJECTS.map(x => `<button type="button" id="subj-${x.id}" data-v="${x.id}" aria-pressed="${x.id === subj}" class="${x.id === 'bonus' ? (locked ? 'is-locked' : 'is-ready') : ''}"><b>${x.id === 'bonus' ? (locked ? '🔒 ' : '⭐ ') : ''}${x.nom}</b><span class="sub">${subTxt(x)}</span></button>`).join('')}</div>
+    </section>`;
+  if (subj === 'bonus' && locked) {
+    view.innerHTML = `<div class="wrap" style="padding:0">${subjPanel}
+      <section class="panel lock">
+        <span class="label">Bonus verrouillé</span>
+        <h2>Licornes, KPop Demon Hunters, Disney…</h2>
+        <b class="n">${v} / ${BONUS_GOAL}</b>
+        <span class="bar"><i style="width:${Math.round(v / BONUS_GOAL * 100)}%"></i></span>
+        <p class="hint">Il faut ${BONUS_GOAL} bonnes réponses, dans au moins ${MIN_SUBJECTS} matières, pour débloquer une partie bonus de ${BONUS_LEN} questions. Sur une période de 8 heures, chaque question ne compte qu'une fois et chaque matière rapporte ${PER_SUBJECT} points maximum.</p>
+        <p class="hint"><b>${v < BONUS_GOAL ? `Encore ${BONUS_GOAL - v} bonne${BONUS_GOAL - v > 1 ? 's' : ''} réponse${BONUS_GOAL - v > 1 ? 's' : ''} !` : 'Il manque une 2e matière !'}</b></p>
+        <div class="tally">${SUBJECTS.filter(x => !NO_POINTS.includes(x.id)).map(x => { const n = cycle().total[x.id] || 0, w = curWin(), full = w && (w.by[x.id] || 0) >= PER_SUBJECT; return `<span class="${n ? 'has' : ''} ${full ? 'full' : ''}">${x.nom} <b>${n}</b>${full ? ' · plein pour l\'instant' : ''}</span>`; }).join('')}</div>
+        ${(() => { const w = curWin(); if (!w) return ''; const h = new Date(w.start + WINDOW_MS); return `<p class="hint">Nouvelle période à ${String(h.getHours()).padStart(2, '0')} h ${String(h.getMinutes()).padStart(2, '0')} : les questions recompteront.</p>`; })()}
+        <p class="hint" ${cycle().legacy ? '' : 'hidden'}>Dont ${cycle().legacy} points gagnés avant la nouvelle règle.</p>
+        <button class="go" id="goWork" type="button">Je vais réviser</button>
+      </section></div>`;
+    bindSubjects();
+    view.querySelector('#goWork').onclick = () => { p.subject = 'maths'; save(); home(); };
+    return;
+  }
+  view.innerHTML = `
+  <div class="wrap" style="padding:0">
+    ${subjPanel}
+
+${qa ? `    <section class="panel">
+      <span class="label">${isBonus ? 'Le bonus' : 'Comment réviser ?'}</span>
+      ${subj === 'hebreu' ? `<div class="seg small" id="hdirs">${[['fr-he', 'Français → hébreu'], ['he-fr', 'Hébreu → français'], ['mix', 'Les deux']].map(([v, l]) => `<button type="button" id="hdir-${v}" data-v="${v}" aria-pressed="${(p.hdir || 'fr-he') === v}"><b style="font-size:.95rem">${l}</b></button>`).join('')}</div>` : ''}
+      <p class="hint">${subj === 'hebreu' ? 'Lis le mot, réponds dans ta tête ou à voix haute, puis touche « Voir la réponse ». Le haut-parleur fait entendre le mot en hébreu, et la prononciation est écrite en lettres latines (kh se prononce comme la jota espagnole).' : isBonus ? `Juste pour s'amuser : ${BONUS_LEN} questions, rien à apprendre ! Après, le bonus se reverrouille jusqu'aux ${BONUS_GOAL} prochaines bonnes réponses.` : 'Lis la question et réponds dans ta tête ou à voix haute. Touche « Voir la réponse », puis sois honnête ! Les mots-clés à retenir sont en gras.'}</p>
+    </section>
+` : `    <section class="panel">
+      <span class="label">Comment réviser ?</span>
+      <div class="seg" id="modes">${MODES.map(m => `<button type="button" id="mode-${m.id}" data-v="${m.id}" aria-pressed="${p.mode === m.id}"><b>${m.nom}</b><span class="sub">${m.txt}</span></button>`).join('')}</div>
+      <div id="dirBox" ${p.mode === 'dictee' ? 'hidden' : ''}>
+        <div class="seg small" id="dirs">${DIRS.map(d => `<button type="button" id="dir-${d.id}" data-v="${d.id}" aria-pressed="${p.dir === d.id}">${d.html}</button>`).join('')}</div>
+      </div>
+      <p class="hint" id="modeHint">${modeHint(p)}</p>
+    </section>
+
+`}
+    <section class="panel">
+      <div class="row"><span class="label">${qa ? 'Quels chapitres ?' : 'Quelles leçons ?'}</span>
+        <span class="row" style="gap:14px"><button class="link" id="all" type="button">Tout</button><button class="link" id="none" type="button">Rien</button></span></div>
+      <div class="themes" id="themes">${sThemes.map(t => {
+        const k = known(t), n = t.cards.length;
+        return `<button type="button" class="chip" id="th-${t.id}" data-v="${t.id}" aria-pressed="${p.themes.includes(t.id)}">
+          <span class="n">${esc(t.nom)}</span>
+          <span class="bar"><i style="width:${Math.round(k / n * 100)}%"></i></span>
+          <span class="meta"><span>${esc(t.sous)}</span><span>${k}/${n}</span></span></button>`;
+      }).join('')}</div>
+      ${isBonus ? '' : `<p class="hint">La barre jaune montre les ${unit} sus au moins 3 fois de suite.</p>`}
+    </section>
+
+    ${isBonus ? '' : `<section class="panel">
+      <span class="label">Combien de ${unit} ?</span>
+      <div class="seg small" id="lens">${[10, 20, 0].map(v => `<button type="button" id="len-${v}" data-v="${v}" aria-pressed="${p.len === v}"><b>${v || 'Tous'}</b></button>`).join('')}</div>
+    </section>`}
+
+    <button class="go" id="start" ${total ? '' : 'disabled'}>${total ? (isBonus ? `Lancer le bonus ! <small style="font-weight:500">(${Math.min(BONUS_LEN, total)} questions)</small>` : `C'est parti ! <small style="font-weight:500">(${p.len && p.len < total ? p.len : total} ${unit})</small>`) : 'Choisis au moins un chapitre'}</button>
+    ${isBonus ? '' : `<div class="row">
+      <button class="ghost" id="listBtn" type="button">${qa ? 'Voir toutes les questions' : 'Voir la liste des mots'}</button>
+    </div>`}
+  </div>`;
+  const pick = (sel, key, conv = v => v) => view.querySelectorAll(sel + ' button').forEach(b => b.onclick = () => { p[key] = conv(b.dataset.v); save(); home(); });
+  if (!qa) { pick('#modes', 'mode'); pick('#dirs', 'dir'); }
+  if (!isBonus) pick('#lens', 'len', Number);
+  if (subj === 'hebreu') pick('#hdirs', 'hdir');
+  bindSubjects();
+  view.querySelectorAll('#themes .chip').forEach(b => b.onclick = () => {
+    const id = b.dataset.v;
+    p.themes = p.themes.includes(id) ? p.themes.filter(x => x !== id) : [...p.themes, id];
+    save(); home();
+    document.getElementById('th-' + id)?.focus();
+  });
+  const mine = sThemes.map(t => t.id);
+  view.querySelector('#all').onclick = () => { p.themes = [...new Set([...p.themes, ...mine])]; save(); home(); };
+  view.querySelector('#none').onclick = () => { p.themes = p.themes.filter(id => !mine.includes(id)); save(); home(); };
+  view.querySelector('#start').onclick = () => start();
+  if (!isBonus) view.querySelector('#listBtn').onclick = list;
+}
+function modeHint(p) {
+  if (p.mode === 'cartes') return 'Lis la carte, dis la réponse dans ta tête (ou à voix haute), puis retourne-la et sois honnête !';
+  if (p.mode === 'ecrire') return 'Tape la traduction. En anglais, chaque lettre compte, et les majuscules des jours et des mois aussi.';
+  return canSpeak ? 'Le mot anglais est lu à voix haute : écris-le sans faute, comme au Spelling Bee.' : 'La lecture à voix haute n\'est pas disponible sur ce navigateur. Essaie Chrome ou Safari.';
+}
+
+function start(onlyIds) {
+  const p = store.prefs;
+  let pool;
+  if (onlyIds) pool = onlyIds.map(id => byId[id]);
+  else {
+    pool = CARDS.filter(c => c.subject === p.subject && p.themes.includes(c.theme))
+      .map(c => ({ c, s: boxOf(c.id) * 10 + Math.random() * 12 }))
+      .sort((a, b) => a.s - b.s).map(x => x.c);
+    if (p.subject === 'bonus') {
+      if (!bonusReady()) return home();
+      const seen = store.seen || {};
+      pool = CARDS.filter(c => c.subject === 'bonus' && p.themes.includes(c.theme))
+        .map(c => ({ c, s: (seen[c.id] || 0) * 10 + Math.random() * 5 }))
+        .sort((a, b) => a.s - b.s).map(x => x.c).slice(0, BONUS_LEN);
+      store.cycle = newCycle(); save();
+    } else if (p.len) pool = pool.slice(0, p.len);
+  }
+  pool = shuffle(pool.slice());
+  session = {
+    queue: pool.map(c => ({ c, dir: p.mode === 'dictee' ? 'dict' : p.dir === 'mix' ? (Math.random() < .5 ? 'fr-en' : 'en-fr') : p.dir, retry: 0 })),
+    i: 0, n: pool.length, first: {}, mode: !pool.length ? p.mode : pool[0].subject === 'bonus' ? 'bonus' : isQA(pool[0].subject) ? 'qa' : p.mode,
+  };
+  homeBtn.hidden = false;
+  step();
+}
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+function answered(ok) {
+  const s = session, item = s.queue[s.i];
+  if (!(item.c.id in s.first)) { s.first[item.c.id] = ok; record(item.c.id, ok); }
+  if (!ok && item.retry < 2) {
+    const at = Math.min(s.queue.length, s.i + 4);
+    s.queue.splice(at, 0, { ...item, retry: item.retry + 1 });
+  }
+}
+function next() { session.i++; step(); }
+
+function progressHtml() {
+  const s = session, done = s.mode === 'bonus' ? s.i : Object.keys(s.first).length;
+  return `<div class="prog"><span class="bar"><i style="width:${Math.round(done / s.n * 100)}%"></i></span><span>${done} / ${s.n}</span></div>`;
+}
+function sideHtml(lang, card) {
+  const isEn = lang === 'en';
+  const text = isEn ? card.en : card.fr;
+  return `<span class="tag ${lang}">${isEn ? 'ENGLISH' : 'FRANÇAIS'}</span>
+    <div class="word" ${isEn ? 'lang="en"' : ''}>${esc(text)}</div>
+    ${isEn && card.note ? `<p class="note">${esc(card.note)}</p>` : ''}
+    ${isEn && canSpeak ? `<button type="button" class="speak" data-say="1" aria-label="Écouter la prononciation">${SPK}</button>` : ''}`;
+}
+
+function step() {
+  const s = session;
+  if (s.i >= s.queue.length) return results();
+  const { c, dir } = s.queue[s.i];
+  const theme = THEMES.find(t => t.id === c.theme);
+  const retryTag = s.queue[s.i].retry ? ' · on réessaie' : '';
+  const ctx = `<p class="small" style="margin:0;text-align:center">${esc(theme.nom)}${retryTag}</p>`;
+
+  if (s.mode === 'bonus') {
+    store.seen = store.seen || {}; store.seen[c.id] = (store.seen[c.id] || 0) + 1; save();
+    const last = s.i === s.queue.length - 1;
+    view.innerHTML = `<div class="wrap" style="padding:0">${progressHtml()}${ctx}
+      <div class="qcard bonus">
+        <span class="tag q">BONUS</span>
+        <div class="qtext">${rich(c.fr)}</div>
+        <div class="qans" id="qans" hidden>
+          <span class="tag a">RÉPONSE</span>
+          <div class="atext">${rich(c.en)}</div>
+          ${c.note ? `<p class="note">${rich(c.note)}</p>` : ''}
+        </div>
+      </div>
+      <button class="go" id="reveal" type="button">Voir la réponse</button>
+      <button class="go" id="nextQ" type="button" hidden>${last ? 'Terminer' : 'Question suivante →'}</button></div>`;
+    const reveal = view.querySelector('#reveal'), nq = view.querySelector('#nextQ');
+    reveal.onclick = () => { view.querySelector('#qans').hidden = false; reveal.hidden = true; nq.hidden = false; nq.focus(); };
+    nq.onclick = next;
+    reveal.focus();
+    return;
+  }
+
+  if (s.mode === 'qa' && c.subject === 'hebreu') {
+    const item = s.queue[s.i];
+    if (!item.hd) { const d = store.prefs.hdir || 'fr-he'; item.hd = d === 'mix' ? (Math.random() < .5 ? 'fr-he' : 'he-fr') : d; }
+    const heBlock = (big) => `<div class="herow"><div class="heword" lang="he">${esc(c.en)}</div>${canSpeak ? `<button type="button" class="speak" data-he="1" aria-label="Écouter en hébreu">${SPK}</button>` : ''}</div><div class="translit">${esc(c.alt[0] || '')}</div>`;
+    const frBlock = `<div class="qtext" style="text-align:center">${esc(c.fr)}</div>`;
+    const front = item.hd === 'fr-he' ? frBlock : heBlock();
+    const back = item.hd === 'fr-he' ? heBlock() : frBlock;
+    view.innerHTML = `<div class="wrap" style="padding:0">${progressHtml()}${ctx}
+      <div class="qcard hebreu">
+        <span class="tag q">${item.hd === 'fr-he' ? 'EN HÉBREU ?' : 'EN FRANÇAIS ?'}</span>
+        ${front}
+        <div class="qans" id="qans" hidden>
+          <span class="tag a">RÉPONSE</span>
+          ${back}
+        </div>
+      </div>
+      ${canSpeak && !heVoice ? '<p class="hint" style="text-align:center">Pas de voix hébraïque sur cet appareil : installe « hébreu » dans les voix de synthèse vocale du téléphone.</p>' : ''}
+      <button class="go" id="reveal" type="button">Voir la réponse</button>
+      <div class="btns" id="judge" hidden>
+        <button class="b-bad" id="no" type="button">Je ne savais pas</button>
+        <button class="b-ok" id="yes" type="button">Je savais !</button>
+      </div></div>`;
+    view.querySelectorAll('[data-he]').forEach(b => b.onclick = () => sayHe(c.en));
+    const reveal = view.querySelector('#reveal');
+    reveal.onclick = () => { view.querySelector('#qans').hidden = false; view.querySelector('#judge').hidden = false; reveal.hidden = true; if (item.hd === 'fr-he') sayHe(c.en); view.querySelector('#yes').focus(); };
+    view.querySelector('#yes').onclick = () => { answered(true); next(); };
+    view.querySelector('#no').onclick = () => { answered(false); next(); };
+    if (item.hd === 'he-fr') setTimeout(() => sayHe(c.en), 250);
+    reveal.focus();
+    return;
+  }
+
+  if (s.mode === 'qa') {
+    view.innerHTML = `<div class="wrap" style="padding:0">${progressHtml()}${ctx}
+      <div class="qcard ${c.subject}">
+        <span class="tag q">QUESTION</span>
+        ${c.alt[1] ? `<img class="pic" src="mytho/${esc(c.alt[1])}-dessin.jpg" alt="" width="440" height="440">` : c.alt[0] ? `<div class="medal" aria-hidden="true">${esc(c.alt[0])}</div>` : ''}
+        <div class="qtext">${rich(c.fr)}</div>
+        <div class="qans" id="qans" hidden>
+          <span class="tag a">RÉPONSE</span>
+          <div class="atext">${rich(c.en)}</div>
+          ${c.alt[1] ? `<figure class="statue"><img src="mytho/${esc(c.alt[1])}-statue.jpg" alt="Statue" width="440" height="440" loading="lazy"><figcaption>Comme une statue de musée</figcaption></figure>` : ''}
+          ${c.note ? `<p class="note">${rich(c.note)}</p>` : ''}
+        </div>
+      </div>
+      <button class="go" id="reveal" type="button">Voir la réponse</button>
+      <div class="btns" id="judge" hidden>
+        <button class="b-bad" id="no" type="button">Je ne savais pas</button>
+        <button class="b-ok" id="yes" type="button">Je savais !</button>
+      </div></div>`;
+    const reveal = view.querySelector('#reveal');
+    reveal.onclick = () => { view.querySelector('#qans').hidden = false; view.querySelector('#judge').hidden = false; reveal.hidden = true; view.querySelector('#yes').focus(); };
+    view.querySelector('#yes').onclick = () => { answered(true); next(); };
+    view.querySelector('#no').onclick = () => { answered(false); next(); };
+    reveal.focus();
+    return;
+  }
+
+  if (s.mode === 'cartes') {
+    const [front, back] = dir === 'fr-en' ? ['fr', 'en'] : ['en', 'fr'];
+    view.innerHTML = `<div class="wrap" style="padding:0">${progressHtml()}${ctx}
+      <div class="stage"><div class="flash" id="flash" tabindex="0" role="button" aria-label="Retourner la carte">
+        <div class="face ${front}">${sideHtml(front, c)}<span class="tap">Touche la carte pour la retourner</span></div>
+        <div class="face back ${back}">${sideHtml(back, c)}</div>
+      </div></div>
+      <div class="btns" id="judge" hidden>
+        <button class="b-bad" id="no" type="button">Je ne savais pas</button>
+        <button class="b-ok" id="yes" type="button">Je savais !</button>
+      </div>
+      <button class="ghost" id="flipBtn" type="button">Retourner la carte</button></div>`;
+    const flash = view.querySelector('#flash'), judge = view.querySelector('#judge'), flipBtn = view.querySelector('#flipBtn');
+    const flip = () => { flash.classList.toggle('flipped'); judge.hidden = false; flipBtn.hidden = true; if (flash.classList.contains('flipped') && back === 'en') say(c.en); };
+    flash.onclick = e => { if (e.target.closest('[data-say]')) { e.stopPropagation(); say(c.en); return; } flip(); };
+    flash.onkeydown = e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); } };
+    flipBtn.onclick = flip;
+    view.querySelector('#yes').onclick = () => { answered(true); next(); };
+    view.querySelector('#no').onclick = () => { answered(false); next(); };
+    flipBtn.focus();
+    return;
+  }
+
+  // Écrire / Dictée
+  const target = dir === 'en-fr' ? 'fr' : 'en';
+  let promptHtml;
+  if (dir === 'dict') {
+    promptHtml = `<div class="prompt dict"><span class="tag en">DICTÉE</span>
+      <div class="dictbtn"><button class="big-listen" id="listen" type="button">${SPK} Écouter</button>
+      <button class="ghost" id="slow" type="button">Plus lentement</button></div>
+      <button class="link" id="clue" type="button">Indice : le sens en français</button>
+      <p class="note" id="clueTxt" hidden>${esc(c.fr)}</p></div>`;
+  } else {
+    const src = dir === 'fr-en' ? 'fr' : 'en';
+    promptHtml = `<div class="prompt ${src}">${sideHtml(src, c).replace(/<p class="note">.*?<\/p>/, '')}
+      <p class="small" style="margin:0">Écris-le en ${target === 'en' ? 'anglais' : 'français'}</p></div>`;
+  }
+  view.innerHTML = `<div class="wrap" style="padding:0">${progressHtml()}${ctx}${promptHtml}
+    <form class="answer" id="form" autocomplete="off">
+      <input id="ans" ${target === 'en' ? 'lang="en"' : ''} autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="${target === 'en' ? 'in English…' : 'en français…'}" aria-label="Ta réponse">
+      <div class="btns" id="actions"><button class="ghost" type="button" id="skip">Je ne sais pas</button><button class="go" type="submit" style="font-size:1.05rem;padding:12px">Vérifier</button></div>
+    </form>
+    <div id="fb"></div></div>`;
+  const input = view.querySelector('#ans'), form = view.querySelector('#form'), fb = view.querySelector('#fb');
+  if (dir === 'dict') {
+    view.querySelector('#listen').onclick = () => { say(c.en); input.focus(); };
+    view.querySelector('#slow').onclick = () => { say(c.en, true); input.focus(); };
+    view.querySelector('#clue').onclick = e => { view.querySelector('#clueTxt').hidden = false; e.target.hidden = true; input.focus(); };
+    setTimeout(() => say(c.en), 250);
+  } else {
+    const sp = view.querySelector('.prompt [data-say]');
+    if (sp) sp.onclick = () => { say(c.en); input.focus(); };
+  }
+  input.focus();
+  let done = false;
+  const finish = (ok, html) => {
+    done = true;
+    input.readOnly = true;
+    input.classList.add(ok ? 'ok' : 'bad');
+    fb.innerHTML = html;
+    view.querySelector('#actions').outerHTML = `<div class="btns one"><button class="go" type="submit" id="nextBtn" style="font-size:1.05rem;padding:12px">Suivant →</button></div>`;
+    view.querySelector('#nextBtn').focus();
+    const sp = fb.querySelector('[data-say]'); if (sp) sp.onclick = () => say(c.en);
+    const over = fb.querySelector('#override');
+    if (over) over.onclick = () => { session.first[c.id] = true; store.boxes[c.id] && (store.boxes[c.id].ko--, store.boxes[c.id].b = 0); record(c.id, true);
+      // retire la répétition prévue
+      const k = session.queue.findIndex((q, idx) => idx > session.i && q.c.id === c.id); if (k > -1) session.queue.splice(k, 1);
+      next(); };
+  };
+  view.querySelector('#skip').onclick = () => {
+    answered(false);
+    finish(false, `<div class="feedback bad"><h3>Voici la réponse</h3>
+      <div class="spell" ${target === 'en' ? 'lang="en"' : ''}>${esc(target === 'en' ? c.en : c.fr)}</div>
+      ${c.note && target === 'en' ? `<p class="note">${esc(c.note)}</p>` : ''}
+      ${target === 'en' && canSpeak ? `<div><button type="button" class="speak" data-say="1" aria-label="Écouter">${SPK}</button></div>` : ''}
+      <p class="small" style="margin:0">Ce mot reviendra un peu plus loin.</p></div>`);
+  };
+  form.onsubmit = e => {
+    e.preventDefault();
+    if (done) return next();
+    const val = input.value;
+    if (!val.trim()) { input.focus(); return; }
+    if (target === 'fr') {
+      const ok = checkFr(val, c);
+      answered(ok);
+      finish(ok, ok
+        ? `<div class="feedback ok"><h3>Bravo !</h3><div class="small">${esc(c.fr)}</div></div>`
+        : `<div class="feedback bad"><h3>Pas tout à fait</h3>
+            <div class="small">On attendait :</div><div class="spell">${esc(c.fr)}</div>
+            <div><button class="link" type="button" id="override">J'avais trouvé, c'est juste dit autrement</button></div></div>`);
+      return;
+    }
+    const r = checkEn(val, c);
+    answered(r.ok);
+    if (r.ok) {
+      finish(true, `<div class="feedback ok"><h3>${['Perfect!', 'Well done!', 'Great!', 'Brilliant!'][Math.floor(Math.random() * 4)]}</h3>
+        <div class="spell" lang="en">${esc(c.en)}</div>${c.note ? `<p class="note">${esc(c.note)}</p>` : ''}
+        ${dir !== 'dict' ? '' : `<div class="small">${esc(c.fr)}</div>`}</div>`);
+      say(c.en);
+    } else {
+      const typed = norm(val);
+      const close = r.caseOnly || levDist(typed.toLowerCase(), r.best.toLowerCase()) <= Math.max(2, Math.floor(r.best.length / 3));
+      const d = diffHtml(typed, r.best, r.caseOnly);
+      finish(false, `<div class="feedback bad"><h3>${r.caseOnly ? 'Attention à la majuscule !' : close ? 'Presque… regarde bien les lettres' : 'Pas tout à fait'}</h3>
+        ${close ? `<div class="small">Tu as écrit :</div><div class="spell" lang="en">${d.mine}</div>
+        <div class="small">La bonne orthographe :</div><div class="spell" lang="en">${d.good}</div>`
+        : `<div class="small">La bonne réponse :</div><div class="spell" lang="en">${esc(c.en)}</div>`}
+        ${c.note ? `<p class="note">${esc(c.note)}</p>` : ''}
+        ${dir === 'dict' ? `<div class="small">Sens : ${esc(c.fr)}</div>` : ''}
+        ${canSpeak ? `<div><button type="button" class="speak" data-say="1" aria-label="Écouter">${SPK}</button></div>` : ''}
+        <p class="small" style="margin:0">Ce mot reviendra un peu plus loin.</p></div>`);
+    }
+  };
+}
+
+function results() {
+  const s = session;
+  if (s.mode === 'bonus') {
+    view.innerHTML = `<div class="wrap" style="padding:0">
+      <section class="panel lock">
+        <span class="label">Fin du bonus</span>
+        <h2>J'espère que tu t'es bien amusé(e) !</h2>
+        <p class="hint">Le bonus est de nouveau verrouillé. Fais ${BONUS_GOAL} bonnes réponses dans les autres matières pour le débloquer encore.</p>
+        <button class="go" id="back" type="button">Retour aux révisions</button>
+      </section></div>`;
+    view.querySelector('#back').onclick = () => { store.prefs.subject = 'maths'; save(); home(); };
+    return;
+  }
+  const ids = Object.keys(s.first), good = ids.filter(id => s.first[id]).length;
+  const wrong = ids.filter(id => !s.first[id]);
+  const pct = ids.length ? good / ids.length : 0;
+  const msg = pct === 1 ? 'Un sans-faute, bravo !' : pct >= .8 ? 'Très bien, encore un petit effort.' : pct >= .5 ? 'C\'est en bonne voie. On revoit les erreurs ?' : 'On s\'accroche : revois les erreurs, ça va venir.';
+  view.innerHTML = `<div class="wrap" style="padding:0">
+    <section class="panel">
+      <span class="label">Résultat du premier coup</span>
+      <div class="score"><b>${good}/${ids.length}</b><span>${msg}</span></div>
+      <span class="bar" style="height:10px"><i style="width:${Math.round(pct * 100)}%"></i></span>
+    </section>
+    ${wrong.length ? `<section class="panel"><span class="label">À revoir (${wrong.length})</span>
+      <ul class="mist">${wrong.map(id => { const c = byId[id]; return `<li><span class="f">${esc(plain(c.fr))}</span><span aria-hidden="true">→</span><span class="e" ${isQA(c.subject) ? '' : 'lang="en"'}>${isQA(c.subject) ? rich(c.en) : esc(c.en)}</span></li>`; }).join('')}</ul></section>` : ''}
+    ${wrong.length ? `<button class="go" id="again">Revoir mes ${wrong.length} erreur${wrong.length > 1 ? 's' : ''}</button>` : ''}
+    <div class="btns"><button class="ghost" id="new" type="button">Nouvelle série</button><button class="ghost" id="back" type="button">Accueil</button></div>
+  </div>`;
+  if (wrong.length) view.querySelector('#again').onclick = () => start(wrong);
+  view.querySelector('#new').onclick = () => start();
+  view.querySelector('#back').onclick = home;
+}
+
+function list() {
+  homeBtn.hidden = false;
+  view.innerHTML = `<div class="wrap" style="padding:0">
+    <div class="legend"><span><i class="dot"></i>pas encore su</span><span><i class="dot l1"></i>en cours</span><span><i class="dot l3"></i>su</span></div>
+    ${THEMES.filter(t => t.subject === store.prefs.subject).map(t => `<section class="panel list"><h2>${esc(t.nom)} <span class="small">· ${esc(t.sous)}</span></h2>
+      <div style="overflow-x:auto"><table class="tbl"><tbody>${t.cards.map(c => c.subject === 'hebreu' ? `<tr><td class="f"><i class="dot l${boxOf(c.id)}"></i>${esc(c.fr)}</td><td class="he" lang="he">${esc(c.en)}<small>${esc(c.alt[0] || '')}</small></td><td class="s">${canSpeak ? `<button type="button" class="speak" data-hes="${esc(c.en)}" aria-label="Écouter">${SPK}</button>` : ''}</td></tr>` : isQA(c.subject) ? `<tr><td class="f"><i class="dot l${boxOf(c.id)}"></i>${c.alt[0] ? esc(c.alt[0]) + ' ' : ''}${esc(plain(c.fr))}</td><td class="ans">${rich(c.en)}</td></tr>` : `<tr><td class="f"><i class="dot l${boxOf(c.id)}"></i>${esc(c.fr)}</td><td class="e" lang="en">${esc(c.en)}</td><td class="s">${canSpeak ? `<button type="button" class="speak" data-en="${esc(c.en)}" aria-label="Écouter ${esc(c.en)}">${SPK}</button>` : ''}</td></tr>`).join('')}</tbody></table></div></section>`).join('')}
+    <section class="panel"><span class="label">Repartir de zéro</span>
+      <p class="hint">Efface les progrès enregistrés sur cet appareil.</p>
+      <div class="row"><button class="ghost danger" id="reset" type="button">Effacer les progrès</button></div></section>
+    ${canSpeak ? `<p class="hint">Voix anglaise utilisée : ${voice ? esc(voice.name + ' · ' + voice.lang) : 'voix anglaise du système'}</p>` : ''}
+  </div>`;
+  view.querySelectorAll('[data-en]').forEach(b => b.onclick = () => say(b.dataset.en));
+  view.querySelectorAll('[data-hes]').forEach(b => b.onclick = () => sayHe(b.dataset.hes));
+  const reset = view.querySelector('#reset');
+  reset.onclick = () => {
+    if (reset.dataset.armed) { store.boxes = {}; save(); list(); return; }
+    reset.dataset.armed = '1'; reset.textContent = 'Sûr ? Touche encore pour effacer';
+  };
+  window.scrollTo(0, 0);
+}
+
+if (canSpeak) { pickVoice(); pickHe(); speechSynthesis.onvoiceschanged = () => { pickVoice(); pickHe(); }; }
+home();
+</script>
+
+
+</body>
+</html>
