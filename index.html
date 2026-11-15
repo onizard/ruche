@@ -2584,10 +2584,9 @@ function modeHint(p) {
 function start(onlyIds) {
   const p = store.prefs;
   if (!onlyIds && p.subject === 'anglais' && p.mode === 'oral') {
-    // l'oral se passe sur une page à part (micro + reconnaissance vocale), avec les leçons choisies ici
+    // l'oral démarre directement sur les cartes (moteur d'Aleph : micro + reconnaissance vocale)
     const sel = THEMES.filter(t => t.subject === 'anglais' && p.themes.includes(t.id)).map(t => t.id);
-    const base = /github\.io$/.test(location.hostname) ? 'oral.html' : 'https://onizard.github.io/ruche/oral.html';
-    location.href = base + '?themes=' + encodeURIComponent(sel.join(',')) + '&dir=' + (p.dir === 'en-fr' ? 'en-fr' : 'fr-en');
+    window.startOral(sel, p.dir, p.len);
     return;
   }
   let pool;
@@ -2900,6 +2899,404 @@ home();
 </script>
 
 
+<!--ORAL-START-->
+<style>
+#oralDrive{
+  --bg:#0E1626; --panel:#16213A; --line:#26344F; --ink:#EEF2F8; --soft:#9AA8C2;
+  --blue:#F2B415; --ok:#3DDC84; --bad:#FF6B5E; --listen:#FFC94A;
+  --f-big:"Rubik","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  
+font-family:var(--f-body);color:var(--ink);font-size:17px;line-height:1.45}
+#oralDrive.o-drive{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));
+  background:var(--bg);transition:background .25s;z-index:10}
+#oralDrive.o-drive.o-ok{background:#0F2A1D}
+#oralDrive.o-drive.o-bad{background:#2E1414}
+#oralDrive .o-state{font-family:var(--f-big);font-weight:700;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);display:flex;align-items:center;gap:10px}
+#oralDrive .o-dot{width:14px;height:14px;border-radius:50%;background:var(--soft)}
+#oralDrive.o-listening .o-dot{background:var(--listen);animation:pulse 1s ease-in-out infinite}
+#oralDrive.o-listening .o-state{color:var(--listen)}
+#oralDrive.o-ok .o-state,#oralDrive.o-ok .o-dot{color:var(--ok);background:none}
+#oralDrive.o-ok .o-dot{background:var(--ok)}
+#oralDrive.o-bad .o-state{color:var(--bad)}
+#oralDrive.o-bad .o-dot{background:var(--bad)}
+@keyframes pulse{50%{transform:scale(1.5);opacity:.6}}
+#oralDrive .o-stage{perspective:1200px;width:min(360px,88vw)}
+#oralDrive .o-card3d{position:relative;width:100%;aspect-ratio:5/3.4;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,1.35,.5,1)}
+#oralDrive .o-card3d.o-flipped{transform:rotateY(180deg)}
+#oralDrive .o-card3d.o-instant{transition:none}
+#oralDrive .o-card3d.o-deal{animation:deal .45s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes deal{from{transform:translateX(70vw) rotate(10deg);opacity:0}to{transform:none;opacity:1}}
+#oralDrive .o-cface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:36px 18px 26px;
+  background:linear-gradient(160deg,#1C2A47,#14203A);border:2px solid var(--line);
+  box-shadow:0 18px 40px -16px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
+#oralDrive .o-cface.o-back{transform:rotateY(180deg);background:linear-gradient(160deg,#1A2E2A,#13211F)}
+#oralDrive.o-ok .o-cface.o-back{border-color:var(--ok);background:linear-gradient(160deg,#173826,#0F2519)}
+#oralDrive.o-bad .o-cface.o-back{border-color:var(--bad);background:linear-gradient(160deg,#3A1A18,#261110)}
+#oralDrive .o-ctag{position:absolute;top:12px;left:16px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+#oralDrive .o-cface::after{content:"EN";position:absolute;right:14px;bottom:4px;font-family:var(--f-big);font-weight:800;font-size:2.4rem;color:rgba(242,180,21,.10)}
+#oralDrive .o-card3d.o-revealed{cursor:pointer}
+#oralDrive .o-prompt{font-family:var(--f-big);font-weight:800;font-size:clamp(1.6rem,7.5vw,2.6rem);line-height:1.15;text-wrap:balance;max-width:14ch;overflow-wrap:anywhere}
+#oralDrive .o-answer{font-family:var(--f-big);font-weight:700;font-size:clamp(1.9rem,9.5vw,3.2rem);line-height:1.15;direction:rtl;color:var(--ok);overflow-wrap:anywhere}
+#oralDrive.o-bad .o-answer{color:#FFD9D4}
+#oralDrive .o-answer.o-fr{direction:ltr}
+#oralDrive .o-translit{font-style:italic;color:var(--soft);font-size:1.15rem}
+@media (prefers-reduced-motion:reduce){#oralDrive .o-card3d{transition:none}
+#oralDrive .o-card3d.o-deal{animation:none}}
+#oralDrive .o-meter{width:min(320px,80vw);height:64px;display:block}
+#oralDrive .o-heard{color:var(--soft);font-size:1rem;min-height:1.4em}
+#oralDrive .o-heard b{color:var(--ink)}
+#oralDrive .o-bar{position:absolute;left:max(20px,env(safe-area-inset-left,0px));right:max(20px,env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));display:flex;justify-content:space-between;color:var(--soft);font-variant-numeric:tabular-nums;font-weight:700}
+#oralDrive .o-stop{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font:inherit;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:99px;padding:12px 28px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#oralDrive.o-listening .o-dot{animation:none}}
+#oralDrive .o-stop{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font:inherit;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:99px;padding:12px 28px;cursor:pointer}
+</style>
+<section class="o-drive" id="oralDrive" hidden aria-live="polite">
+  <div class="o-bar"><span id="dCount">0 / 20</span><span id="dScore">✓ 0 · ✗ 0</span></div>
+  <div class="o-state"><i class="o-dot"></i><span id="dState">Prêt</span></div>
+  <div class="o-stage">
+    <div class="o-card3d" id="card">
+      <div class="o-cface front"><span class="o-ctag" id="tagFront">En français</span><div class="o-prompt" id="dPrompt"></div></div>
+      <div class="o-cface o-back"><span class="o-ctag" id="tagBack">En anglais</span><div class="o-answer o-fr" id="dAnswer"></div><div class="o-translit" id="dTranslit"></div></div>
+    </div>
+  </div>
+  <canvas id="meter" class="o-meter" hidden aria-hidden="true"></canvas>
+  <div class="o-heard" id="dHeard"></div>
+  <button class="o-stop" id="dStop" type="button">Arrêter</button>
+</section>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const OCARDS = CARDS.filter(c => c.subject === 'anglais');
+const KEY = 'ruche-oral-v1';
+let st = { boxes: {}, n: 0, prefs: { dir: 'fr-en', len: 20, themes: [] } };
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.boxes) st = { ...st, ...s, prefs: { ...st.prefs, ...s.prefs } }; } catch (e) {}
+const saveO = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+const active = () => OCARDS.filter(c => st.prefs.themes.includes(c.theme));
+/* ---------- Boîtes de Leitner (comme Aleph) ----------
+   Bonne réponse : le mot monte d'une boîte et revient dans 1, 2, 4, 7, 14 ou 60 jours.
+   Juste dans la boîte 6 : il est maîtrisé et ne revient plus.
+   Erreur : retour en boîte 1, le mot revient 5 à 10 mots plus loin dans la séance, puis le lendemain. */
+const DAY = 86400e3, NEW_PER_DAY = 20, MAX_LEARN = 4;
+const WAIT = [0, 1, 2, 4, 7, 14, 60], DONE = 7;
+const today = () => new Date(Date.now()).toDateString();
+const newToday = () => (st.newDay === today() ? st.newCount || 0 : 0);
+const dayStart = t => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+const inDays = n => dayStart(Date.now()) + n * DAY;
+const seen = id => !!st.boxes[id];
+const level = id => (st.boxes[id] && st.boxes[id].box) || 0;
+const mastered = id => level(id) >= DONE;
+const isLearning = b => b && b.learn;
+function recordO(id, ok) {
+  const isNew = !st.boxes[id];
+  const b = st.boxes[id] || { box: 1, ok: 0, ko: 0, learn: false };
+  if (isNew) { if (st.newDay !== today()) { st.newDay = today(); st.newCount = 0; } st.newCount++; }
+  if (ok) {
+    b.ok++;
+    if (b.learn) { b.learn = false; b.box = 1; }
+    else if (isNew) b.box = 4;               // trouvé du premier coup : déjà connu
+    else b.box = Math.min(DONE, (b.box || 1) + 1);
+    b.due = b.box >= DONE ? -1 : inDays(WAIT[b.box]);
+  } else {
+    b.ko++; b.box = 1; b.learn = true; b.ldue = st.n + 5 + Math.floor(Math.random() * 6);
+  }
+  st.boxes[id] = b; saveO();
+}
+
+/* ---------- Comparaison des réponses ---------- */
+const NUMS = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split(' ');
+const TENS = { 30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety', 100: 'one hundred' };
+const numWord = n => n <= 20 ? NUMS[n] : TENS[n] || (n < 100 && TENS[n - n % 10] ? TENS[n - n % 10] + ' ' + NUMS[n % 10] : String(n));
+const ORD = { '1st': 'first', '2nd': 'second', '3rd': 'third', '4th': 'fourth', '5th': 'fifth' };
+const normEn = s => s.toLowerCase().replace(/[’‘`]/g, "'").replace(/\b(\d+(st|nd|rd|th))\b/g, m => ORD[m] || m)
+  .replace(/\b\d+\b/g, m => numWord(+m)).replace(/\.\.\.|…/g, ' ').replace(/\([^)]*\)/g, ' ')
+  .replace(/[?!.,:;"«»\-]/g, ' ').replace(/\b(a|an|the|to)\b/g, ' ').replace(/\s+/g, ' ').trim();
+const normFr = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\([^)]*\)/g, ' ')
+  .replace(/[?!.,:;"«»…'’\-]/g, ' ').replace(/\b(le|la|les|l|un|une|des|du|de|d)\b/g, ' ').replace(/\s+/g, ' ').trim();
+function lev(a, b) {
+  const m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n];
+}
+const ratio = (a, b) => 1 - lev(a, b) / Math.max(a.length, b.length, 1);
+const wordOk = (w, e) => w === e || (e.length > 3 && ratio(w, e) >= 0.75);
+function close(said, exp) {
+  if (!said || !exp) return false;
+  const ew = exp.split(' ').filter(Boolean);
+  if (ew.length >= 2) {
+    // phrases : chaque mot attendu doit être dit (petites fautes tolérées sur les mots longs)
+    const sw = said.split(' ').filter(Boolean), joined = said.replace(/ /g, '');
+    return ew.every(e => sw.some(w => wordOk(w, e)) || (e.length >= 4 && joined.includes(e)));
+  }
+  const a = said.replace(/ /g, ''), b = exp.replace(/ /g, '');
+  if (a === b || said.split(' ').some(w => wordOk(w, exp))) return true;
+  return b.length > 4 && ratio(a, b) >= 0.8;
+}
+function expectedOptions(c, lang) {
+  if (lang === 'en') return [c.en, ...c.alt].flatMap(x => x.split('/')).map(normEn).filter(Boolean);
+  return c.fr.replace(/\([^)]*\)/g, ' ').split(/,|\/| ou /).map(normFr).filter(x => x.length > 1).concat([normFr(c.fr)]);
+}
+function judge(alts, c, lang) {
+  const opts = expectedOptions(c, lang);
+  return alts.some(raw => { const s = lang === 'en' ? normEn(raw) : normFr(raw); return opts.some(o => close(s, o)); });
+}
+const isDontKnow = s => /don'?t know|dont know|no idea|skip|sais pas|passe/i.test(s);
+const isRepeat = s => /\bagain\b|repeat|encore|répète/i.test(s);
+const isStop = s => /^(stop|pause|arrête|arrete)$/i.test(s.trim().replace(/[.!]/g, ''));
+
+/* ---------- Voix ---------- */
+const synth = window.speechSynthesis;
+const IOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+let vEn = null, vFr = null;
+const PREF_EN = ['ava', 'samantha', 'allison', 'susan', 'zoe', 'serena', 'kate', 'google us english', 'google uk english female', 'aria', 'jenny', 'libby', 'sonia'];
+const noteEn = v => { const n = v.name.toLowerCase(); const i = PREF_EN.findIndex(x => n === x || n.startsWith(x + ' ') || n.includes(x + ' (')); return (i > -1 ? 100 - i * 5 : 0) + (/premium/i.test(n) ? 3 : /enhanced|amélior|natural|neural/i.test(n) ? 2 : 0) + (/^en[-_]us/i.test(v.lang) ? 1 : 0); };
+function pickVoices() {
+  if (!synth) return;
+  const vs = synth.getVoices(), pref = v => (/google|natural|premium|enhanced|amélior/i.test(v.name) ? 1 : 0);
+  vEn = vs.filter(v => /^en[-_]/i.test(v.lang)).sort((a, b) => noteEn(b) - noteEn(a))[0] || null;
+  vFr = vs.filter(v => /^fr[-_]FR/i.test(v.lang)).sort((a, b) => pref(b) - pref(a))[0] || vs.find(v => /^fr/i.test(v.lang)) || null;
+}
+if (synth) { pickVoices(); synth.onvoiceschanged = pickVoices; }
+function speak(text, lang, rate = 0.95) {
+  return new Promise(res => {
+    if (!synth) return res();
+    const u = new SpeechSynthesisUtterance(text.replace(/\.\.\.|…/g, lang === 'en' ? ', something,' : ' '));
+    const v = lang === 'en' ? vEn : vFr;
+    u.lang = v ? v.lang : (lang === 'en' ? 'en-US' : 'fr-FR'); if (v && !IOS) u.voice = v;
+    u.rate = rate;
+    let done = false, poll = 0, safety = 0;
+    const fin = () => { if (!done) { done = true; clearInterval(poll); clearTimeout(safety); setTimeout(res, 60); } };
+    u.onend = fin; u.onerror = fin;
+    const t0 = Date.now(); let started = false;
+    poll = setInterval(() => {
+      if (synth.speaking) started = true;
+      if ((started && !synth.speaking && !synth.pending) || (!started && Date.now() - t0 > 3000)) fin();
+    }, 80);
+    u.onstart = () => { started = true; };
+    safety = setTimeout(() => { if (IOS) synth.cancel(); fin(); }, 1500 + text.length * 110 / rate);
+    if (IOS && !synth.speaking) synth.cancel();
+    synth.speak(u);
+  });
+}
+let actx = null;
+function beep(kind) {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const notes = kind === 'ok' ? [660, 880] : kind === 'bad' ? [300, 220] : [520];
+    notes.forEach((f, i) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.frequency.value = f; o.type = 'sine'; o.connect(g); g.connect(actx.destination);
+      const t = actx.currentTime + i * 0.14;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+      o.start(t); o.stop(t + 0.14);
+    });
+  } catch (e) {}
+  return new Promise(r => setTimeout(r, kind === 'listen' ? 90 : 0));
+}
+function micMsg(err) {
+  if (IOS) return "Le micro ou la dictée est bloqué. Sur iPhone : Réglages → Général → Clavier → activez « Activer Dictée ». Puis Réglages → Safari → Micro → Autoriser.";
+  return "Le micro est bloqué. Autorise le micro pour ce site dans Chrome.";
+}
+
+/* ---------- Écoute (la même qu'Aleph) ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+function listen(lang, ms, check) {
+  return new Promise(res => {
+    if (!SR) return res({ error: 'unsupported' });
+    const t0 = Date.now();
+    let finals = [], finalAlts = [], cur = [], curBest = '', finished = false, quiet = 0, lastErr = null, r = null;
+    const alts = () => { const best = (finals.join(' ') + ' ' + curBest).trim(); return [...new Set([best, ...cur, ...finalAlts].filter(Boolean))]; };
+    const result = () => { const a = alts(); return a.length ? { alts: a } : { error: lastErr || 'no-speech' }; };
+    const finish = o => { if (finished) return; finished = true; clearTimeout(timer); clearTimeout(quiet); try { r && r.abort(); } catch (x) {} rec = null; meter.stop(); res(o); };
+    const timer = setTimeout(() => finish(result()), ms);
+    function startOne() {
+      if (finished) return;
+      if (IOS) { try { actx && actx.state === 'running' && actx.suspend(); } catch (e) {} }
+      r = rec = new SR();
+      r.lang = lang === 'en' ? 'en-US' : 'fr-FR';
+      r.interimResults = true; r.maxAlternatives = 5; r.continuous = false;
+      r.onresult = e => {
+        meter.speaking(); cur = []; curBest = '';
+        for (let i = 0; i < e.results.length; i++) {
+          const rr = e.results[i];
+          if (rr.isFinal) { finals.push(rr[0].transcript); for (const x of rr) finalAlts.push(x.transcript); }
+          else { curBest += ' ' + rr[0].transcript; for (const x of rr) cur.push(x.transcript); }
+        }
+        if (Array.from(e.results).every(x => x.isFinal)) { cur = []; curBest = ''; }
+        const a = alts();
+        if (a[0]) $('dHeard').innerHTML = 'Entendu : <b>' + a[0].replace(/[<&]/g, '') + '</b>';
+        if (check && check(a)) { finish({ alts: a, right: true }); return; }
+        clearTimeout(quiet);
+        if (e.results[e.results.length - 1].isFinal) quiet = setTimeout(() => finish(result()), 1300);
+      };
+      r.onspeechstart = () => meter.speaking();
+      r.onspeechend = () => meter.quiet();
+      r.onerror = e => { lastErr = e.error; if (['not-allowed', 'service-not-allowed', 'language-not-supported', 'network', 'audio-capture'].includes(e.error)) finish({ error: e.error }); };
+      r.onend = () => { if (!finished && Date.now() - t0 < ms - 400) setTimeout(startOne, 30); };
+      try { r.start(); } catch (e) { finish({ error: 'start' }); }
+    }
+    startOne(); meter.start();
+  });
+}
+const meter = (() => {
+  let raf = 0, on = false, talk = false;
+  function draw() {
+    const c = $('meter'); if (!c) return;
+    const g = c.getContext('2d'), W = c.width = c.clientWidth * devicePixelRatio, H = c.height = c.clientHeight * devicePixelRatio;
+    g.clearRect(0, 0, W, H);
+    const n = 24, gap = W / n * 0.28, bw = W / n - gap, t = Date.now();
+    for (let i = 0; i < n; i++) {
+      const v = talk ? 0.3 + 0.6 * Math.abs(Math.sin(t / 110 + i * 0.9) * Math.cos(t / 170 + i * 0.4)) : 0.06;
+      const h = Math.max(H * 0.06, v * H);
+      g.fillStyle = talk ? '#FFC94A' : '#3A4A68';
+      g.beginPath(); g.roundRect ? g.roundRect(i * (bw + gap) + gap / 2, (H - h) / 2, bw, h, bw / 2) : g.rect(i * (bw + gap) + gap / 2, (H - h) / 2, bw, h); g.fill();
+    }
+    if (on) raf = requestAnimationFrame(draw);
+  }
+  return {
+    start() { on = true; talk = false; const c = $('meter'); if (c) c.hidden = false; cancelAnimationFrame(raf); draw(); },
+    speaking() { talk = true; }, quiet() { talk = false; },
+    stop() { on = false; cancelAnimationFrame(raf); const c = $('meter'); if (c) c.hidden = true; }
+  };
+})();
+
+/* ---------- Séance ---------- */
+var S = null; let wake = null;
+function nextCard(lastId) {
+  const now = Date.now(), cs = active();
+  const pool = cs.filter(c => c.id !== lastId && !mastered(c.id));
+  const box = c => st.boxes[c.id];
+  const learn = pool.filter(c => isLearning(box(c))).sort((x, y) => box(x).ldue - box(y).ldue);
+  if (learn.length && box(learn[0]).ldue <= st.n) return learn[0];
+  const full = cs.filter(c => isLearning(box(c))).length >= MAX_LEARN;
+  const due = pool.filter(c => seen(c.id) && !isLearning(box(c)) && box(c).due <= now).sort((x, y) => box(x).due - box(y).due);
+  const fresh = pool.find(c => !seen(c.id));
+  const canNew = fresh && !full && newToday() < NEW_PER_DAY;
+  if (due.length && canNew) return st.n % 2 ? fresh : due[0];
+  if (due.length) return due[0];
+  if (full) return learn[0];
+  if (fresh) return fresh;
+  if (learn.length) return learn[0];
+  return pool.filter(c => seen(c.id)).sort((x, y) => box(x).due - box(y).due)[0] || null;
+}
+function show(state, cls) {
+  $('oralDrive').className = 'o-drive ' + (cls || '').split(' ').filter(Boolean).map(x => 'o-' + x).join(' '); $('dState').textContent = state;
+  $('dCount').textContent = S.len ? `${S.count} / ${S.len}` : `${S.count}`;
+  $('dScore').textContent = `✓ ${S.good} · ✗ ${S.bad}`;
+}
+function fitText(el) {
+  const face = el.closest('.o-cface'); el.style.fontSize = '';
+  const items = () => [...face.children].filter(x => !x.classList.contains('o-ctag') && !x.hidden);
+  const need = () => items().reduce((h, x) => h + x.offsetHeight, 0) + 10 * (items().length - 1);
+  const room = () => { const cs = getComputedStyle(face); return face.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom); };
+  let fs = parseFloat(getComputedStyle(el).fontSize);
+  while (need() > room() && fs > 15) { fs *= 0.9; el.style.fontSize = fs + 'px'; }
+}
+async function run() {
+  const dir = st.prefs.dir, qLang = dir === 'fr-en' ? 'fr' : 'en', aLang = dir === 'fr-en' ? 'en' : 'fr';
+  await speak(dir === 'fr-en' ? "C'est parti ! Je dis le mot en français, tu le dis en anglais." : "C'est parti ! Je dis le mot en anglais, tu le dis en français.", 'fr');
+  while (S && S.on) {
+    if (S.paused) { await new Promise(r => (S.resume = r)); if (!S || !S.on) break; }
+    if (S.len && S.count >= S.len) break;
+    const c = S.cur || nextCard(S.lastId); S.cur = c;
+    if (!c) { await speak('Bravo ! Tous les mots de ces leçons sont appris.', 'fr'); break; }
+    const q = qLang === 'fr' ? c.fr : c.en;
+    $('dPrompt').textContent = q; fitText($('dPrompt')); $('dHeard').textContent = '';
+    { const cd = $('card'); cd.classList.add('o-instant'); cd.classList.remove('o-flipped', 'o-deal', 'o-revealed'); void cd.offsetWidth; cd.classList.remove('o-instant'); cd.classList.add('o-deal');
+      $('tagFront').textContent = qLang === 'en' ? 'En anglais' : 'En français'; $('tagBack').textContent = aLang === 'en' ? 'En anglais' : 'En français';
+      setTimeout(() => { if (!$('card').classList.contains('o-flipped')) { $('dAnswer').textContent = ''; $('dTranslit').textContent = ''; } }, 50); }
+    show('Question');
+    await speak(q, qLang, qLang === 'en' ? 0.85 : 0.95);
+    if (!S || !S.on) break;
+    let res, tries = 0;
+    while (true) {
+      show('À toi…', 'listening'); await beep('listen');
+      res = await listen(aLang, 8000, alts => judge(alts, c, aLang));
+      if (!S || !S.on) return;
+      if (['not-allowed', 'service-not-allowed', 'language-not-supported'].includes(res.error)) { await stopSession(micMsg(res.error)); return; }
+      if (res.error === 'network') { await speak("Pas de connexion internet. Je fais une pause.", 'fr'); pause(); break; }
+      if (res.right || (res.alts && judge(res.alts, c, aLang))) { res.right = true; break; }
+      if (res.alts && res.alts.some(isStop)) { pause(); break; }
+      if (res.alts && res.alts.some(isRepeat) && !res.alts.some(isDontKnow) && tries < 3) { tries++; await speak(q, qLang, 0.8); continue; }
+      break;
+    }
+    if (!S || !S.on || S.paused) continue;
+    const ok = !!res.right;
+    S.count++; st.n++; S.lastId = c.id; S.cur = null;
+    $('dAnswer').textContent = aLang === 'en' ? c.en : c.fr; $('dTranslit').textContent = c.note || ''; fitText($('dAnswer'));
+    $('card').classList.remove('o-deal'); $('card').classList.add('o-flipped', 'o-revealed');
+    if (ok) {
+      S.good++; recordO(c.id, true); if (!S.first[c.id]) { S.first[c.id] = 1; record(c.id, true); } show('Juste !', 'ok'); beep('ok');
+      if (aLang === 'en') await speak(c.en, 'en', 0.9); // on réentend la bonne prononciation
+    } else {
+      S.bad++; recordO(c.id, false); if (!S.first[c.id]) { S.first[c.id] = 1; record(c.id, false); } show('À revoir', 'bad'); beep('bad');
+      const ans = aLang === 'en' ? c.en : c.fr, rate = aLang === 'en' ? 0.8 : 0.95;
+      await speak(ans, aLang, rate);
+      // la réponse reste affichée : il faut la répéter correctement 3 fois (le mot reste compté comme raté)
+      const REPEATS = 3; let slow = rate, misses = 0, done = 0;
+      while (S && S.on) {
+        show(`Répète la réponse · ${done + 1}/${REPEATS}`, 'bad'); await beep('listen');
+        const r2 = await listen(aLang, 10000, a => judge(a, c, aLang));
+        if (!S || !S.on) return;
+        if (['not-allowed', 'service-not-allowed', 'language-not-supported'].includes(r2.error)) { await stopSession(micMsg(r2.error)); return; }
+        if (r2.right || (r2.alts && judge(r2.alts, c, aLang))) {
+          done++; show(done >= REPEATS ? 'Bien répété' : `Bien · encore ${REPEATS - done}`, 'ok'); await beep('ok');
+          if (done >= REPEATS) break; else continue;
+        }
+        if (r2.alts && r2.alts.some(isStop)) { pause(); break; }
+        if (r2.alts && !r2.alts.some(isRepeat)) {
+          // pas tout à fait : la voix corrige, comme un prof, un peu plus lentement à chaque fois
+          misses++; show('Écoute bien…', 'bad');
+          slow = Math.max(aLang === 'en' ? 0.55 : 0.7, slow - 0.12);
+          await speak('Non. Écoute bien.', 'fr', 1);
+          if (!S || !S.on) return;
+          const words = ans.split(/\s+/);
+          await speak(misses >= 2 && words.length > 1 ? words.join(', ') : ans, aLang, slow);
+        } else await speak(ans, aLang, slow);
+      }
+    }
+    if (!S || !S.on) return;
+  }
+  if (S && S.on) { await speak(`Séance terminée. ${S.good} bonnes réponses sur ${S.count}. Bravo !`, 'fr'); stopSession(); }
+}
+function pause() { if (!S) return; S.paused = true; show('En pause · touche l\'écran pour reprendre'); }
+$('oralDrive').addEventListener('click', e => {
+  if (e.target.id === 'dStop') return;
+  if (S && S.paused) { S.paused = false; const r = S.resume; S.resume = null; r && r(); return; }
+  if ($('card').classList.contains('o-revealed') && e.target.closest('#card')) $('card').classList.toggle('o-flipped');
+});
+async function stopSession(msg) {
+  if (!S) return;
+  S.on = false; const r = S.resume; S.resume = null; r && r();
+  try { rec && rec.abort(); } catch (e) {}
+  synth && synth.cancel();
+  try { wake && wake.release(); } catch (e) {} wake = null;
+  S = null; $('oralDrive').hidden = true; document.body.style.overflow = ''; save(); home();
+  if (msg) setTimeout(() => alert(msg), 50);
+}
+$('dStop').onclick = () => stopSession();
+window.startOral = async function (themes, dir, len) {
+  st.prefs.themes = themes; st.prefs.dir = dir === 'en-fr' ? 'en-fr' : 'fr-en'; st.prefs.len = len || 0; saveO();
+  if (!SR) { alert("La reconnaissance vocale n'est pas disponible sur ce navigateur. Utilise Chrome sur Android, ou Safari sur iPhone."); return; }
+  if (IOS && navigator.standalone) { alert("Sur iPhone, l'oral ne marche que dans Safari : depuis l'icône de l'écran d'accueil, Apple coupe le micro. Ouvre onizard.github.io/ruche dans Safari."); return; }
+  pickVoices();
+  if (IOS && navigator.audioSession) { try { navigator.audioSession.type = 'play-and-record'; } catch (e) {} }
+  if (synth) { try { const u0 = new SpeechSynthesisUtterance(' '); u0.volume = 0; u0.lang = 'fr-FR'; synth.speak(u0); } catch (e) {} }
+  if (!IOS) try { if (navigator.mediaDevices) { const s = await navigator.mediaDevices.getUserMedia({ audio: true }); s.getTracks().forEach(t => t.stop()); } } catch (e) {}
+  try { wake = await navigator.wakeLock.request('screen'); } catch (e) {}
+  beep('listen');
+  S = { first: {}, on: true, paused: false, count: 0, good: 0, bad: 0, len: st.prefs.len, cur: null, lastId: null };
+  $('oralDrive').hidden = false; document.body.style.overflow = 'hidden';
+  run();
+};
+})();
+</script>
+<!--ORAL-END-->
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});</script>
 </body>
 </html>
