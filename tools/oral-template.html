@@ -162,7 +162,32 @@ const NUMS = 'zero one two three four five six seven eight nine ten eleven twelv
 const TENS = { 30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety', 100: 'one hundred' };
 const numWord = n => n <= 20 ? NUMS[n] : TENS[n] || (n < 100 && TENS[n - n % 10] ? TENS[n - n % 10] + ' ' + NUMS[n % 10] : String(n));
 const ORD = { '1st': 'first', '2nd': 'second', '3rd': 'third', '4th': 'fourth', '5th': 'fifth' };
-const normEn = s => s.toLowerCase().replace(/[’‘`]/g, "'").replace(/\b(\d+(st|nd|rd|th))\b/g, m => ORD[m] || m)
+// synonymes acceptés : une réponse juste avec un autre mot correct est validée (absent / missing…)
+const SYN = [
+  ['absent', 'missing', 'away'], ['pupils', 'students', 'kids', 'children'], ['pupil', 'student', 'kid', 'child'],
+  ['hello', 'hi', 'hey'], ['goodbye', 'bye'], ['happy', 'glad', 'pleased'], ['sad', 'unhappy'], ['angry', 'mad', 'cross', 'furious'],
+  ['sick', 'ill', 'unwell'], ['silly', 'stupid', 'dumb', 'foolish'], ['crazy', 'mad', 'nuts'], ['nervous', 'stressed', 'anxious', 'worried'],
+  ['excited', 'thrilled'], ['confused', 'lost'], ['tired', 'exhausted'], ['sleepy', 'drowsy'], ['scared', 'afraid', 'frightened'],
+  ['big', 'large', 'huge'], ['small', 'little', 'tiny'], ['easy', 'simple'], ['maybe', 'perhaps'], ['however', 'but'],
+  ['opposite', 'contrary'], ['register', 'attendance', 'roll'], ['take', 'call', 'do'], ['throw', 'toss', 'chuck'], ['hand', 'give', 'pass'],
+  ['put', 'place', 'set'], ['highlight', 'highlighter'], ['circle', 'ring'], ['greet', 'welcome'], ['remember', 'recall'],
+  ['colour', 'color'], ['grey', 'gray'], ['favourite', 'favorite'], ['theatre', 'theater'], ['autumn', 'fall'],
+  ['eraser', 'rubber'], ['bicycle', 'bike'], ['schoolbag', 'backpack', 'rucksack', 'satchel', 'bag'], ['sharpener', 'pencil sharpener'],
+  ['bottle', 'flask'], ['house', 'home'], ['ocean', 'sea'], ['coach', 'trainer'], ['biscuit', 'cookie'], ['jelly', 'jello'],
+  ['mum', 'mom', 'mummy', 'mommy'], ['maths', 'math'], ['film', 'movie'], ['sweets', 'candy'], ['holiday', 'vacation'],
+  ['shop', 'store'], ['absurd', 'ridiculous'], ['ghost', 'spirit'], ['cold', 'chilly'], ['warm', 'mild'], ['stormy', 'thundery'],
+  ['rainy', 'wet'], ['tall', 'high'], ['fun', 'funny'], ['position', 'place'], ['order', 'sequence'],
+  ['many', 'several'], ['nobody', 'noone'], ['homework', 'homeworks']
+];
+const SYNW = {};
+SYN.forEach((g, i) => g.forEach(w => (SYNW[w] = SYNW[w] || []).push(i)));
+const same = (a, b) => a === b || (SYNW[a] && SYNW[b] && SYNW[a].some(i => SYNW[b].includes(i)));
+// formes équivalentes : contractions et petites expressions
+const PHR = [[/\bcan't\b|\bcannot\b/g, 'can not'], [/\bwon't\b/g, 'will not'], [/n't\b/g, ' not'], [/'m\b/g, ' am'], [/'re\b/g, ' are'],
+  [/'ll\b/g, ' will'], [/'ve\b/g, ' have'], [/\b(what|who|it|that|there|where|how|he|she)'s\b/g, '$1 is'],
+  [/\bno one\b|\bno-one\b/g, 'nobody'], [/\ba lot of\b|\blots of\b/g, 'many'], [/\bschool bag\b/g, 'schoolbag'],
+  [/\bpencil sharpener\b/g, 'sharpener'], [/\bgive out\b|\bpass out\b|\bhand around\b/g, 'hand out'], [/\bnot here\b/g, 'absent'], [/\bhow come\b/g, 'why']];
+const normEn = s => PHR.reduce((t, [re, to]) => t.replace(re, to), s.toLowerCase().replace(/[’‘`]/g, "'")).replace(/\b(\d+(st|nd|rd|th))\b/g, m => ORD[m] || m)
   .replace(/\b\d+\b/g, m => numWord(+m)).replace(/\.\.\.|…/g, ' ').replace(/\([^)]*\)/g, ' ')
   .replace(/[?!.,:;"«»\-]/g, ' ').replace(/\b(a|an|the|to)\b/g, ' ').replace(/\s+/g, ' ').trim();
 const normFr = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\([^)]*\)/g, ' ')
@@ -174,7 +199,7 @@ function lev(a, b) {
   return prev[n];
 }
 const ratio = (a, b) => 1 - lev(a, b) / Math.max(a.length, b.length, 1);
-const wordOk = (w, e) => w === e || (e.length > 3 && ratio(w, e) >= 0.75);
+const wordOk = (w, e) => same(w, e) || (e.length > 3 && ratio(w, e) >= 0.75);
 function close(said, exp) {
   if (!said || !exp) return false;
   const ew = exp.split(' ').filter(Boolean);
@@ -191,6 +216,7 @@ function expectedOptions(c, lang) {
   if (lang === 'en') return [c.en, ...c.alt].flatMap(x => x.split('/')).map(normEn).filter(Boolean);
   return c.fr.replace(/\([^)]*\)/g, ' ').split(/,|\/| ou /).map(normFr).filter(x => x.length > 1).concat([normFr(c.fr)]);
 }
+window.oralJudge = (alts, c, lang) => judge(alts, c, lang);
 function judge(alts, c, lang) {
   const opts = expectedOptions(c, lang);
   return alts.some(raw => { const s = lang === 'en' ? normEn(raw) : normFr(raw); return opts.some(o => close(s, o)); });
