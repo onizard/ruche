@@ -179,6 +179,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,.chip:focus-visible{out
 .qcard.mytho::before{background:linear-gradient(90deg,var(--fr) 0 50%,var(--card) 50% 100%);background-size:24px 8px}
 .qcard.mytho{border-color:var(--fr)}
 .pic{align-self:center;width:min(240px,70%);height:auto;aspect-ratio:1;border-radius:18px;border:3px solid var(--fr);object-fit:cover;background:var(--fr-pale)}
+.pic.pcpic{object-fit:contain;background:#fff;border-color:var(--border);padding:8px}
 .statue{margin:6px 0 0;display:flex;flex-direction:column;align-items:center;gap:6px}
 .statue img{width:min(200px,60%);height:auto;aspect-ratio:1;border-radius:14px;object-fit:cover}
 .statue figcaption{font-size:.8rem;color:var(--ink-soft)}
@@ -811,6 +812,74 @@ Sur quel matériau un glaçon fond-il le plus vite ? | Sur l'**aluminium**, car 
 Pourquoi le glaçon fond-il vite sur l'aluminium ? | L'aluminium **transmet très bien la chaleur de l'air** vers le glaçon, ce qui **accélère sa fonte**.
 Qu'est-ce qu'un isolant thermique ? Donne 2 exemples. | Un matériau qui **conduit mal la chaleur** : le **bois** et le **polystyrène**. Le glaçon y fond **lentement**.
 Range du plus isolant au meilleur conducteur : carrelage, aluminium, polystyrène, bois. | **Polystyrène, bois** (isolants) → **carrelage** (assez conducteur) → **aluminium** (bon conducteur).
+`},
+{id:'pc-c1-etats', subject:'pc', nom:'Ch. 1 · Les états physiques', sous:'Solide, liquide, gazeux', data:`
+Sous quels états physiques peut-on trouver la matière ? | Trois états : **solide**, **liquide** et **gazeux**.
+Comment appelle-t-on l'eau à l'état solide ? | La **glace** (un glaçon, la neige…).
+Comment appelle-t-on l'eau à l'état gazeux ? | La **vapeur d'eau**.
+À 20 °C, l'air est-il solide, liquide ou gazeux ? | **Gazeux**.
+À 20 °C, dans quel état sont le fer, le verre et le sable ? | Ils sont **solides**.
+À 20 °C, dans quel état sont l'huile, le lait et le sirop ? | Ils sont **liquides**.
+Dans quel état sont les bulles d'une eau pétillante ? | **Gazeux** : ce sont des bulles de gaz dans un liquide.
+`},
+{id:'pc-c1-electrique', subject:'pc', nom:'Ch. 1 · La conductivité électrique', sous:'Conducteur ou isolant ?', data:`
+Comment tester si un matériau conduit l'électricité ? | On le place dans un **circuit avec une lampe**. Si la lampe **s'allume**, il est **conducteur**.
+Qu'est-ce qu'un conducteur électrique ? | Un matériau qui **laisse passer le courant électrique** : la lampe s'allume.
+Qu'est-ce qu'un isolant électrique ? | Un matériau qui **ne laisse pas passer le courant** : la lampe reste éteinte.
+Cite des conducteurs électriques. | Les **métaux** (**fer**, **cuivre**, **aluminium**) et le **graphite** (la mine de crayon).
+Cite des isolants électriques. | Le **plastique**, le **bois**, le **verre**, le **liège**…
+Pourquoi les fils électriques sont-ils en cuivre entouré de plastique ? | Le **cuivre** est **conducteur** : il transporte le courant. Le **plastique** est **isolant** : il nous protège.
+`},
+{id:'pc-c1-matiere2', subject:'pc', nom:'Ch. 1 · Ranger la matière', sous:'Métal, organique, minéral…', data:`
+Qu'est-ce que la matière organique ? | La matière **vivante** ou **fabriquée par les êtres vivants** : le **bois**, le **coton**, la **laine**, une **feuille**…
+Le pull en laine : quelle famille de matière ? | **Matière organique** : la laine vient du **mouton**.
+Le caillou, le sable, le sel : quelle famille de matière ? | **Matière minérale**.
+La canette, le clou, la casserole : quelle famille de matière ? | Les **métaux** (aluminium, fer, cuivre).
+Une bouteille en PET, un pot de yaourt : quelle famille ? | Les **plastiques**.
+Le plastique est-il naturel ou fabriqué ? | **Fabriqué** par l'Homme (à partir du **pétrole**).
+Un objet en aluminium est-il attiré par un aimant ? | **Non** ! C'est un métal, mais seul le **fer** est attiré.
+`},
+{id:'pc-c2-securite', subject:'pc', nom:'La sécurité en chimie', sous:'Règles du TP', data:`
+Cite des règles OBLIGATOIRES pendant un TP de chimie. | **Manipuler debout**, **attacher ses cheveux longs**, **dégager la paillasse**, **refermer les flacons** après usage, **se laver les mains** à la fin.
+Cite des choses INTERDITES pendant un TP de chimie. | **Boire ou manger** (même un chewing-gum), **goûter ou sentir** un produit, **mélanger des produits** sans que ce soit demandé, manipuler **sans l'autorisation** du professeur.
+Pourquoi faut-il manipuler debout ? | Pour pouvoir **s'écarter vite** en cas d'accident.
+Pourquoi ne faut-il jamais sentir ou goûter un produit ? | Il peut être **toxique** ou **corrosif** et nous faire du mal.
+Où trouve-t-on les pictogrammes de danger ? | Sur l'**étiquette** des produits chimiques : ils indiquent leurs **dangers**.
+L'eau de Javel porte le pictogramme « corrosif ». Quelle précaution ? | Éviter tout **contact avec la peau et les yeux** (gants, lunettes) : elle **ronge** les tissus.
+`},
+{id:'pc-c2-pictos', subject:'pc', nom:'Les pictogrammes de danger', sous:'Que veut dire ce dessin ?', data:`
+Que veut dire ce pictogramme ? | **Inflammable** : le produit prend feu facilement. | 🔥;pc:pic-inflammable
+Que veut dire ce pictogramme ? | **Comburant** : il fait brûler les autres produits (flamme au-dessus d'un rond). | 🔥;pc:pic-comburant
+Que veut dire ce pictogramme ? | **Explosif** : le produit peut exploser. | 💥;pc:pic-explosif
+Que veut dire ce pictogramme ? | **Gaz sous pression** : la bouteille peut exploser si on la chauffe. | 🧯;pc:pic-gaz
+Que veut dire ce pictogramme ? | **Corrosif** : il ronge la peau et les matériaux. | ⚠️;pc:pic-corrosif
+Que veut dire ce pictogramme ? | **Toxique** : il peut tuer, même en petite quantité. | ☠️;pc:pic-toxique
+Que veut dire ce pictogramme ? | **Nocif, irritant** : il peut irriter la peau ou les yeux. | ❗;pc:pic-nocif
+Que veut dire ce pictogramme ? | **Danger pour la santé** : il peut rendre gravement malade. | 🧍;pc:pic-sante
+Que veut dire ce pictogramme ? | **Dangereux pour l'environnement** : il pollue l'eau et tue les poissons. | 🐟;pc:pic-environnement
+`},
+{id:'pc-c2-materiel', subject:'pc', nom:'Le matériel de chimie', sous:'Reconnaître la verrerie', data:`
+Comment s'appelle cette verrerie ? | Un **bécher**. | 🧪;pc:verre-becher
+Comment s'appelle cette verrerie ? | Un **erlenmeyer**. | 🧪;pc:verre-erlen
+Comment s'appelle cette verrerie ? | Un **tube à essai**. | 🧪;pc:verre-tube
+Comment s'appelle cette verrerie ? | Une **éprouvette graduée** : elle sert à **mesurer un volume** de liquide. | 🧪;pc:verre-eprouvette
+Comment s'appelle cette verrerie ? | Un **ballon** (à fond rond). | 🧪;pc:verre-ballon
+Comment s'appelle cette verrerie ? | Une **fiole jaugée** (le trait sur le col indique le volume exact). | 🧪;pc:verre-fiole
+Comment s'appelle cette verrerie ? | Un **cristallisoir** (large et bas). | 🧪;pc:verre-cristallisoir
+Comment s'appelle cette verrerie ? | Un **flacon**. | 🧪;pc:verre-flacon
+`},
+{id:'pc-c2-melanges', subject:'pc', nom:'Ch. 2 · Mélanges et corps purs', sous:'Homogène, hétérogène', data:`
+Qu'est-ce qu'un mélange ? | Un liquide (ou un solide) où l'on peut distinguer **au moins deux constituants**.
+Qu'est-ce qu'un corps pur ? | Il n'est fait que d'**un seul constituant** : une **seule sorte de molécule**. Ex. : l'**eau pure**.
+Comment s'écrit la molécule d'eau ? Que contient-elle ? | **H₂O** : **2 atomes d'hydrogène** (H) et **1 atome d'oxygène** (O).
+Qu'est-ce qu'un mélange homogène ? | On **ne voit pas** les différents constituants à l'œil nu. Ex. : l'**eau salée**, l'**eau sucrée**.
+Qu'est-ce qu'un mélange hétérogène ? | On **voit** les différents constituants à l'œil nu. Ex. : l'**eau et l'huile**, l'**eau boueuse**.
+L'eau salée : corps pur ou mélange ? | Un **mélange homogène** (eau + sel), même si on ne voit pas le sel.
+L'eau déminéralisée : corps pur ou mélange ? | Un **corps pur** (que de l'eau).
+L'eau et l'huile : quel type de mélange ? | Un **mélange hétérogène** : on voit deux couches.
+Donne un mélange d'un liquide et d'un gaz. | L'**eau pétillante** (de l'eau et des bulles de gaz).
+Dans un cocktail à étages, quel liquide va au fond du verre ? | Le **plus dense**. Le moins dense reste en haut.
+Cocktail Natura : range du plus dense au moins dense. | **Grenadine** → **ananas** → **orange** → **pamplemousse** (en haut).
 `},
 {id:'b-licornes', subject:'bonus', nom:"L'École des Licornes", sous:'Unicorn Academy', data:`
 Dans L'École des Licornes, comment s'appelle la licorne de Sophia ? | **Wildstar**.
@@ -2163,7 +2232,7 @@ const SUBJECTS = [
   { id: 'maths', nom: 'Maths', txt: 'Séquences 1 à 5' },
   { id: 'svt', nom: 'SVT', txt: 'Terre, climat, écosystèmes' },
   { id: 'histoire', nom: 'Histoire', txt: 'La Préhistoire' },
-  { id: 'pc', nom: 'Physique-chimie', txt: 'La matière' },
+  { id: 'pc', nom: 'Physique-chimie', txt: 'Matière, sécurité, mélanges' },
   { id: 'hebreu', nom: 'Hébreu', txt: '1000 mots utiles' },
   { id: 'mytho', nom: 'Mythologie', txt: 'Dieux, monstres, héros' },
   { id: 'bonus', nom: 'Bonus', txt: 'Séries et films' },
@@ -2392,6 +2461,7 @@ const MODES = [
   { id: 'cartes', nom: 'Cartes', txt: 'Retourner et se tester' },
   { id: 'ecrire', nom: 'Écrire', txt: 'Taper la traduction' },
   { id: 'dictee', nom: 'Dictée', txt: 'Écouter et épeler' },
+  { id: 'oral', nom: 'À l\'oral', txt: 'Parler, comme Aleph' },
 ];
 const DIRS = [
   { id: 'fr-en', html: '<span class="dir"><span class="tag fr">FR</span>→<span class="tag en">EN</span></span>' },
@@ -2506,12 +2576,20 @@ ${qa ? `    <section class="panel">
 }
 function modeHint(p) {
   if (p.mode === 'cartes') return 'Lis la carte, dis la réponse dans ta tête (ou à voix haute), puis retourne-la et sois honnête !';
+  if (p.mode === 'oral') return 'L\'appli dit le mot, tu réponds à voix haute en anglais et elle vérifie toute seule. Si tu te trompes, tu répètes la bonne réponse 3 fois. Les mots reviennent au bon moment pour bien les retenir (micro nécessaire, Chrome conseillé).';
   if (p.mode === 'ecrire') return 'Tape la traduction. En anglais, chaque lettre compte, et les majuscules des jours et des mois aussi.';
   return canSpeak ? 'Le mot anglais est lu à voix haute : écris-le sans faute, comme au Spelling Bee.' : 'La lecture à voix haute n\'est pas disponible sur ce navigateur. Essaie Chrome ou Safari.';
 }
 
 function start(onlyIds) {
   const p = store.prefs;
+  if (!onlyIds && p.subject === 'anglais' && p.mode === 'oral') {
+    // l'oral se passe sur une page à part (micro + reconnaissance vocale), avec les leçons choisies ici
+    const sel = THEMES.filter(t => t.subject === 'anglais' && p.themes.includes(t.id)).map(t => t.id);
+    const base = /github\.io$/.test(location.hostname) ? 'oral.html' : 'https://onizard.github.io/ruche/oral.html';
+    location.href = base + '?themes=' + encodeURIComponent(sel.join(',')) + '&dir=' + (p.dir === 'en-fr' ? 'en-fr' : 'fr-en');
+    return;
+  }
   let pool;
   if (onlyIds) pool = onlyIds.map(id => byId[id]);
   else {
@@ -2626,12 +2704,12 @@ function step() {
     view.innerHTML = `<div class="wrap" style="padding:0">${progressHtml()}${ctx}
       <div class="qcard ${c.subject}">
         <span class="tag q">QUESTION</span>
-        ${c.alt[1] ? `<img class="pic" src="mytho/${esc(c.alt[1])}-dessin.jpg" alt="" width="440" height="440">` : c.alt[0] ? `<div class="medal" aria-hidden="true">${esc(c.alt[0])}</div>` : ''}
+        ${c.alt[1] ? `<img class="pic${c.alt[1].startsWith('pc:') ? ' pcpic' : ''}" src="${c.alt[1].startsWith('pc:') ? 'pc/' + esc(c.alt[1].slice(3)) + '.png' : 'mytho/' + esc(c.alt[1]) + '-dessin.jpg'}" alt="" width="440" height="440">` : c.alt[0] ? `<div class="medal" aria-hidden="true">${esc(c.alt[0])}</div>` : ''}
         <div class="qtext">${rich(c.fr)}</div>
         <div class="qans" id="qans" hidden>
           <span class="tag a">RÉPONSE</span>
           <div class="atext">${rich(c.en)}</div>
-          ${c.alt[1] ? `<figure class="statue"><img src="mytho/${esc(c.alt[1])}-statue.jpg" alt="Statue" width="440" height="440" loading="lazy"><figcaption>Comme une statue de musée</figcaption></figure>` : ''}
+          ${c.alt[1] && !c.alt[1].startsWith('pc:') ? `<figure class="statue"><img src="mytho/${esc(c.alt[1])}-statue.jpg" alt="Statue" width="440" height="440" loading="lazy"><figcaption>Comme une statue de musée</figcaption></figure>` : ''}
           ${c.note ? `<p class="note">${rich(c.note)}</p>` : ''}
         </div>
       </div>
