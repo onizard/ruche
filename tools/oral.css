@@ -86,3 +86,13 @@ h1 span{color:var(--blue)}
 .bar{position:absolute;left:max(20px,env(safe-area-inset-left,0px));right:max(20px,env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));display:flex;justify-content:space-between;color:var(--soft);font-variant-numeric:tabular-nums;font-weight:700}
 .stop{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font:inherit;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:99px;padding:12px 28px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.listening .dot{animation:none}}
+
+.stars{display:flex;gap:20px;align-items:flex-end;justify-content:center;height:58px;margin-bottom:8px}
+.stars i{font-style:normal;font-size:46px;line-height:1;color:rgba(255,255,255,.13);transition:color .25s,text-shadow .25s}
+.stars i:nth-child(1){transform:translateY(12px) rotate(-16deg)}
+.stars i:nth-child(2){transform:translateY(-4px)}
+.stars i:nth-child(3){transform:translateY(12px) rotate(16deg)}
+.stars i.on{color:#FFC94A;text-shadow:0 0 16px rgba(255,201,74,.85);animation:starpop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes starpop{0%{scale:.3}60%{scale:1.4}100%{scale:1}}
+.stars.blink i{animation:starblink .25s ease-in-out 4 alternate}
+@keyframes starblink{to{opacity:.2;scale:1.15}}

@@ -81,6 +81,7 @@
 <section class="drive" id="drive" hidden aria-live="polite">
   <div class="bar"><span id="dCount">0 / 20</span><span id="dScore">✓ 0 · ✗ 0</span></div>
   <div class="state"><i class="dot"></i><span id="dState">Prêt</span></div>
+  <div class="stars" id="stars" hidden aria-hidden="true"><i>★</i><i>★</i><i>★</i></div>
   <div class="stage">
     <div class="card3d" id="card">
       <div class="cface front"><span class="ctag" id="tagFront">En français</span><div class="prompt" id="dPrompt"></div></div>
@@ -366,6 +367,7 @@ function nextCard(lastId) {
   if (learn.length) return learn[0];
   return pool.filter(c => seen(c.id)).sort((x, y) => box(x).due - box(y).due)[0] || null;
 }
+function stars(n, blink) { const el = $('stars'); el.hidden = n < 0; [...el.children].forEach((s, i) => s.classList.toggle('on', i < n)); el.classList.toggle('blink', !!blink); }
 function show(state, cls) {
   $('drive').className = 'drive ' + (cls || ''); $('dState').textContent = state;
   $('dCount').textContent = S.len ? `${S.count} / ${S.len}` : `${S.count}`;
@@ -392,7 +394,7 @@ async function run() {
     { const cd = $('card'); cd.classList.add('instant'); cd.classList.remove('flipped', 'deal', 'revealed'); void cd.offsetWidth; cd.classList.remove('instant'); cd.classList.add('deal');
       $('tagFront').textContent = qLang === 'en' ? 'En anglais' : 'En français'; $('tagBack').textContent = aLang === 'en' ? 'En anglais' : 'En français';
       setTimeout(() => { if (!$('card').classList.contains('flipped')) { $('dAnswer').textContent = ''; $('dTranslit').textContent = ''; } }, 50); }
-    show('Question');
+    stars(-1); show('Question');
     await speak(q, qLang, qLang === 'en' ? 0.85 : 0.95);
     if (!S || !S.on) break;
     let res, tries = 0;
@@ -421,14 +423,15 @@ async function run() {
       await speak(ans, aLang, rate);
       // la réponse reste affichée : il faut la répéter correctement 3 fois (le mot reste compté comme raté)
       const REPEATS = 3; let slow = rate, misses = 0, done = 0;
+      stars(0); // 3 étoiles à allumer, une par bonne répétition
       while (S && S.on) {
         show(`Répète la réponse · ${done + 1}/${REPEATS}`, 'bad'); await beep('listen');
         const r2 = await listen(aLang, 10000, a => judge(a, c, aLang));
         if (!S || !S.on) return;
         if (['not-allowed', 'service-not-allowed', 'language-not-supported'].includes(r2.error)) { await stopSession(micMsg(r2.error)); return; }
         if (r2.right || (r2.alts && judge(r2.alts, c, aLang))) {
-          done++; show(done >= REPEATS ? 'Bien répété' : `Bien · encore ${REPEATS - done}`, 'ok'); await beep('ok');
-          if (done >= REPEATS) break; else continue;
+          done++; stars(done); show(done >= REPEATS ? 'Bien répété' : `Bien · encore ${REPEATS - done}`, 'ok'); await beep('ok');
+          if (done >= REPEATS) { stars(REPEATS, true); await new Promise(r => setTimeout(r, 1100)); break; } else continue;
         }
         if (r2.alts && r2.alts.some(isStop)) { pause(); break; }
         if (r2.alts && !r2.alts.some(isRepeat)) {

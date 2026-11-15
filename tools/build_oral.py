@@ -60,7 +60,7 @@ names = [n for n in names if not n[0].isdigit()]
 for n in names: scoped = re.sub(r'\.' + re.escape(n) + r'(?![\w-])', '.o-' + n, scoped)
 html = re.sub(r'class="([^"]*)"', lambda m: 'class="' + ' '.join('o-' + c if c in names else c for c in m.group(1).split()) + '"', html)
 engine = engine.replace("closest('.cface')", "closest('.o-cface')").replace("contains('ctag')", "contains('o-ctag')")
-for n in ['flipped', 'deal', 'revealed', 'instant']: engine = engine.replace("'" + n + "'", "'o-" + n + "'")
+for n in ['flipped', 'deal', 'revealed', 'instant', 'on', 'blink']: engine = engine.replace("'" + n + "'", "'o-" + n + "'")
 engine = engine.replace("$('oralDrive').className = 'drive ' + (cls || '');", "$('oralDrive').className = 'o-drive ' + (cls || '').split(' ').filter(Boolean).map(x => 'o-' + x).join(' ');")
 block = '<!--ORAL-START-->\n<style>\n' + scoped + '\n</style>\n' + html + '\n<script>\n' + engine + '\n</script>\n<!--ORAL-END-->\n'
 idx = open('index.html', encoding='utf-8').read()

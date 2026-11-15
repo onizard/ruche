@@ -2951,11 +2951,21 @@ font-family:var(--f-body);color:var(--ink);font-size:17px;line-height:1.45}
 #oralDrive .o-bar{position:absolute;left:max(20px,env(safe-area-inset-left,0px));right:max(20px,env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));display:flex;justify-content:space-between;color:var(--soft);font-variant-numeric:tabular-nums;font-weight:700}
 #oralDrive .o-stop{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font:inherit;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:99px;padding:12px 28px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){#oralDrive.o-listening .o-dot{animation:none}}
+#oralDrive .o-stars{display:flex;gap:20px;align-items:flex-end;justify-content:center;height:58px;margin-bottom:8px}
+#oralDrive .o-stars i{font-style:normal;font-size:46px;line-height:1;color:rgba(255,255,255,.13);transition:color .25s,text-shadow .25s}
+#oralDrive .o-stars i:nth-child(1){transform:translateY(12px) rotate(-16deg)}
+#oralDrive .o-stars i:nth-child(2){transform:translateY(-4px)}
+#oralDrive .o-stars i:nth-child(3){transform:translateY(12px) rotate(16deg)}
+#oralDrive .o-stars i.o-on{color:#FFC94A;text-shadow:0 0 16px rgba(255,201,74,.85);animation:starpop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes starpop{0%{scale:.3}60%{scale:1.4}100%{scale:1}}
+#oralDrive .o-stars.o-blink i{animation:starblink .25s ease-in-out 4 alternate}
+@keyframes starblink{to{opacity:.2;scale:1.15}}
 #oralDrive .o-stop{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font:inherit;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:99px;padding:12px 28px;cursor:pointer}
 </style>
 <section class="o-drive" id="oralDrive" hidden aria-live="polite">
   <div class="o-bar"><span id="dCount">0 / 20</span><span id="dScore">✓ 0 · ✗ 0</span></div>
   <div class="o-state"><i class="o-dot"></i><span id="dState">Prêt</span></div>
+  <div class="o-stars" id="stars" hidden aria-hidden="true"><i>★</i><i>★</i><i>★</i></div>
   <div class="o-stage">
     <div class="o-card3d" id="card">
       <div class="o-cface front"><span class="o-ctag" id="tagFront">En français</span><div class="o-prompt" id="dPrompt"></div></div>
@@ -3184,6 +3194,7 @@ function nextCard(lastId) {
   if (learn.length) return learn[0];
   return pool.filter(c => seen(c.id)).sort((x, y) => box(x).due - box(y).due)[0] || null;
 }
+function stars(n, blink) { const el = $('stars'); el.hidden = n < 0; [...el.children].forEach((s, i) => s.classList.toggle('o-on', i < n)); el.classList.toggle('o-blink', !!blink); }
 function show(state, cls) {
   $('oralDrive').className = 'o-drive ' + (cls || '').split(' ').filter(Boolean).map(x => 'o-' + x).join(' '); $('dState').textContent = state;
   $('dCount').textContent = S.len ? `${S.count} / ${S.len}` : `${S.count}`;
@@ -3210,7 +3221,7 @@ async function run() {
     { const cd = $('card'); cd.classList.add('o-instant'); cd.classList.remove('o-flipped', 'o-deal', 'o-revealed'); void cd.offsetWidth; cd.classList.remove('o-instant'); cd.classList.add('o-deal');
       $('tagFront').textContent = qLang === 'en' ? 'En anglais' : 'En français'; $('tagBack').textContent = aLang === 'en' ? 'En anglais' : 'En français';
       setTimeout(() => { if (!$('card').classList.contains('o-flipped')) { $('dAnswer').textContent = ''; $('dTranslit').textContent = ''; } }, 50); }
-    show('Question');
+    stars(-1); show('Question');
     await speak(q, qLang, qLang === 'en' ? 0.85 : 0.95);
     if (!S || !S.on) break;
     let res, tries = 0;
@@ -3239,14 +3250,15 @@ async function run() {
       await speak(ans, aLang, rate);
       // la réponse reste affichée : il faut la répéter correctement 3 fois (le mot reste compté comme raté)
       const REPEATS = 3; let slow = rate, misses = 0, done = 0;
+      stars(0); // 3 étoiles à allumer, une par bonne répétition
       while (S && S.on) {
         show(`Répète la réponse · ${done + 1}/${REPEATS}`, 'bad'); await beep('listen');
         const r2 = await listen(aLang, 10000, a => judge(a, c, aLang));
         if (!S || !S.on) return;
         if (['not-allowed', 'service-not-allowed', 'language-not-supported'].includes(r2.error)) { await stopSession(micMsg(r2.error)); return; }
         if (r2.right || (r2.alts && judge(r2.alts, c, aLang))) {
-          done++; show(done >= REPEATS ? 'Bien répété' : `Bien · encore ${REPEATS - done}`, 'ok'); await beep('ok');
-          if (done >= REPEATS) break; else continue;
+          done++; stars(done); show(done >= REPEATS ? 'Bien répété' : `Bien · encore ${REPEATS - done}`, 'ok'); await beep('ok');
+          if (done >= REPEATS) { stars(REPEATS, true); await new Promise(r => setTimeout(r, 1100)); break; } else continue;
         }
         if (r2.alts && r2.alts.some(isStop)) { pause(); break; }
         if (r2.alts && !r2.alts.some(isRepeat)) {
