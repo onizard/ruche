@@ -3122,7 +3122,7 @@ function recordO(id, ok) {
 
 /* ---------- Comparaison des réponses ---------- */
 const NUMS = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split(' ');
-const TENS = { 30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety', 100: 'one hundred' };
+const TENS = { 20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety', 100: 'one hundred' };
 const numWord = n => n <= 20 ? NUMS[n] : TENS[n] || (n < 100 && TENS[n - n % 10] ? TENS[n - n % 10] + ' ' + NUMS[n % 10] : String(n));
 const ORD = { '1st': 'first', '2nd': 'second', '3rd': 'third', '4th': 'fourth', '5th': 'fifth' };
 // synonymes acceptés : une réponse juste avec un autre mot correct est validée (absent / missing…)
@@ -3146,13 +3146,18 @@ const SYNW = {};
 SYN.forEach((g, i) => g.forEach(w => (SYNW[w] = SYNW[w] || []).push(i)));
 const same = (a, b) => a === b || (SYNW[a] && SYNW[b] && SYNW[a].some(i => SYNW[b].includes(i)));
 // formes équivalentes : contractions et petites expressions
-const PHR = [[/\bcan't\b|\bcannot\b/g, 'can not'], [/\bwon't\b/g, 'will not'], [/n't\b/g, ' not'], [/'m\b/g, ' am'], [/'re\b/g, ' are'],
-  [/'ll\b/g, ' will'], [/'ve\b/g, ' have'], [/\b(what|who|it|that|there|where|how|he|she)'s\b/g, '$1 is'],
-  [/\bno one\b|\bno-one\b/g, 'nobody'], [/\ba lot of\b|\blots of\b/g, 'many'], [/\bschool bag\b/g, 'schoolbag'],
+// contractions (avec ou sans apostrophe, le téléphone l'oublie souvent) et petites expressions équivalentes
+const PHR = [[/\bwon'?t\b/g, 'will not'], [/\bcan'?t\b|\bcannot\b/g, 'can not'], [/n't\b/g, ' not'], [/\b(do|does|did|is|are|was|were|could|would|should|have|has|had|must)nt\b/g, '$1 not'], [/\bi'?m\b/g, 'i am'], [/'re\b/g, ' are'],
+  [/'ll\b/g, ' will'], [/'ve\b/g, ' have'], [/'d\b/g, ' would'], [/\b(what|who|it|that|there|where|how|he|she|here)'s\b/g, '$1 is'],
+  [/\bits\b/g, 'it is'], [/\bive\b/g, 'i have'], [/\byoure\b/g, 'you are'], [/\btheyre\b/g, 'they are'], [/\b(that|what|there|here|whos)s\b/g, '$1 is'],
+  [/\b(we|you|they)ve\b/g, '$1 have'],   [/\bno one\b|\bno-one\b/g, 'nobody'], [/\ba lot of\b|\blots of\b/g, 'many'], [/\bschool bag\b/g, 'schoolbag'],
   [/\bpencil sharpener\b/g, 'sharpener'], [/\bgive out\b|\bpass out\b|\bhand around\b/g, 'hand out'], [/\bnot here\b/g, 'absent'], [/\bhow come\b/g, 'why']];
-const normEn = s => PHR.reduce((t, [re, to]) => t.replace(re, to), s.toLowerCase().replace(/[’‘`]/g, "'")).replace(/\b(\d+(st|nd|rd|th))\b/g, m => ORD[m] || m)
-  .replace(/\b\d+\b/g, m => numWord(+m)).replace(/\.\.\.|…/g, ' ').replace(/\([^)]*\)/g, ' ')
-  .replace(/[?!.,:;"«»\-]/g, ' ').replace(/\b(a|an|the|to)\b/g, ' ').replace(/\s+/g, ' ').trim();
+const normEn = s => PHR.reduce((t, [re, to]) => t.replace(re, to), s.toLowerCase().replace(/[’‘`]/g, "'").replace(/\([^)]*\)/g, ' '))
+  .replace(/\b(\d+(st|nd|rd|th))\b/g, m => ORD[m] || m).replace(/\b\d+\b/g, m => numWord(+m)).replace(/\.\.\.|…/g, ' ')
+  .replace(/'s\b/g, '').replace(/[?!.,:;"«»'\-–—\/]/g, ' ').replace(/\b(okay|ok)\b/g, 'ok').replace(/\b(a|an|the|to)\b/g, ' ')
+  // orthographe britannique / américaine : colour/color, theatre/theater, -ise/-ize
+  .replace(/our\b/g, 'or').replace(/tre\b/g, 'ter').replace(/is(e|ed|es|ing)\b/g, 'iz$1')
+  .replace(/\s+/g, ' ').trim();
 const normFr = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\([^)]*\)/g, ' ')
   .replace(/[?!.,:;"«»…'’\-]/g, ' ').replace(/\b(le|la|les|l|un|une|des|du|de|d)\b/g, ' ').replace(/\s+/g, ' ').trim();
 function lev(a, b) {
@@ -3161,32 +3166,56 @@ function lev(a, b) {
   for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
   return prev[n];
 }
+// comparaison « à l'oreille » : la reconnaissance confond les mots qui se prononcent pareil (right / write, four / for…)
+const enSound = w => w.replace(/^kn/, 'n').replace(/^wr/, 'r').replace(/mb$/, 'm').replace(/ph/g, 'f').replace(/gh/g, '')
+  .replace(/ck/g, 'k').replace(/c(?=[eiy])/g, 's').replace(/c/g, 'k').replace(/q/g, 'k').replace(/x/g, 'ks').replace(/z/g, 's')
+  .replace(/(.{2,})e$/, '$1').replace(/[aeiouy]+/g, 'a').replace(/(.)\1+/g, '$1');
+let sndLang = 'en';
+const snd = w => (sndLang === 'en' ? enSound(w) : w);
 const ratio = (a, b) => 1 - lev(a, b) / Math.max(a.length, b.length, 1);
-const wordOk = (w, e) => same(w, e) || (e.length > 3 && ratio(w, e) >= 0.75);
+function wordOk(w, e) {
+  if (w === e || same(w, e)) return true;
+  if (e.length <= 2) return false;
+  if (e.length >= 4 && snd(w) === snd(e)) return true;
+  // petites fautes de transcription, seulement sur les mots assez longs (cold ≠ gold, sad ≠ mad)
+  return e.length >= 5 && (ratio(w, e) >= 0.75 || (snd(e).length >= 6 && ratio(snd(w), snd(e)) >= 0.8));
+}
 function close(said, exp) {
   if (!said || !exp) return false;
   const ew = exp.split(' ').filter(Boolean);
   if (ew.length >= 2) {
-    // phrases : chaque mot attendu doit être dit (petites fautes tolérées sur les mots longs)
-    const sw = said.split(' ').filter(Boolean), joined = said.replace(/ /g, '');
-    return ew.every(e => sw.some(w => wordOk(w, e)) || (e.length >= 4 && joined.includes(e)));
+    // mots collés ou coupés autrement (« schoolbag » / « school bag ») : on compare sans les espaces
+    const sj = said.replace(/ /g, ''), ej = exp.replace(/ /g, '');
+    if (sj.includes(ej) || (ej.length >= 12 && ratio(sj, ej) >= 0.9)) return true;
+    // phrases : chaque mot attendu doit être dit, dans l'ordre (des mots en trop autour sont tolérés)
+    const sw = said.split(' ').filter(Boolean);
+    let pos = 0;
+    for (const e of ew) {
+      let k = sw.findIndex((w, i) => i >= pos && wordOk(w, e));
+      if (k < 0 && e.length >= 4) for (let i = pos; i < sw.length && k < 0; i++) if (sw.slice(i).join('').startsWith(e) || sw[i].includes(e)) k = i;
+      if (k < 0) return false;
+      pos = k + 1;
+    }
+    return true;
   }
   const a = said.replace(/ /g, ''), b = exp.replace(/ /g, '');
   if (a === b || said.split(' ').some(w => wordOk(w, exp))) return true;
-  return b.length > 4 && ratio(a, b) >= 0.8;
+  if (b.length >= 4 && (a.includes(b) || (snd(b).length >= 3 && snd(a) === snd(b)))) return true;
+  return b.length >= 6 && ratio(a, b) >= 0.8;
 }
 function expectedOptions(c, lang) {
   if (lang === 'en') return [c.en, ...c.alt].flatMap(x => x.split('/')).map(normEn).filter(Boolean);
   return c.fr.replace(/\([^)]*\)/g, ' ').split(/,|\/| ou /).map(normFr).filter(x => x.length > 1).concat([normFr(c.fr)]);
 }
-window.oralJudge = (alts, c, lang) => judge(alts, c, lang);
+window.oralJudge = (alts, c, lang) => judge(alts, c, lang); window.oralNorm = s => normEn(s);
 function judge(alts, c, lang) {
   const opts = expectedOptions(c, lang);
+  sndLang = lang;
   return alts.some(raw => { const s = lang === 'en' ? normEn(raw) : normFr(raw); return opts.some(o => close(s, o)); });
 }
-const isDontKnow = s => /don'?t know|dont know|no idea|skip|sais pas|passe/i.test(s);
-const isRepeat = s => /\bagain\b|repeat|encore|répète/i.test(s);
-const isStop = s => /^(stop|pause|arrête|arrete)$/i.test(s.trim().replace(/[.!]/g, ''));
+const isDontKnow = s => /(don'?t|do not) know|dont know|no idea|not sure|skip|sais pas|j'en sais rien|aucune idée/i.test(s);
+const isRepeat = s => /\bagain\b|repeat|pardon|encore|répète/i.test(s);
+const isStop = s => /^(stop|pause|arrête|arrete|arrêter)$/i.test(s.trim().replace(/[.!]/g, '')) || /(^| )stop( |$)/i.test(s.toLowerCase().trim());
 
 /* ---------- Voix ---------- */
 const synth = window.speechSynthesis;
