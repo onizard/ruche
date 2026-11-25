@@ -184,7 +184,10 @@ SYN.forEach((g, i) => g.forEach(w => (SYNW[w] = SYNW[w] || []).push(i)));
 const same = (a, b) => a === b || (SYNW[a] && SYNW[b] && SYNW[a].some(i => SYNW[b].includes(i)));
 // formes équivalentes : contractions et petites expressions
 // contractions (avec ou sans apostrophe, le téléphone l'oublie souvent) et petites expressions équivalentes
-const PHR = [[/\bwon'?t\b/g, 'will not'], [/\bcan'?t\b|\bcannot\b/g, 'can not'], [/n't\b/g, ' not'], [/\b(do|does|did|is|are|was|were|could|would|should|have|has|had|must)nt\b/g, '$1 not'], [/\bi'?m\b/g, 'i am'], [/'re\b/g, ' are'],
+const PHR = [
+  // mots qui se prononcent pareil : la reconnaissance écrit souvent « you're » ou « you are » pour « your »
+  [/\byou'?re\b|\byou are\b|\byore\b/g, 'your'], [/\bthey'?re\b|\bthere\b/g, 'their'], [/\bhour\b/g, 'our'],
+  [/\bwon'?t\b/g, 'will not'], [/\bcan'?t\b|\bcannot\b/g, 'can not'], [/n't\b/g, ' not'], [/\b(do|does|did|is|are|was|were|could|would|should|have|has|had|must)nt\b/g, '$1 not'], [/\bi'?m\b/g, 'i am'], [/'re\b/g, ' are'],
   [/'ll\b/g, ' will'], [/'ve\b/g, ' have'], [/'d\b/g, ' would'], [/\b(what|who|it|that|there|where|how|he|she|here)'s\b/g, '$1 is'],
   [/\bits\b/g, 'it is'], [/\bive\b/g, 'i have'], [/\byoure\b/g, 'you are'], [/\btheyre\b/g, 'they are'], [/\b(that|what|there|here|whos)s\b/g, '$1 is'],
   [/\b(we|you|they)ve\b/g, '$1 have'],   [/\bno one\b|\bno-one\b/g, 'nobody'], [/\ba lot of\b|\blots of\b/g, 'many'], [/\bschool bag\b/g, 'schoolbag'],

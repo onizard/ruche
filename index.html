@@ -3352,7 +3352,10 @@ SYN.forEach((g, i) => g.forEach(w => (SYNW[w] = SYNW[w] || []).push(i)));
 const same = (a, b) => a === b || (SYNW[a] && SYNW[b] && SYNW[a].some(i => SYNW[b].includes(i)));
 // formes équivalentes : contractions et petites expressions
 // contractions (avec ou sans apostrophe, le téléphone l'oublie souvent) et petites expressions équivalentes
-const PHR = [[/\bwon'?t\b/g, 'will not'], [/\bcan'?t\b|\bcannot\b/g, 'can not'], [/n't\b/g, ' not'], [/\b(do|does|did|is|are|was|were|could|would|should|have|has|had|must)nt\b/g, '$1 not'], [/\bi'?m\b/g, 'i am'], [/'re\b/g, ' are'],
+const PHR = [
+  // mots qui se prononcent pareil : la reconnaissance écrit souvent « you're » ou « you are » pour « your »
+  [/\byou'?re\b|\byou are\b|\byore\b/g, 'your'], [/\bthey'?re\b|\bthere\b/g, 'their'], [/\bhour\b/g, 'our'],
+  [/\bwon'?t\b/g, 'will not'], [/\bcan'?t\b|\bcannot\b/g, 'can not'], [/n't\b/g, ' not'], [/\b(do|does|did|is|are|was|were|could|would|should|have|has|had|must)nt\b/g, '$1 not'], [/\bi'?m\b/g, 'i am'], [/'re\b/g, ' are'],
   [/'ll\b/g, ' will'], [/'ve\b/g, ' have'], [/'d\b/g, ' would'], [/\b(what|who|it|that|there|where|how|he|she|here)'s\b/g, '$1 is'],
   [/\bits\b/g, 'it is'], [/\bive\b/g, 'i have'], [/\byoure\b/g, 'you are'], [/\btheyre\b/g, 'they are'], [/\b(that|what|there|here|whos)s\b/g, '$1 is'],
   [/\b(we|you|they)ve\b/g, '$1 have'],   [/\bno one\b|\bno-one\b/g, 'nobody'], [/\ba lot of\b|\blots of\b/g, 'many'], [/\bschool bag\b/g, 'schoolbag'],
@@ -3666,8 +3669,7 @@ $('dStop').onclick = () => stopSession();
 window.startOral = async function (themes, dir, len) {
   st.prefs.themes = themes; st.prefs.dir = dir === 'en-fr' ? 'en-fr' : 'fr-en'; st.prefs.len = len || 0; saveO();
   if (!SR) { alert("La reconnaissance vocale n'est pas disponible sur ce navigateur. Utilise Chrome sur Android, ou Safari sur iPhone."); return; }
-  // iPhone : le micro marche depuis l'icône de l'écran d'accueil, pas dans Safari (constaté par Olivier, nov. 2026) : on prévient, sans bloquer
-  if (IOS && !navigator.standalone) { let seen = false; try { seen = sessionStorage.getItem('iosTip'); sessionStorage.setItem('iosTip', 1); } catch (e) {} if (!seen) alert("Sur iPhone, l'oral marche depuis l'icône de l'écran d'accueil, pas dans Safari : touchez Partager puis « Sur l'écran d'accueil », et ouvrez l'appli depuis l'icône."); }
+  if (IOS && navigator.standalone) { alert("Sur iPhone, l'oral ne marche que dans Safari : depuis l'icône de l'écran d'accueil, Apple coupe le micro. Ouvre onizard.github.io/ruche dans Safari."); return; }
   pickVoices();
   if (IOS && navigator.audioSession) { try { navigator.audioSession.type = 'play-and-record'; } catch (e) {} }
   if (synth) { try { const u0 = new SpeechSynthesisUtterance(' '); u0.volume = 0; u0.lang = 'fr-FR'; synth.speak(u0); } catch (e) {} }
