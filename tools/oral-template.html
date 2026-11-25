@@ -343,8 +343,14 @@ function listen(lang, ms, check) {
       };
       r.onspeechstart = () => meter.speaking();
       r.onspeechend = () => meter.quiet();
-      r.onerror = e => { lastErr = e.error; if (['not-allowed', 'service-not-allowed', 'language-not-supported', 'network', 'audio-capture'].includes(e.error)) finish({ error: e.error }); };
+      r.onerror = e => { lastErr = e.error;
+        // téléphone qui refuse deux écoutes à la fois : on lâche le micro Bluetooth et on n'essaie plus
+        if (e.error === 'audio-capture' && btStream) { btStream.getTracks().forEach(t => t.stop()); btStream = null; st.btOff = true; save(); return; }
+        if (['not-allowed', 'service-not-allowed', 'language-not-supported', 'network', 'audio-capture'].includes(e.error)) finish({ error: e.error }); };
       r.onend = () => { if (!finished && Date.now() - t0 < ms - 400) setTimeout(startOne, 30); };
+      // iPhone : redonner le type « lecture + enregistrement » juste avant d'écouter pousse iOS à prendre le micro
+      // des oreillettes / du kit Bluetooth branché, au lieu de celui du téléphone (astuce relevée dans le suivi de bugs WebKit)
+      if (IOS && navigator.audioSession) { try { navigator.audioSession.type = 'auto'; navigator.audioSession.type = 'play-and-record'; } catch (e) {} }
       try { r.start(); } catch (e) { finish({ error: 'start' }); }
     }
     startOne(); meter.start();
@@ -392,7 +398,8 @@ function refreshHome() {
   });
   $('start').disabled = !cs.length; $('start').textContent = cs.length ? 'Démarrer' : 'Choisis au moins une leçon';
   const w = [];
-  if (IOS && navigator.standalone) w.push("Sur iPhone, l'oral ne marche que dans Safari : depuis l'icône de l'écran d'accueil, Apple coupe le micro. <a href=\"x-safari-https://onizard.github.io/ruche/oral.html\" style=\"color:inherit;font-weight:700\">Ouvrir dans Safari</a>");
+  // iPhone : le micro marche depuis l'icône de l'écran d'accueil, pas dans Safari (constaté par Olivier, nov. 2026)
+  if (IOS && !navigator.standalone) w.push("Sur iPhone, l'oral marche depuis l'icône de l'écran d'accueil, pas dans Safari : touchez Partager puis « Sur l'écran d'accueil », et ouvrez l'appli depuis l'icône.");
   if (!SR) w.push("La reconnaissance vocale n'est pas disponible sur ce navigateur. Utilise <b>Chrome sur Android</b> (ou Safari sur iPhone).");
   $('warn').innerHTML = w.join('<br>'); $('warn').hidden = !w.length;
 }
@@ -510,12 +517,14 @@ $('drive').addEventListener('click', e => {
   if (S && S.paused) { S.paused = false; const r = S.resume; S.resume = null; r && r(); return; }
   if ($('card').classList.contains('revealed') && e.target.closest('#card')) $('card').classList.toggle('flipped');
 });
+let btStream = null;
 async function stopSession(msg) {
   if (!S) return;
   S.on = false; const r = S.resume; S.resume = null; r && r();
   try { rec && rec.abort(); } catch (e) {}
   synth && synth.cancel();
   try { wake && wake.release(); } catch (e) {} wake = null;
+  if (btStream) { btStream.getTracks().forEach(t => t.stop()); btStream = null; }
   S = null; $('drive').hidden = true; $('home').hidden = false; refreshHome();
   if (msg) { $('warn').innerHTML = msg; $('warn').hidden = false; }
 }
@@ -526,6 +535,14 @@ $('start').onclick = async () => {
   if (IOS && navigator.audioSession) { try { navigator.audioSession.type = 'play-and-record'; } catch (e) {} }
   if (synth) { try { const u0 = new SpeechSynthesisUtterance(' '); u0.volume = 0; u0.lang = 'fr-FR'; synth.speak(u0); } catch (e) {} }
   if (!IOS) try { if (navigator.mediaDevices) { const s = await navigator.mediaDevices.getUserMedia({ audio: true }); s.getTracks().forEach(t => t.stop()); } } catch (e) {}
+  // Android : si un kit / des oreillettes Bluetooth sont connectés, on garde leur micro ouvert pendant la séance,
+  // ce qui oblige le téléphone à basculer dessus (sinon la reconnaissance écoute avec le micro du téléphone).
+  // Pas de Bluetooth : rien ne change, micro du téléphone.
+  if (!IOS && !st.btOff) try {
+    const devs = await navigator.mediaDevices.enumerateDevices();
+    const bt = devs.find(d => d.kind === 'audioinput' && /bluetooth|headset|hands-?free|casque|kit|car|buds|airpods/i.test(d.label));
+    if (bt) btStream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: bt.deviceId } } });
+  } catch (e) { btStream = null; }
   try { wake = await navigator.wakeLock.request('screen'); } catch (e) {}
   beep('listen');
   S = { on: true, paused: false, count: 0, good: 0, bad: 0, len: st.prefs.len, cur: null, lastId: null };
