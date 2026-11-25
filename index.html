@@ -3338,8 +3338,6 @@ function listen(lang, ms, check) {
       r.onspeechstart = () => meter.speaking();
       r.onspeechend = () => meter.quiet();
       r.onerror = e => { lastErr = e.error;
-        // téléphone qui refuse deux écoutes à la fois : on lâche le micro Bluetooth et on n'essaie plus
-        if (e.error === 'audio-capture' && btStream) { btStream.getTracks().forEach(t => t.stop()); btStream = null; st.btOff = true; saveO(); return; }
         if (['not-allowed', 'service-not-allowed', 'language-not-supported', 'network', 'audio-capture'].includes(e.error)) finish({ error: e.error }); };
       r.onend = () => { if (!finished && Date.now() - t0 < ms - 400) setTimeout(startOne, 30); };
       // iPhone : redonner le type « lecture + enregistrement » juste avant d'écouter pousse iOS à prendre le micro
@@ -3500,14 +3498,6 @@ window.startOral = async function (themes, dir, len) {
   if (IOS && navigator.audioSession) { try { navigator.audioSession.type = 'play-and-record'; } catch (e) {} }
   if (synth) { try { const u0 = new SpeechSynthesisUtterance(' '); u0.volume = 0; u0.lang = 'fr-FR'; synth.speak(u0); } catch (e) {} }
   if (!IOS) try { if (navigator.mediaDevices) { const s = await navigator.mediaDevices.getUserMedia({ audio: true }); s.getTracks().forEach(t => t.stop()); } } catch (e) {}
-  // Android : si un kit / des oreillettes Bluetooth sont connectés, on garde leur micro ouvert pendant la séance,
-  // ce qui oblige le téléphone à basculer dessus (sinon la reconnaissance écoute avec le micro du téléphone).
-  // Pas de Bluetooth : rien ne change, micro du téléphone.
-  if (!IOS && !st.btOff) try {
-    const devs = await navigator.mediaDevices.enumerateDevices();
-    const bt = devs.find(d => d.kind === 'audioinput' && /bluetooth|headset|hands-?free|casque|kit|car|buds|airpods/i.test(d.label));
-    if (bt) btStream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: bt.deviceId } } });
-  } catch (e) { btStream = null; }
   try { wake = await navigator.wakeLock.request('screen'); } catch (e) {}
   beep('listen');
   S = { first: {}, on: true, paused: false, count: 0, good: 0, bad: 0, len: st.prefs.len, cur: null, lastId: null };
